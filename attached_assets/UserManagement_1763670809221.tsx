@@ -1,0 +1,284 @@
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { UserPlus, Trash2, Users, ArrowLeft } from "lucide-react";
+import { api } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
+import InventoryHeader from "@/components/InventoryHeader";
+import type { Language } from "@/lib/translations";
+import { useTranslation } from "@/lib/translations";
+
+interface UserManagementProps {
+  userName: string;
+  userRole: string;
+  onLogout: () => void;
+  onNavigateToInventory?: () => void;
+  language: Language;
+  onLanguageChange: (language: Language) => void;
+}
+
+export default function UserManagement({ userName, userRole, onLogout, onNavigateToInventory, language, onLanguageChange }: UserManagementProps) {
+  const { toast } = useToast();
+  const t = useTranslation(language);
+  const [showAddUser, setShowAddUser] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    email: '',
+    name: '',
+    role: 'user' as 'admin' | 'user',
+    department: ''
+  });
+
+  const { data: users = [] } = useQuery({
+    queryKey: ['/api/users'],
+    queryFn: () => api.users.getAll()
+  });
+
+  const createUserMutation = useMutation({
+    mutationFn: (userData: typeof formData) => api.users.create(userData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      setShowAddUser(false);
+      setFormData({
+        username: '',
+        password: '',
+        email: '',
+        name: '',
+        role: 'user',
+        department: ''
+      });
+      toast({ title: "User created successfully" });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Failed to create user", 
+        description: error.message || "Please try again",
+        variant: "destructive" 
+      });
+    }
+  });
+
+  const deleteUserMutation = useMutation({
+    mutationFn: (id: string) => api.users.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users'] });
+      toast({ title: "User deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Failed to delete user", 
+        description: error.message || "Please try again",
+        variant: "destructive" 
+      });
+    }
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    createUserMutation.mutate(formData);
+  };
+
+  const handleDeleteUser = (id: string, username: string) => {
+    if (confirm(`Are you sure you want to delete user "${username}"?`)) {
+      deleteUserMutation.mutate(id);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <InventoryHeader
+        userName={userName}
+        userRole={userRole}
+        currentView="categories"
+        onViewChange={() => {}}
+        onLogout={onLogout}
+        onNavigateToReservations={() => {}}
+        onNavigateToActivityLogs={() => {}}
+        onNavigateToQRCodes={() => {}}
+        onNavigateToMaintenance={() => {}}
+        hideViewToggle={true}
+        language={language}
+        onLanguageChange={onLanguageChange}
+      />
+
+      <main className="max-w-[1400px] mx-auto px-5 py-8">
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            onClick={onNavigateToInventory}
+            className="gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {t('backToInventory')}
+          </Button>
+        </div>
+
+        <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
+          <h1 className="text-4xl font-extrabold mb-4">{t('userManagement')}</h1>
+          <p className="text-lg opacity-90 max-w-2xl mx-auto">
+            {t('createManageUsers')}
+          </p>
+        </div>
+
+        <div className="mb-6 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Users className="w-6 h-6 text-[#667eea]" />
+            <h2 className="text-2xl font-bold">{users.length} {t('totalUsers')}</h2>
+          </div>
+          <Button
+            onClick={() => setShowAddUser(true)}
+            className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
+          >
+            <UserPlus className="w-4 h-4 mr-2" />
+            {t('addNewUser')}
+          </Button>
+        </div>
+
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t('username')}</TableHead>
+                  <TableHead>{t('name')}</TableHead>
+                  <TableHead>{t('email')}</TableHead>
+                  <TableHead>{t('role')}</TableHead>
+                  <TableHead className="text-right">{t('actions')}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {users.map((user: any) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-medium">{user.username}</TableCell>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        user.role === 'admin' 
+                          ? 'bg-red-100 text-red-800' 
+                          : 'bg-green-100 text-green-800'
+                      }`}>
+                        {user.role === 'admin' ? t('admin').toUpperCase() : t('user').toUpperCase()}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleDeleteUser(user.id, user.username)}
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </main>
+
+      <Dialog open={showAddUser} onOpenChange={setShowAddUser}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('addNewUser')}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username">{t('username')} *</Label>
+              <Input
+                id="username"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                placeholder="e.g., jsmith"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">{t('password')} *</Label>
+              <Input
+                id="password"
+                type="password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                placeholder={t('password')}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="name">{t('fullName')} *</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="e.g., John Smith"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email">{t('email')} *</Label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="e.g., jsmith@company.com"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="department">{t('department')}</Label>
+              <Input
+                id="department"
+                value={formData.department}
+                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                placeholder="e.g., Production"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="role">{t('role')} *</Label>
+              <Select
+                value={formData.role}
+                onValueChange={(value: 'admin' | 'user') => setFormData({ ...formData, role: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="user">{t('user')}</SelectItem>
+                  <SelectItem value="admin">{t('admin')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setShowAddUser(false)}>
+                {t('cancel')}
+              </Button>
+              <Button 
+                type="submit" 
+                className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
+                disabled={createUserMutation.isPending}
+              >
+                {createUserMutation.isPending ? t('creating') : t('createUser')}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

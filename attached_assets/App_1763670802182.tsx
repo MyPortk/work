@@ -1,0 +1,169 @@
+import { useState, useEffect } from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/queryClient";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import Login from "@/pages/Login";
+import Inventory from "@/pages/Inventory";
+import Reservations from "@/pages/Reservations";
+import ActivityLogs from "@/pages/ActivityLogs";
+import QRCodes from "@/pages/QRCodes";
+import Maintenance from "@/pages/Maintenance";
+import UserManagement from "@/pages/UserManagement";
+import type { Language } from "@/lib/translations";
+
+type View = 'login' | 'inventory' | 'reservations' | 'activity-logs' | 'qr-codes' | 'maintenance' | 'users';
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentView, setCurrentView] = useState<View>('login');
+  const [language, setLanguage] = useState<Language>('en');
+  const [currentUser, setCurrentUser] = useState<{
+    id: string;
+    username: string;
+    role: string;
+    name: string;
+  } | null>(null);
+
+  const handleLogin = (user: any) => {
+    setCurrentUser(user);
+    setIsAuthenticated(true);
+    // Admin sees inventory (categories) first, users see inventory too
+    setCurrentView('inventory');
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setIsAuthenticated(false);
+    setCurrentView('login');
+  };
+
+  const handleNavigateToReservations = () => {
+    setCurrentView('reservations');
+  };
+
+  const handleNavigateToActivityLogs = () => {
+    setCurrentView('activity-logs');
+  };
+
+  const handleNavigateToQRCodes = () => {
+    setCurrentView('qr-codes');
+  };
+
+  const handleNavigateToMaintenance = () => {
+    setCurrentView('maintenance');
+  };
+
+  const handleNavigateToInventory = () => {
+    setCurrentView('inventory');
+  };
+
+  const checkSession = async () => {
+    try {
+      const response = await fetch('/api/auth/session');
+      if (response.ok) {
+        const user = await response.json();
+        handleLogin(user);
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      console.error("Session check failed:", error);
+      setIsAuthenticated(false);
+    }
+  };
+
+  useEffect(() => {
+    checkSession();
+    // Load saved language preference
+    const savedLanguage = localStorage.getItem('language') as Language;
+    if (savedLanguage) {
+      setLanguage(savedLanguage);
+      document.documentElement.dir = savedLanguage === 'ar' ? 'rtl' : 'ltr';
+    }
+    // Expose navigate functions for header
+    (window as any).navigateToUsers = () => setCurrentView('users');
+  }, []);
+
+  const handleLanguageChange = (newLanguage: Language) => {
+    setLanguage(newLanguage);
+    localStorage.setItem('language', newLanguage);
+    document.documentElement.dir = newLanguage === 'ar' ? 'rtl' : 'ltr';
+  };
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        {!isAuthenticated ? (
+          <Login onLogin={handleLogin} language={language} onLanguageChange={handleLanguageChange} />
+        ) : currentView === 'inventory' ? (
+          <Inventory
+            userName={currentUser?.name || ''}
+            userRole={currentUser?.role || ''}
+            userId={currentUser?.id || ''}
+            onLogout={handleLogout}
+            onNavigateToReservations={handleNavigateToReservations}
+            onNavigateToActivityLogs={handleNavigateToActivityLogs}
+            onNavigateToQRCodes={handleNavigateToQRCodes}
+            onNavigateToMaintenance={handleNavigateToMaintenance}
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+          />
+        ) : currentView === 'reservations' ? (
+          <Reservations
+            userName={currentUser?.name || ''}
+            userRole={currentUser?.role || ''}
+            userId={currentUser?.id || ''}
+            onLogout={handleLogout}
+            onNavigateToInventory={handleNavigateToInventory}
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+          />
+        ) : currentView === 'activity-logs' ? (
+          <ActivityLogs
+            userName={currentUser?.name || ''}
+            userRole={currentUser?.role || ''}
+            onLogout={handleLogout}
+            onNavigateBack={handleNavigateToInventory}
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+          />
+        ) : currentView === 'qr-codes' ? (
+          <QRCodes
+            userName={currentUser?.name || ''}
+            userRole={currentUser?.role || ''}
+            onLogout={handleLogout}
+            onNavigateBack={handleNavigateToInventory}
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+          />
+        ) : currentView === 'maintenance' ? (
+          <Maintenance
+            userName={currentUser?.name || ''}
+            userRole={currentUser?.role || ''}
+            userId={currentUser?.id || ''}
+            onLogout={handleLogout}
+            onNavigateToReservations={handleNavigateToReservations}
+            onNavigateToActivityLogs={handleNavigateToActivityLogs}
+            onNavigateToQRCodes={handleNavigateToQRCodes}
+            onNavigateToInventory={handleNavigateToInventory}
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+          />
+        ) : currentView === 'users' && currentUser && currentUser.role === 'admin' ? (
+          <UserManagement
+            userName={currentUser.name}
+            userRole={currentUser.role}
+            onLogout={handleLogout}
+            onNavigateToInventory={handleNavigateToInventory}
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+          />
+        ) : null}
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;
