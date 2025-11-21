@@ -277,7 +277,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
         onLanguageChange={onLanguageChange}
       />
 
-      <main className="max-w-[1400px] mx-auto px-5 py-8">
+      <main className="max-w-[1400px] mx-auto px-3 md:px-5 py-4 md:py-8">
         {currentView === 'categories' ? (
           <div>
             <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">

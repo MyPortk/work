@@ -49,7 +49,9 @@ export default function InventoryHeader({
   return (
     <header className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-lg sticky top-0 z-50">
       <div className="max-w-[1400px] mx-auto px-3 md:px-5 py-3 md:py-4">
+        {/* Top Row */}
         <div className="flex items-center justify-between">
+          {/* Logo and Title */}
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
             <Package className="w-6 md:w-8 h-6 md:h-8 flex-shrink-0" />
             <div className="min-w-0">
@@ -60,7 +62,7 @@ export default function InventoryHeader({
             </div>
           </div>
 
-          <div className="flex items-center gap-1 md:gap-3">
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1">
             {!hideViewToggle && (
               <div className="flex gap-1 bg-white/10 rounded-lg p-1 mr-2">
@@ -115,6 +117,7 @@ export default function InventoryHeader({
               </DropdownMenuContent>
             </DropdownMenu>
 
+            {/* Main Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -127,58 +130,58 @@ export default function InventoryHeader({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>{t('navigation')}</DropdownMenuLabel>
-              <DropdownMenuSeparator />
+                <DropdownMenuLabel>{t('navigation')}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
 
-              {onNavigateToReservations && (
-                <DropdownMenuItem onClick={onNavigateToReservations}>
-                  <Calendar className="w-4 h-4 mr-2" />
-                  {t('reservations')}
+                {onNavigateToReservations && (
+                  <DropdownMenuItem onClick={onNavigateToReservations}>
+                    <Calendar className="w-4 h-4 mr-2" />
+                    {t('reservations')}
+                  </DropdownMenuItem>
+                )}
+
+                {onNavigateToReports && (
+                  <DropdownMenuItem onClick={onNavigateToReports}>
+                    <AlertCircle className="w-4 h-4 mr-2" />
+                    Reports
+                  </DropdownMenuItem>
+                )}
+
+                {userRole === 'admin' && onNavigateToActivityLogs && (
+                  <DropdownMenuItem onClick={onNavigateToActivityLogs}>
+                    <ClipboardList className="w-4 h-4 mr-2" />
+                    {t('activityLog')}
+                  </DropdownMenuItem>
+                )}
+
+                {userRole === 'admin' && onNavigateToQRCodes && (
+                  <DropdownMenuItem onClick={onNavigateToQRCodes}>
+                    <QrCode className="w-4 h-4 mr-2" />
+                    {t('qrCodes')}
+                  </DropdownMenuItem>
+                )}
+
+                {userRole === 'admin' && onNavigateToMaintenance && (
+                  <DropdownMenuItem onClick={onNavigateToMaintenance}>
+                    <Wrench className="w-4 h-4 mr-2" />
+                    {t('maintenance')}
+                  </DropdownMenuItem>
+                )}
+
+                {userRole === 'admin' && (
+                  <DropdownMenuItem onClick={() => (window as any).navigateToUsers?.()}>
+                    <Users className="w-4 h-4 mr-2" />
+                    {t('userManagement')}
+                  </DropdownMenuItem>
+                )}
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem onClick={onLogout}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  {t('logout')}
                 </DropdownMenuItem>
-              )}
-
-              {onNavigateToReports && (
-                <DropdownMenuItem onClick={onNavigateToReports}>
-                  <AlertCircle className="w-4 h-4 mr-2" />
-                  Reports
-                </DropdownMenuItem>
-              )}
-
-              {userRole === 'admin' && onNavigateToActivityLogs && (
-                <DropdownMenuItem onClick={onNavigateToActivityLogs}>
-                  <ClipboardList className="w-4 h-4 mr-2" />
-                  {t('activityLog')}
-                </DropdownMenuItem>
-              )}
-
-              {userRole === 'admin' && onNavigateToQRCodes && (
-                <DropdownMenuItem onClick={onNavigateToQRCodes}>
-                  <QrCode className="w-4 h-4 mr-2" />
-                  {t('qrCodes')}
-                </DropdownMenuItem>
-              )}
-
-              {userRole === 'admin' && onNavigateToMaintenance && (
-                <DropdownMenuItem onClick={onNavigateToMaintenance}>
-                  <Wrench className="w-4 h-4 mr-2" />
-                  {t('maintenance')}
-                </DropdownMenuItem>
-              )}
-
-              {userRole === 'admin' && (
-                <DropdownMenuItem onClick={() => (window as any).navigateToUsers?.()}>
-                  <Users className="w-4 h-4 mr-2" />
-                  {t('userManagement')}
-                </DropdownMenuItem>
-              )}
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem onClick={onLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                {t('logout')}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
+              </DropdownMenuContent>
             </DropdownMenu>
           </div>
 

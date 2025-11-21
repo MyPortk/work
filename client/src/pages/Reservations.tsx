@@ -235,7 +235,7 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
         onLanguageChange={onLanguageChange}
       />
 
-      <main className="max-w-[1400px] mx-auto px-5 py-8">
+      <main className="max-w-[1400px] mx-auto px-3 md:px-5 py-4 md:py-8">
         <div className="mb-6">
           <Button
             variant="ghost"
