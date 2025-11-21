@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Search, Plus, CheckCircle, XCircle, Clock, ArrowLeft, Calendar, User } from "lucide-react";
 import { format } from "date-fns";
-import { api, type Reservation, type Item, type User } from "@/lib/api";
+import { api, type Reservation, type Item } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import ReservationFormDialog from "@/components/ReservationFormDialog";
 import ReservationActionDialog from "@/components/ReservationActionDialog";
