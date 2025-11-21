@@ -1,0 +1,259 @@
+
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon, AlertCircle } from "lucide-react";
+import { format } from "date-fns";
+import { api, type Item } from "@/lib/api";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+interface ReservationFormDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (data: { itemId: string; startDate: Date; returnDate: Date; notes?: string }) => void;
+  items: Item[];
+}
+
+export default function ReservationFormDialog({
+  open,
+  onClose,
+  onSubmit,
+  items
+}: ReservationFormDialogProps) {
+  const [itemId, setItemId] = useState("");
+  const [startDate, setStartDate] = useState<Date>();
+  const [returnDate, setReturnDate] = useState<Date>();
+  const [notes, setNotes] = useState("");
+
+  // Auto-select item if only one item is provided (from reserve button)
+  useEffect(() => {
+    if (open && items.length === 1) {
+      setItemId(items[0].id);
+    }
+  }, [open, items]);
+
+  // Fetch existing reservations for the selected item
+  const { data: itemReservations = [] } = useQuery({
+    queryKey: ['/api/reservations/item', itemId],
+    queryFn: () => itemId ? api.reservations.getByItem(itemId) : Promise.resolve([]),
+    enabled: !!itemId,
+  });
+
+  // Reset dates when item changes
+  useEffect(() => {
+    setStartDate(undefined);
+    setReturnDate(undefined);
+  }, [itemId]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!itemId || !startDate || !returnDate) return;
+    
+    if (returnDate < startDate) {
+      alert("Return date must be after start date");
+      return;
+    }
+    
+    onSubmit({
+      itemId,
+      startDate,
+      returnDate,
+      notes: notes.trim() || undefined
+    });
+    
+    setItemId("");
+    setStartDate(undefined);
+    setReturnDate(undefined);
+    setNotes("");
+  };
+
+  const handleClose = () => {
+    setItemId("");
+    setStartDate(undefined);
+    setReturnDate(undefined);
+    setNotes("");
+    onClose();
+  };
+
+  // Check if a date is blocked by existing reservations
+  const isDateBlocked = (date: Date) => {
+    if (!itemId) return false;
+    
+    return itemReservations.some(reservation => {
+      const resStart = new Date(reservation.startDate);
+      const resEnd = new Date(reservation.returnDate);
+      resStart.setHours(0, 0, 0, 0);
+      resEnd.setHours(0, 0, 0, 0);
+      const checkDate = new Date(date);
+      checkDate.setHours(0, 0, 0, 0);
+      
+      return checkDate >= resStart && checkDate <= resEnd;
+    });
+  };
+
+  // Check if selected dates conflict with existing reservations
+  const hasDateConflict = () => {
+    if (!startDate || !returnDate || !itemId) return false;
+
+    return itemReservations.some(reservation => {
+      const resStart = new Date(reservation.startDate);
+      const resEnd = new Date(reservation.returnDate);
+      
+      return (
+        (startDate >= resStart && startDate <= resEnd) ||
+        (returnDate >= resStart && returnDate <= resEnd) ||
+        (startDate <= resStart && returnDate >= resEnd)
+      );
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>New Reservation Request</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="item">Select Item *</Label>
+            <Select value={itemId} onValueChange={setItemId} required disabled={items.length === 1}>
+              <SelectTrigger>
+                <SelectValue placeholder="Choose an item..." />
+              </SelectTrigger>
+              <SelectContent>
+                {items.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.productName} - {item.barcode}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {items.length === 1 && (
+              <p className="text-sm text-muted-foreground">
+                Reserving: {items[0].productName}
+              </p>
+            )}
+          </div>
+
+          {itemId && itemReservations.length > 0 && (
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                This item has {itemReservations.length} existing reservation(s). 
+                Unavailable dates are highlighted in red on the calendar.
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          <div className="space-y-2">
+            <Label>Start Date *</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {startDate ? format(startDate, "PPP") : <span>Pick a start date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={startDate}
+                  onSelect={setStartDate}
+                  disabled={(date) => {
+                    const today = new Date(new Date().setHours(0, 0, 0, 0));
+                    return date < today || isDateBlocked(date);
+                  }}
+                  modifiers={{
+                    blocked: (date) => isDateBlocked(date)
+                  }}
+                  modifiersClassNames={{
+                    blocked: "bg-red-100 text-red-900 line-through"
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Return Date *</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {returnDate ? format(returnDate, "PPP") : <span>Pick a return date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={returnDate}
+                  onSelect={setReturnDate}
+                  disabled={(date) => {
+                    const today = new Date(new Date().setHours(0, 0, 0, 0));
+                    if (startDate) {
+                      return date < startDate || date < today || isDateBlocked(date);
+                    }
+                    return date < today || isDateBlocked(date);
+                  }}
+                  modifiers={{
+                    blocked: (date) => isDateBlocked(date)
+                  }}
+                  modifiersClassNames={{
+                    blocked: "bg-red-100 text-red-900 line-through"
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {hasDateConflict() && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                The selected dates conflict with an existing reservation. Please choose different dates.
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          <div className="space-y-2">
+            <Label htmlFor="notes">Request Notes (Optional)</Label>
+            <Textarea
+              id="notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Add any special requests or notes..."
+              rows={3}
+            />
+          </div>
+
+          <div className="flex gap-3 justify-end">
+            <Button type="button" variant="outline" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
+              disabled={!itemId || !startDate || !returnDate || hasDateConflict()}
+            >
+              Submit Request
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

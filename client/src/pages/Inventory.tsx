@@ -1,0 +1,644 @@
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+import InventoryHeader from "@/components/InventoryHeader";
+import CategoryCard from "@/components/CategoryCard";
+import ItemCard from "@/components/ItemCard";
+import ItemFormDialog from "@/components/ItemFormDialog";
+import QRScannerDialog from "@/components/QRScannerDialog";
+import ScanResultDialog from "@/components/ScanResultDialog";
+import CategoryFormDialog from "@/components/CategoryFormDialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Plus, Search, FolderPlus, Pencil, Trash2, LayoutGrid, TableIcon } from "lucide-react";
+import { api, type Item } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
+import ReservationFormDialog from "@/components/ReservationFormDialog";
+import type { Language } from "@/lib/translations";
+import { useTranslation } from "@/lib/translations";
+
+interface InventoryPageProps {
+  userName: string;
+  userRole: string;
+  userId: string;
+  onLogout: () => void;
+  onNavigateToReservations?: () => void;
+  onNavigateToActivityLogs?: () => void;
+  onNavigateToQRCodes?: () => void;
+  onNavigateToMaintenance?: () => void;
+  currentLanguage: Language;
+  onLanguageChange: (lang: Language) => void;
+}
+
+export default function Inventory({ userName, userRole, userId, onLogout, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, currentLanguage, onLanguageChange }: InventoryPageProps) {
+  const { toast } = useToast();
+  const t = useTranslation(currentLanguage);
+  const [currentView, setCurrentView] = useState<'categories' | 'inventory'>('categories');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showItemForm, setShowItemForm] = useState(false);
+  const [showQRScanner, setShowQRScanner] = useState(false);
+  const [showScanResult, setShowScanResult] = useState(false);
+  const [editingItem, setEditingItem] = useState<Item | null>(null);
+  const [scanResult, setScanResult] = useState<any>(null);
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<any>(null);
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+  const [reservingItem, setReservingItem] = useState<Item | null>(null);
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ['/api/categories'],
+    queryFn: () => api.categories.getAll(),
+    enabled: currentView === 'categories'
+  });
+
+  const { data: items = [] } = useQuery({
+    queryKey: ['/api/items', selectedCategory],
+    queryFn: () => {
+      console.log('Fetching items for category:', selectedCategory);
+      return api.items.getAll(selectedCategory || undefined);
+    },
+    enabled: currentView === 'inventory'
+  });
+
+  const createItemMutation = useMutation({
+    mutationFn: (itemData: Partial<Item>) => api.items.create(itemData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      setShowItemForm(false);
+      toast({ title: "Item added successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to add item", variant: "destructive" });
+    }
+  });
+
+  const updateItemMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<Item> }) =>
+      api.items.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      setShowItemForm(false);
+      setEditingItem(null);
+      toast({ title: "Item updated successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to update item", variant: "destructive" });
+    }
+  });
+
+  const deleteItemMutation = useMutation({
+    mutationFn: (id: string) => api.items.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      toast({ title: "Item deleted successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to delete item", variant: "destructive" });
+    }
+  });
+
+  const scanMutation = useMutation({
+    mutationFn: (barcode: string) => api.scan.process(barcode),
+    onSuccess: (data) => {
+      setScanResult(data);
+      setShowQRScanner(false);
+      setShowScanResult(true);
+      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+    },
+    onError: () => {
+      setScanResult({
+        success: false,
+        error: 'Failed to process scan'
+      });
+      setShowQRScanner(false);
+      setShowScanResult(true);
+    }
+  });
+
+  const createCategoryMutation = useMutation({
+    mutationFn: (categoryData: any) => api.customCategories.create(categoryData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      setShowCategoryForm(false);
+      toast({ title: "Category created successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to create category", variant: "destructive" });
+    }
+  });
+
+  const updateCategoryMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) =>
+      api.customCategories.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      setShowCategoryForm(false);
+      setEditingCategory(null);
+      toast({ title: "Category updated successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to update category", variant: "destructive" });
+    }
+  });
+
+  const deleteCategoryMutation = useMutation({
+    mutationFn: (id: string) => api.customCategories.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/categories'] });
+      toast({ title: "Category deleted successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to delete category", variant: "destructive" });
+    }
+  });
+
+  const createReservationMutation = useMutation({
+    mutationFn: (data: any) => api.reservations.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/reservations'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
+      setReservingItem(null);
+      toast({ title: "Reservation created successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to create reservation", variant: "destructive" });
+      setReservingItem(null);
+    }
+  });
+
+  const handleLogout = async () => {
+    try {
+      await api.auth.logout();
+      onLogout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+      onLogout();
+    }
+  };
+
+  const filteredItems = items.filter(item => {
+    const matchesSearch = searchQuery === "" || 
+      item.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.barcode.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+
+  const filteredCategories = categories.filter(cat =>
+    cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleAddItem = (itemData: any) => {
+    createItemMutation.mutate(itemData);
+  };
+
+  const handleEditItem = (itemData: any) => {
+    if (editingItem) {
+      updateItemMutation.mutate({ id: editingItem.id, data: itemData });
+    }
+  };
+
+  const handleDeleteItem = (id: string) => {
+    if (confirm('Are you sure you want to delete this item?')) {
+      deleteItemMutation.mutate(id);
+    }
+  };
+
+  const handleScan = (barcode: string) => {
+    scanMutation.mutate(barcode);
+  };
+
+  const handleAddCategory = (categoryData: any) => {
+    createCategoryMutation.mutate(categoryData);
+  };
+
+  const handleEditCategory = (categoryData: any) => {
+    if (editingCategory?.id) {
+      updateCategoryMutation.mutate({ id: editingCategory.id, data: categoryData });
+    }
+  };
+
+  const handleDeleteCategory = (id: string) => {
+    if (confirm('Are you sure you want to delete this category?')) {
+      deleteCategoryMutation.mutate(id);
+    }
+  };
+
+  const handleReserveItem = (item: Item) => {
+    setReservingItem(item);
+  };
+
+  const handleSubmitReservation = (data: any) => {
+    createReservationMutation.mutate(data);
+  };
+
+  const handleCheckout = (item: Item) => {
+    if (confirm(`Check out ${item.productName}?`)) {
+      updateItemMutation.mutate({
+        id: item.id,
+        data: { status: 'In Use' }
+      });
+    }
+  };
+
+  const handleCheckin = (item: Item) => {
+    if (confirm(`Check in ${item.productName}?`)) {
+      updateItemMutation.mutate({
+        id: item.id,
+        data: { status: 'Available' }
+      });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <InventoryHeader
+        userName={userName}
+        userRole={userRole}
+        currentView={currentView}
+        onViewChange={(view) => {
+          setCurrentView(view);
+          setSelectedCategory(null);
+        }}
+        onLogout={handleLogout}
+        onNavigateToReservations={onNavigateToReservations}
+        onNavigateToActivityLogs={onNavigateToActivityLogs}
+        onNavigateToQRCodes={onNavigateToQRCodes}
+        onNavigateToMaintenance={onNavigateToMaintenance}
+        language={currentLanguage}
+        onLanguageChange={onLanguageChange}
+      />
+
+      <main className="max-w-[1400px] mx-auto px-5 py-8">
+        {currentView === 'categories' ? (
+          <div>
+            <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
+              <h1 className="text-4xl font-extrabold mb-4" data-testid="text-hero-title">
+                {t('equipmentCategories')}
+              </h1>
+              <p className="text-lg opacity-90 max-w-2xl mx-auto" data-testid="text-hero-subtitle">
+                {t('browseInventory')}
+              </p>
+            </div>
+
+            <div className="max-w-2xl mx-auto mb-8">
+              <div className="flex gap-3">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
+                    placeholder={t('searchCategories')}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 h-12 text-base border-2"
+                    data-testid="input-search-categories"
+                  />
+                </div>
+                <Button
+                  onClick={() => setViewMode(viewMode === 'card' ? 'table' : 'card')}
+                  variant="outline"
+                  className="h-12"
+                  data-testid="button-toggle-view"
+                >
+                  {viewMode === 'card' ? <TableIcon className="w-4 h-4 mr-2" /> : <LayoutGrid className="w-4 h-4 mr-2" />}
+                  {viewMode === 'card' ? t('tableView') : t('cardView')}
+                </Button>
+                {userRole === 'admin' && (
+                  <Button
+                    onClick={() => {
+                      setEditingCategory(null);
+                      setShowCategoryForm(true);
+                    }}
+                    className="bg-gradient-to-r from-[#667eea] to-[#764ba2] h-12"
+                    data-testid="button-add-category"
+                  >
+                    <FolderPlus className="w-4 h-4 mr-2" />
+                    {t('addCategory')}
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {viewMode === 'card' ? (
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-5">
+                {filteredCategories.map((category) => (
+                  <div key={category.name} className="relative group">
+                    <CategoryCard
+                      {...category}
+                      onClick={() => {
+                        console.log('Category clicked:', category.name);
+                        console.log('Category subTypes:', category.subTypes);
+                        setSelectedCategory(category.name);
+                        setCurrentView('inventory');
+                      }}
+                    />
+                    {userRole === 'admin' && (
+                      <div className="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingCategory(category);
+                            setShowCategoryForm(true);
+                          }}
+                          className="bg-white/90 hover:bg-white"
+                        >
+                          <Pencil className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteCategory(category.id);
+                          }}
+                          className="bg-red-500/90 hover:bg-red-600"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('name')}</TableHead>
+                      <TableHead>{t('type')}</TableHead>
+                      <TableHead>{t('status')}</TableHead>
+                      <TableHead>{t('totalItems')}</TableHead>
+                      <TableHead>{t('available')}</TableHead>
+                      {userRole === 'admin' && <TableHead className="text-right">{t('actions')}</TableHead>}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredCategories.map((category) => (
+                      <TableRow 
+                        key={category.name}
+                        className="cursor-pointer hover:bg-muted/50"
+                        onClick={() => {
+                          setSelectedCategory(category.name);
+                          setCurrentView('inventory');
+                        }}
+                      >
+                        <TableCell className="font-medium">{category.name}</TableCell>
+                        <TableCell>{category.subTypes.join(', ')}</TableCell>
+                        <TableCell>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${category.availableCount > 0 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                            {category.availableCount > 0 ? t('available') : t('allInUse')}
+                          </span>
+                        </TableCell>
+                        <TableCell>{category.totalCount}</TableCell>
+                        <TableCell>{category.availableCount}</TableCell>
+                        {userRole === 'admin' && (
+                          <TableCell className="text-right">
+                            <div className="flex gap-2 justify-end">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingCategory(category);
+                                  setShowCategoryForm(true);
+                                }}
+                              >
+                                <Pencil className="w-3 h-3" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteCategory(category.id);
+                                }}
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div>
+            <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+              <div>
+                <h1 className="text-3xl font-bold" data-testid="text-inventory-title">
+                  {selectedCategory || t('allItems')}
+                </h1>
+                <p className="text-muted-foreground" data-testid="text-inventory-count">
+                  {filteredItems.length} {t('items')}
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => setViewMode(viewMode === 'card' ? 'table' : 'card')}
+                  variant="outline"
+                  data-testid="button-toggle-view-items"
+                >
+                  {viewMode === 'card' ? <TableIcon className="w-4 h-4 mr-2" /> : <LayoutGrid className="w-4 h-4 mr-2" />}
+                  {viewMode === 'card' ? t('tableView') : t('cardView')}
+                </Button>
+                {userRole === 'admin' && (
+                  <>
+                    <Button
+                      onClick={() => setShowQRScanner(true)}
+                      variant="outline"
+                      data-testid="button-scan-item"
+                    >
+                      <Search className="w-4 h-4 mr-2" />
+                      {t('scanItem')}
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setEditingItem(null);
+                        setShowItemForm(true);
+                      }}
+                      className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
+                      data-testid="button-add-item"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      {t('addItem')}
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <div className="relative max-w-md">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  placeholder={t('searchItems')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12"
+                  data-testid="input-search-items"
+                />
+              </div>
+            </div>
+
+            {viewMode === 'card' ? (
+              <div className="grid gap-4">
+                {filteredItems.map((item) => (
+                  <ItemCard
+                    key={item.id}
+                    id={item.id}
+                    barcode={item.barcode}
+                    productName={item.productName}
+                    productType={item.productType}
+                    status={item.status}
+                    location={item.location || undefined}
+                    notes={item.notes || undefined}
+                    userRole={userRole}
+                    onEdit={userRole === 'admin' ? () => {
+                      setEditingItem(item);
+                      setShowItemForm(true);
+                    } : undefined}
+                    onDelete={userRole === 'admin' ? () => handleDeleteItem(item.id) : undefined}
+                    onScan={userRole !== 'admin' ? () => {
+                      setShowQRScanner(true);
+                    } : undefined}
+                    onReserve={userRole !== 'admin' ? () => handleReserveItem(item) : undefined}
+                    onCheckout={userRole === 'admin' ? () => handleCheckout(item) : undefined}
+                    onCheckin={userRole === 'admin' ? () => handleCheckin(item) : undefined}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{t('barcode')}</TableHead>
+                      <TableHead>{t('name')}</TableHead>
+                      <TableHead>{t('type')}</TableHead>
+                      <TableHead>{t('status')}</TableHead>
+                      <TableHead>{t('location')}</TableHead>
+                      {userRole === 'admin' && <TableHead className="text-right">{t('actions')}</TableHead>}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredItems.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-mono">{item.barcode}</TableCell>
+                        <TableCell className="font-medium">{item.productName}</TableCell>
+                        <TableCell>{item.productType}</TableCell>
+                        <TableCell>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            item.status === 'Available' ? 'bg-green-100 text-green-800' :
+                            item.status === 'In Use' ? 'bg-blue-100 text-blue-800' :
+                            item.status === 'Reserved' ? 'bg-amber-100 text-amber-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {item.status}
+                          </span>
+                        </TableCell>
+                        <TableCell>{item.location || '-'}</TableCell>
+                        {userRole === 'admin' && (
+                          <TableCell className="text-right">
+                            <div className="flex gap-2 justify-end">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setEditingItem(item);
+                                  setShowItemForm(true);
+                                }}
+                              >
+                                <Pencil className="w-3 h-3" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => handleDeleteItem(item.id)}
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+
+            {filteredItems.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground" data-testid="text-no-items">
+                  {t('noItemsFound')}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </main>
+
+      <ItemFormDialog
+        open={showItemForm}
+        onClose={() => {
+          setShowItemForm(false);
+          setEditingItem(null);
+        }}
+        onSubmit={editingItem ? handleEditItem : handleAddItem}
+        item={editingItem ? {
+          id: editingItem.id,
+          barcode: editingItem.barcode,
+          productName: editingItem.productName,
+          productType: editingItem.productType,
+          status: editingItem.status,
+          location: editingItem.location || undefined,
+          notes: editingItem.notes || undefined
+        } : undefined}
+        mode={editingItem ? 'edit' : 'add'}
+        userRole={userRole}
+      />
+
+      <QRScannerDialog
+        open={showQRScanner}
+        onClose={() => setShowQRScanner(false)}
+        onScan={handleScan}
+      />
+
+      <ScanResultDialog
+        open={showScanResult}
+        onClose={() => setShowScanResult(false)}
+        result={scanResult}
+        isLoading={scanMutation.isPending}
+      />
+
+      <CategoryFormDialog
+        open={showCategoryForm}
+        onClose={() => {
+          setShowCategoryForm(false);
+          setEditingCategory(null);
+        }}
+        onSubmit={editingCategory ? handleEditCategory : handleAddCategory}
+        category={editingCategory}
+        mode={editingCategory ? 'edit' : 'add'}
+      />
+
+      <ReservationFormDialog
+        open={!!reservingItem}
+        onClose={() => setReservingItem(null)}
+        onSubmit={(data) => createReservationMutation.mutate({ ...data, userId })}
+        items={reservingItem ? [reservingItem] : []}
+      />
+    </div>
+  );
+}

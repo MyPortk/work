@@ -1,0 +1,329 @@
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Search, Plus, CheckCircle, XCircle, Clock, ArrowLeft, Calendar } from "lucide-react";
+import { format } from "date-fns";
+import { api, type Reservation, type Item } from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
+import ReservationFormDialog from "@/components/ReservationFormDialog";
+import ReservationActionDialog from "@/components/ReservationActionDialog";
+import InventoryHeader from "@/components/InventoryHeader";
+import type { Language } from "@/lib/translations";
+import { useTranslation } from "@/lib/translations";
+
+interface ReservationsPageProps {
+  userName: string;
+  userRole: string;
+  userId: string;
+  onLogout: () => void;
+  onNavigateToInventory?: () => void;
+  language?: Language;
+  onLanguageChange?: (language: Language) => void;
+}
+
+export default function Reservations({ userName, userRole, userId, onLogout, onNavigateToInventory, language = 'en', onLanguageChange }: ReservationsPageProps) {
+  const { toast } = useToast();
+  const t = useTranslation(language);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showReservationForm, setShowReservationForm] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [actionDialog, setActionDialog] = useState<{ open: boolean; action: 'reject' | 'complete'; reservationId: string; itemName: string }>({ open: false, action: 'reject', reservationId: '', itemName: '' });
+
+  const { data: reservations = [] } = useQuery({
+    queryKey: ['/api/reservations'],
+    queryFn: () => api.reservations.getAll(),
+  });
+
+  const { data: items = [] } = useQuery({
+    queryKey: ['/api/items'],
+    queryFn: () => api.items.getAll(),
+  });
+
+  const createReservationMutation = useMutation({
+    mutationFn: (data: any) => api.reservations.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/reservations'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
+      setShowReservationForm(false);
+      toast({ title: "Reservation created successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to create reservation", variant: "destructive" });
+    }
+  });
+
+  const updateReservationMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) =>
+      api.reservations.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/reservations'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
+      toast({ title: "Reservation updated successfully" });
+    },
+    onError: () => {
+      toast({ title: "Failed to update reservation", variant: "destructive" });
+    }
+  });
+
+  const handleApprove = (id: string) => {
+    updateReservationMutation.mutate({
+      id,
+      data: { status: 'approved', approvalDate: new Date() }
+    });
+  };
+
+  const handleReject = (id: string, itemId: string) => {
+    const itemName = getItemName(itemId);
+    setActionDialog({ open: true, action: 'reject', reservationId: id, itemName });
+  };
+
+  const handleComplete = (id: string, itemId: string) => {
+    const itemName = getItemName(itemId);
+    setActionDialog({ open: true, action: 'complete', reservationId: id, itemName });
+  };
+
+  const handleActionSubmit = (data: { rejectionReason?: string; itemConditionOnReturn?: string }) => {
+    const updateData: any = {
+      approvalDate: new Date()
+    };
+
+    if (actionDialog.action === 'reject') {
+      updateData.status = 'rejected';
+      updateData.rejectionReason = data.rejectionReason;
+    } else {
+      updateData.status = 'completed';
+      updateData.itemConditionOnReturn = data.itemConditionOnReturn;
+    }
+
+    updateReservationMutation.mutate({
+      id: actionDialog.reservationId,
+      data: updateData
+    });
+  };
+
+  const getItemName = (itemId: string) => {
+    const item = items.find(i => i.id === itemId);
+    return item?.productName || 'Unknown Item';
+  };
+
+  const filteredReservations = reservations.filter(res => {
+    const itemName = getItemName(res.itemId).toLowerCase();
+    const matchesSearch = searchQuery === "" || itemName.includes(searchQuery.toLowerCase());
+    const matchesFilter = filterStatus === "all" || res.status === filterStatus;
+    const matchesUser = userRole === 'admin' || res.userId === userId; // Correctly filter by userId
+    return matchesSearch && matchesFilter && matchesUser;
+  });
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'approved': return 'bg-green-500';
+      case 'pending': return 'bg-yellow-500';
+      case 'rejected': return 'bg-red-500';
+      case 'completed': return 'bg-blue-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'approved': return <CheckCircle className="w-4 h-4" />;
+      case 'rejected': return <XCircle className="w-4 h-4" />;
+      case 'pending': return <Clock className="w-4 h-4" />;
+      default: return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <InventoryHeader
+        userName={userName}
+        userRole={userRole}
+        currentView="inventory"
+        onViewChange={() => onNavigateToInventory?.()}
+        onLogout={onLogout}
+        onNavigateToReservations={() => {}}
+        hideViewToggle={true}
+        language={language}
+        onLanguageChange={onLanguageChange}
+      />
+
+      <main className="max-w-[1400px] mx-auto px-5 py-8">
+        <div className="mb-6">
+          <Button
+            variant="ghost"
+            onClick={onNavigateToInventory} // This should navigate to categories, not inventory view
+            className="gap-2"
+            data-testid="button-back-to-inventory"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            {t('backToInventory')}
+          </Button>
+        </div>
+
+        <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
+          <h1 className="text-4xl font-extrabold mb-4">{t('equipmentReservations')}</h1>
+          <p className="text-lg opacity-90 max-w-2xl mx-auto">
+            {t('requestManageReservations')}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+          <div className="flex gap-3">
+            <Button
+              variant={filterStatus === "all" ? "default" : "outline"}
+              onClick={() => setFilterStatus("all")}
+            >
+              {t('all')}
+            </Button>
+            <Button
+              variant={filterStatus === "pending" ? "default" : "outline"}
+              onClick={() => setFilterStatus("pending")}
+            >
+              {t('pending')}
+            </Button>
+            <Button
+              variant={filterStatus === "approved" ? "default" : "outline"}
+              onClick={() => setFilterStatus("approved")}
+            >
+              {t('approved')}
+            </Button>
+            <Button
+              variant={filterStatus === "completed" ? "default" : "outline"}
+              onClick={() => setFilterStatus("completed")}
+            >
+              {t('completed')}
+            </Button>
+          </div>
+          <Button
+            onClick={() => setShowReservationForm(true)}
+            className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            {t('newReservation')}
+          </Button>
+        </div>
+
+        <div className="mb-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <Input
+              placeholder={t('search')}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12"
+            />
+          </div>
+        </div>
+
+        <div className="grid gap-4">
+          {filteredReservations.map((reservation) => (
+            <Card key={reservation.id} className="p-6">
+              <div className="flex items-start justify-between gap-4 flex-wrap">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <h3 className="text-xl font-bold">{getItemName(reservation.itemId)}</h3>
+                    <Badge className={`${getStatusColor(reservation.status)} text-white`}>
+                      <span className="flex items-center gap-1">
+                        {getStatusIcon(reservation.status)}
+                        {reservation.status.toUpperCase()}
+                      </span>
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Calendar className="w-4 h-4" />
+                      <span>
+                        <strong>{t('start')}:</strong> {format(new Date(reservation.startDate), "PPP")}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Calendar className="w-4 h-4" />
+                      <span>
+                        <strong>{t('return')}:</strong> {format(new Date(reservation.returnDate), "PPP")}
+                      </span>
+                    </div>
+                    <div className="text-muted-foreground">
+                      <strong>{t('requested')}:</strong> {format(new Date(reservation.requestDate), "PPP")}
+                    </div>
+                    {reservation.approvalDate && (
+                      <div className="text-muted-foreground">
+                        <strong>{t('responded')}:</strong> {format(new Date(reservation.approvalDate), "PPP")}
+                      </div>
+                    )}
+                    {reservation.notes && (
+                      <div className="col-span-2 text-muted-foreground">
+                        <strong>{t('notes')}:</strong> {reservation.notes}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {userRole === 'admin' && reservation.status === 'pending' && (
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+                      onClick={() => handleApprove(reservation.id)}
+                    >
+                      <CheckCircle className="w-4 h-4 mr-1" />
+                      {t('approve')}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
+                      onClick={() => handleReject(reservation.id, reservation.itemId)}
+                    >
+                      <XCircle className="w-4 h-4 mr-1" />
+                      {t('decline')}
+                    </Button>
+                  </div>
+                )}
+                {userRole === 'admin' && reservation.status === 'approved' && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+                    onClick={() => handleComplete(reservation.id, reservation.itemId)}
+                  >
+                    <CheckCircle className="w-4 h-4 mr-1" />
+                    {t('markReturned')}
+                  </Button>
+                )}
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        {filteredReservations.length === 0 && (
+          <div className="text-center py-12 bg-muted/30 rounded-lg">
+            <Clock className="w-12 h-12 mx-auto mb-3 text-muted-foreground" />
+            <p className="text-lg font-medium text-muted-foreground">{t('noReservationsFound')}</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {filterStatus !== "all" ? t('tryChangingFilter') : t('createFirstReservation')}
+            </p>
+          </div>
+        )}
+      </main>
+
+      <ReservationFormDialog
+        open={showReservationForm}
+        onClose={() => setShowReservationForm(false)}
+        onSubmit={(data) => createReservationMutation.mutate({ ...data, userId: userId })} // Pass the actual userId
+        items={items.filter(item => item.status !== 'Maintenance')}
+      />
+
+      <ReservationActionDialog
+        open={actionDialog.open}
+        onClose={() => setActionDialog({ ...actionDialog, open: false })}
+        onSubmit={handleActionSubmit}
+        action={actionDialog.action}
+        itemName={actionDialog.itemName}
+      />
+    </div>
+  );
+}
