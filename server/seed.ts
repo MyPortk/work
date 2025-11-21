@@ -187,56 +187,56 @@ export async function seedDatabase() {
     { barcode: 'STO-003', productName: 'WD My Passport Wireless', productType: 'Storage Devices', status: 'Available', location: 'IT Room', notes: 'Wireless portable HDD', isEquipment: true },
 
     // 13. Softwares
-    { barcode: 'SOFT-101', productName: 'Adobe Premiere Pro License', productType: 'Editing Software', status: 'Available', location: 'Digital Assets', notes: 'Video editing software', isEquipment: true },
-    { barcode: 'SOFT-102', productName: 'Final Cut Pro License', productType: 'Editing Software', status: 'Available', location: 'Digital Assets', notes: 'Apple video editing', isEquipment: true },
-    { barcode: 'SOFT-103', productName: 'Adobe Photoshop License', productType: 'Design Software', status: 'Available', location: 'Digital Assets', notes: 'Photo editing software', isEquipment: true },
-    { barcode: 'SOFT-104', productName: 'Adobe Illustrator License', productType: 'Design Software', status: 'Available', location: 'Digital Assets', notes: 'Vector design software', isEquipment: true },
-    { barcode: 'SOFT-105', productName: 'Microsoft Office 365', productType: 'Office Software', status: 'Available', location: 'Digital Assets', notes: 'Office productivity suite', isEquipment: true },
+    { barcode: 'SOFT-101', productName: 'Adobe Premiere Pro License', productType: 'Editing Software', status: 'Available', location: 'Digital Assets', notes: 'Video editing software', isEquipment: false },
+    { barcode: 'SOFT-102', productName: 'Final Cut Pro License', productType: 'Editing Software', status: 'Available', location: 'Digital Assets', notes: 'Apple video editing', isEquipment: false },
+    { barcode: 'SOFT-103', productName: 'Adobe Photoshop License', productType: 'Design Software', status: 'Available', location: 'Digital Assets', notes: 'Photo editing software', isEquipment: false },
+    { barcode: 'SOFT-104', productName: 'Adobe Illustrator License', productType: 'Design Software', status: 'Available', location: 'Digital Assets', notes: 'Vector design software', isEquipment: false },
+    { barcode: 'SOFT-105', productName: 'Microsoft Office 365', productType: 'Office Software', status: 'Available', location: 'Digital Assets', notes: 'Office productivity suite', isEquipment: false },
 
     // 14. Office Supplies
-    { barcode: 'OFF-001', productName: 'Pens and Pencils Set', productType: 'Stationery', status: 'Available', location: 'Office Supply Cabinet', notes: 'Writing instruments', isEquipment: true },
-    { barcode: 'OFF-002', productName: 'Notebooks A4', productType: 'Stationery', status: 'Available', location: 'Office Supply Cabinet', notes: 'Spiral notebooks', isEquipment: true },
-    { barcode: 'OFF-003', productName: 'Sticky Notes Assorted', productType: 'Stationery', status: 'Available', location: 'Office Supply Cabinet', notes: 'Post-it notes', isEquipment: true },
-    { barcode: 'OFF-004', productName: 'Desk Organizer', productType: 'Desk Items', status: 'Available', location: 'Office', notes: 'Desktop organization', isEquipment: true },
-    { barcode: 'OFF-005', productName: 'Paper Clips & Binders', productType: 'Desk Items', status: 'Available', location: 'Office Supply Cabinet', notes: 'Office fasteners', isEquipment: true },
-    { barcode: 'OFF-006', productName: 'Printer Paper A4 Ream', productType: 'Printer Supplies', status: 'Available', location: 'Print Room', notes: 'Copy paper 500 sheets', isEquipment: true },
-    { barcode: 'OFF-007', productName: 'Ink Cartridges Set', productType: 'Printer Supplies', status: 'Available', location: 'Print Room', notes: 'Printer ink refills', isEquipment: true },
+    { barcode: 'OFF-001', productName: 'Pens and Pencils Set', productType: 'Stationery', status: 'Available', location: 'Office Supply Cabinet', notes: 'Writing instruments', isEquipment: false },
+    { barcode: 'OFF-002', productName: 'Notebooks A4', productType: 'Stationery', status: 'Available', location: 'Office Supply Cabinet', notes: 'Spiral notebooks', isEquipment: false },
+    { barcode: 'OFF-003', productName: 'Sticky Notes Assorted', productType: 'Stationery', status: 'Available', location: 'Office Supply Cabinet', notes: 'Post-it notes', isEquipment: false },
+    { barcode: 'OFF-004', productName: 'Desk Organizer', productType: 'Desk Items', status: 'Available', location: 'Office', notes: 'Desktop organization', isEquipment: false },
+    { barcode: 'OFF-005', productName: 'Paper Clips & Binders', productType: 'Desk Items', status: 'Available', location: 'Office Supply Cabinet', notes: 'Office fasteners', isEquipment: false },
+    { barcode: 'OFF-006', productName: 'Printer Paper A4 Ream', productType: 'Printer Supplies', status: 'Available', location: 'Print Room', notes: 'Copy paper 500 sheets', isEquipment: false },
+    { barcode: 'OFF-007', productName: 'Ink Cartridges Set', productType: 'Printer Supplies', status: 'Available', location: 'Print Room', notes: 'Printer ink refills', isEquipment: false },
 
     // 15. Pantry
-    { barcode: 'PAN-001', productName: 'Coffee & Tea Supplies', productType: 'Snacks', status: 'Available', location: 'Pantry', notes: 'Hot beverages', isEquipment: true },
-    { barcode: 'PAN-002', productName: 'Snack Box Assorted', productType: 'Snacks', status: 'Available', location: 'Pantry', notes: 'Mixed snacks', isEquipment: true },
-    { barcode: 'PAN-003', productName: 'Disposable Cups Pack', productType: 'Disposable Items', status: 'Available', location: 'Pantry', notes: 'Paper cups 100 count', isEquipment: true },
-    { barcode: 'PAN-004', productName: 'Disposable Plates & Utensils', productType: 'Disposable Items', status: 'Available', location: 'Pantry', notes: 'Disposable dinnerware', isEquipment: true },
+    { barcode: 'PAN-001', productName: 'Coffee & Tea Supplies', productType: 'Snacks', status: 'Available', location: 'Pantry', notes: 'Hot beverages', isEquipment: false },
+    { barcode: 'PAN-002', productName: 'Snack Box Assorted', productType: 'Snacks', status: 'Available', location: 'Pantry', notes: 'Mixed snacks', isEquipment: false },
+    { barcode: 'PAN-003', productName: 'Disposable Cups Pack', productType: 'Disposable Items', status: 'Available', location: 'Pantry', notes: 'Paper cups 100 count', isEquipment: false },
+    { barcode: 'PAN-004', productName: 'Disposable Plates & Utensils', productType: 'Disposable Items', status: 'Available', location: 'Pantry', notes: 'Disposable dinnerware', isEquipment: false },
 
     // 16. Transportation
-    { barcode: 'TRANS-001', productName: 'Company Van', productType: 'Vehicles', status: 'Available', location: 'Parking Lot', notes: 'Equipment transport van', isEquipment: true },
-    { barcode: 'TRANS-002', productName: 'Delivery Dolly', productType: 'Delivery Equipment', status: 'Available', location: 'Loading Dock', notes: 'Hand truck for transport', isEquipment: true },
-    { barcode: 'TRANS-003', productName: 'Equipment Cart', productType: 'Delivery Equipment', status: 'Available', location: 'Storage', notes: 'Rolling equipment cart', isEquipment: true },
-    { barcode: 'TRANS-004', productName: 'Travel Case Set', productType: 'Travel Accessories', status: 'Available', location: 'Storage Room', notes: 'Protective travel cases', isEquipment: true },
+    { barcode: 'TRANS-001', productName: 'Company Van', productType: 'Vehicles', status: 'Available', location: 'Parking Lot', notes: 'Equipment transport van', isEquipment: false },
+    { barcode: 'TRANS-002', productName: 'Delivery Dolly', productType: 'Delivery Equipment', status: 'Available', location: 'Loading Dock', notes: 'Hand truck for transport', isEquipment: false },
+    { barcode: 'TRANS-003', productName: 'Equipment Cart', productType: 'Delivery Equipment', status: 'Available', location: 'Storage', notes: 'Rolling equipment cart', isEquipment: false },
+    { barcode: 'TRANS-004', productName: 'Travel Case Set', productType: 'Travel Accessories', status: 'Available', location: 'Storage Room', notes: 'Protective travel cases', isEquipment: false },
 
     // 17. Furniture
-    { barcode: 'FURN-001', productName: 'Office Chair Ergonomic', productType: 'Chairs', status: 'Available', location: 'Office', notes: 'Adjustable office chair', isEquipment: true },
-    { barcode: 'FURN-002', productName: 'Director Chair Set', productType: 'Chairs', status: 'Available', location: 'Studio', notes: 'Folding director chairs', isEquipment: true },
-    { barcode: 'FURN-003', productName: 'Conference Table', productType: 'Tables', status: 'Available', location: 'Meeting Room', notes: 'Large meeting table', isEquipment: true },
-    { barcode: 'FURN-004', productName: 'Production Desk', productType: 'Tables', status: 'Available', location: 'Studio', notes: 'Work desk', isEquipment: true },
-    { barcode: 'FURN-005', productName: 'Storage Cabinet Metal', productType: 'Storage Units', status: 'Available', location: 'Equipment Room', notes: 'Lockable storage cabinet', isEquipment: true },
-    { barcode: 'FURN-006', productName: 'Shelving Unit', productType: 'Storage Units', status: 'Available', location: 'Storage Room', notes: '5-tier metal shelving', isEquipment: true },
+    { barcode: 'FURN-001', productName: 'Office Chair Ergonomic', productType: 'Chairs', status: 'Available', location: 'Office', notes: 'Adjustable office chair', isEquipment: false },
+    { barcode: 'FURN-002', productName: 'Director Chair Set', productType: 'Chairs', status: 'Available', location: 'Studio', notes: 'Folding director chairs', isEquipment: false },
+    { barcode: 'FURN-003', productName: 'Conference Table', productType: 'Tables', status: 'Available', location: 'Meeting Room', notes: 'Large meeting table', isEquipment: false },
+    { barcode: 'FURN-004', productName: 'Production Desk', productType: 'Tables', status: 'Available', location: 'Studio', notes: 'Work desk', isEquipment: false },
+    { barcode: 'FURN-005', productName: 'Storage Cabinet Metal', productType: 'Storage Units', status: 'Available', location: 'Equipment Room', notes: 'Lockable storage cabinet', isEquipment: false },
+    { barcode: 'FURN-006', productName: 'Shelving Unit', productType: 'Storage Units', status: 'Available', location: 'Storage Room', notes: '5-tier metal shelving', isEquipment: false },
 
     // 18. Communication
-    { barcode: 'COMM-001', productName: 'Company SIM Card Set', productType: 'SIM Cards', status: 'Available', location: 'IT Office', notes: 'Mobile data SIM cards', isEquipment: true },
-    { barcode: 'COMM-002', productName: 'Portable WiFi Hotspot', productType: 'Internet Devices', status: 'Available', location: 'Equipment Room', notes: 'Mobile internet device', isEquipment: true },
-    { barcode: 'COMM-003', productName: 'Spare Mobile Phone', productType: 'Mobile Devices', status: 'Available', location: 'IT Office', notes: 'Backup communication device', isEquipment: true },
+    { barcode: 'COMM-001', productName: 'Company SIM Card Set', productType: 'SIM Cards', status: 'Available', location: 'IT Office', notes: 'Mobile data SIM cards', isEquipment: false },
+    { barcode: 'COMM-002', productName: 'Portable WiFi Hotspot', productType: 'Internet Devices', status: 'Available', location: 'Equipment Room', notes: 'Mobile internet device', isEquipment: false },
+    { barcode: 'COMM-003', productName: 'Spare Mobile Phone', productType: 'Mobile Devices', status: 'Available', location: 'IT Office', notes: 'Backup communication device', isEquipment: false },
 
     // 19. Uniforms & Branding
-    { barcode: 'UNI-001', productName: 'Staff Uniform Shirt (S)', productType: 'Uniforms', status: 'Available', location: 'Uniform Storage', notes: 'Small size uniform', isEquipment: true },
-    { barcode: 'UNI-002', productName: 'Staff Uniform Shirt (M)', productType: 'Uniforms', status: 'Available', location: 'Uniform Storage', notes: 'Medium size uniform', isEquipment: true },
-    { barcode: 'UNI-003', productName: 'Staff Uniform Shirt (L)', productType: 'Uniforms', status: 'Available', location: 'Uniform Storage', notes: 'Large size uniform', isEquipment: true },
-    { barcode: 'UNI-004', productName: 'Staff Uniform Shirt (XL)', productType: 'Uniforms', status: 'Available', location: 'Uniform Storage', notes: 'Extra large uniform', isEquipment: true },
-    { barcode: 'BRAND-001', productName: 'Name Badges Set', productType: 'Badges', status: 'Available', location: 'HR Office', notes: 'Employee ID badges', isEquipment: true },
-    { barcode: 'BRAND-002', productName: 'Luggage Tags', productType: 'Tags', status: 'Available', location: 'Equipment Storage', notes: 'Equipment identification tags', isEquipment: true },
-    { barcode: 'BRAND-003', productName: 'Branded T-Shirts (Assorted)', productType: 'T-Shirts', status: 'Available', location: 'Marketing Storage', notes: 'Promotional t-shirts', isEquipment: true },
-    { barcode: 'BRAND-004', productName: 'Branded Tote Bags', productType: 'Tote Bags', status: 'Available', location: 'Marketing Storage', notes: 'Company logo tote bags', isEquipment: true },
-    { barcode: 'BRAND-005', productName: 'Uniform Storage Bags', productType: 'Uniform Bags', status: 'Available', location: 'Uniform Storage', notes: 'Individual uniform bags', isEquipment: true }
+    { barcode: 'UNI-001', productName: 'Staff Uniform Shirt (S)', productType: 'Uniforms', status: 'Available', location: 'Uniform Storage', notes: 'Small size uniform', isEquipment: false },
+    { barcode: 'UNI-002', productName: 'Staff Uniform Shirt (M)', productType: 'Uniforms', status: 'Available', location: 'Uniform Storage', notes: 'Medium size uniform', isEquipment: false },
+    { barcode: 'UNI-003', productName: 'Staff Uniform Shirt (L)', productType: 'Uniforms', status: 'Available', location: 'Uniform Storage', notes: 'Large size uniform', isEquipment: false },
+    { barcode: 'UNI-004', productName: 'Staff Uniform Shirt (XL)', productType: 'Uniforms', status: 'Available', location: 'Uniform Storage', notes: 'Extra large uniform', isEquipment: false },
+    { barcode: 'BRAND-001', productName: 'Name Badges Set', productType: 'Badges', status: 'Available', location: 'HR Office', notes: 'Employee ID badges', isEquipment: false },
+    { barcode: 'BRAND-002', productName: 'Luggage Tags', productType: 'Tags', status: 'Available', location: 'Equipment Storage', notes: 'Equipment identification tags', isEquipment: false },
+    { barcode: 'BRAND-003', productName: 'Branded T-Shirts (Assorted)', productType: 'T-Shirts', status: 'Available', location: 'Marketing Storage', notes: 'Promotional t-shirts', isEquipment: false },
+    { barcode: 'BRAND-004', productName: 'Branded Tote Bags', productType: 'Tote Bags', status: 'Available', location: 'Marketing Storage', notes: 'Company logo tote bags', isEquipment: false },
+    { barcode: 'BRAND-005', productName: 'Uniform Storage Bags', productType: 'Uniform Bags', status: 'Available', location: 'Uniform Storage', notes: 'Individual uniform bags', isEquipment: false }
   ];
 
   for (const item of items) {
