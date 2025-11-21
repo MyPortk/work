@@ -132,11 +132,15 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
   };
 
   const handleConfirmCheckout = () => {
+    if (!checkoutNotes.trim()) {
+      toast({ title: "Please add equipment condition notes", variant: "destructive" });
+      return;
+    }
     updateReservationMutation.mutate({
       id: checkoutReservation.id,
       data: { 
-        checkoutDate: new Date(),
-        itemConditionOnReceive: checkoutNotes || undefined
+        checkoutDate: new Date().toISOString(),
+        itemConditionOnReceive: checkoutNotes.trim()
       }
     });
     setShowCheckoutDialog(false);

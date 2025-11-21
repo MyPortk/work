@@ -935,7 +935,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = insertReservationSchema.partial().extend({
         rejectionReason: z.string().optional(),
         itemConditionOnReceive: z.string().optional(),
-        itemConditionOnReturn: z.string().optional()
+        itemConditionOnReturn: z.string().optional(),
+        checkoutDate: z.date().optional().or(z.string().datetime().transform(str => new Date(str))),
+        returnedDate: z.date().optional().or(z.string().datetime().transform(str => new Date(str))),
+        returnNotes: z.string().optional()
       }).parse(req.body);
 
       // Get current reservation state
@@ -1024,6 +1027,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         } catch (logError) {
           console.error('Failed to log reservation status change:', logError);
+        }
+      } else if (validatedData.checkoutDate && validatedData.itemConditionOnReceive !== undefined) {
+        // Handle equipment checkout/receive
+        await storage.updateItem(reservation.itemId, { status: 'In Use' });
+
+        // Log activity for checkout
+        try {
+          await storage.createActivityLog({
+            itemId: reservation.itemId,
+            userId: req.session.userId!,
+            action: 'Equipment Received',
+            oldStatus: item?.status || 'Reserved',
+            newStatus: 'In Use',
+            notes: `${item?.productName || 'Item'} received by ${req.session.name}. Condition: ${validatedData.itemConditionOnReceive || 'No notes provided'}. Status: Reserved → In Use. Received at ${new Date().toLocaleString()}`
+          });
+        } catch (logError) {
+          console.error('Failed to log checkout activity:', logError);
+        }
+
+        // Create notification for admin
+        try {
+          await storage.createNotification({
+            userId: reservation.userId,
+            type: 'equipment_received',
+            title: 'Equipment Received',
+            message: `You have successfully received ${item?.productName || 'equipment'}. Return by ${format(new Date(reservation.returnDate), 'MMM dd, yyyy')} at ${reservation.returnTime || '17:00'}`,
+            relatedId: reservation.id,
+            isRead: 'false'
+          });
+        } catch (notifError) {
+          console.error('Failed to create checkout notification:', notifError);
         }
       } else if (validatedData.status === 'approved') {
         await storage.updateItem(reservation.itemId, { status: 'Reserved' });
