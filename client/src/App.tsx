@@ -117,6 +117,9 @@ function App() {
             userId={currentUser?.id || ''}
             onLogout={handleLogout}
             onNavigateToInventory={handleNavigateToInventory}
+            onNavigateToActivityLogs={handleNavigateToActivityLogs}
+            onNavigateToQRCodes={handleNavigateToQRCodes}
+            onNavigateToMaintenance={handleNavigateToMaintenance}
             currentLanguage={language}
             onLanguageChange={handleLanguageChange}
           />
@@ -125,7 +128,10 @@ function App() {
             userName={currentUser?.name || ''}
             userRole={currentUser?.role || ''}
             onLogout={handleLogout}
-            onNavigateBack={handleNavigateToInventory}
+            onNavigateToInventory={handleNavigateToInventory}
+            onNavigateToReservations={handleNavigateToReservations}
+            onNavigateToQRCodes={handleNavigateToQRCodes}
+            onNavigateToMaintenance={handleNavigateToMaintenance}
             currentLanguage={language}
             onLanguageChange={handleLanguageChange}
           />
@@ -134,7 +140,10 @@ function App() {
             userName={currentUser?.name || ''}
             userRole={currentUser?.role || ''}
             onLogout={handleLogout}
-            onNavigateBack={handleNavigateToInventory}
+            onNavigateToInventory={handleNavigateToInventory}
+            onNavigateToReservations={handleNavigateToReservations}
+            onNavigateToActivityLogs={handleNavigateToActivityLogs}
+            onNavigateToMaintenance={handleNavigateToMaintenance}
             currentLanguage={language}
             onLanguageChange={handleLanguageChange}
           />
@@ -144,10 +153,10 @@ function App() {
             userRole={currentUser?.role || ''}
             userId={currentUser?.id || ''}
             onLogout={handleLogout}
+            onNavigateToInventory={handleNavigateToInventory}
             onNavigateToReservations={handleNavigateToReservations}
             onNavigateToActivityLogs={handleNavigateToActivityLogs}
             onNavigateToQRCodes={handleNavigateToQRCodes}
-            onNavigateToInventory={handleNavigateToInventory}
             currentLanguage={language}
             onLanguageChange={handleLanguageChange}
           />
@@ -157,6 +166,10 @@ function App() {
             userRole={currentUser.role}
             onLogout={handleLogout}
             onNavigateToInventory={handleNavigateToInventory}
+            onNavigateToReservations={handleNavigateToReservations}
+            onNavigateToActivityLogs={handleNavigateToActivityLogs}
+            onNavigateToQRCodes={handleNavigateToQRCodes}
+            onNavigateToMaintenance={handleNavigateToMaintenance}
             currentLanguage={language}
             onLanguageChange={handleLanguageChange}
           />
