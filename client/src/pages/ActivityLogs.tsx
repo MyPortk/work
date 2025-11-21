@@ -16,12 +16,15 @@ interface ActivityLogsProps {
   userName: string;
   userRole: string;
   onLogout: () => void;
-  onNavigateBack?: () => void;
+  onNavigateToInventory?: () => void;
+  onNavigateToReservations?: () => void;
+  onNavigateToQRCodes?: () => void;
+  onNavigateToMaintenance?: () => void;
   currentLanguage: Language;
   onLanguageChange: (lang: Language) => void;
 }
 
-export default function ActivityLogs({ userName, userRole, onLogout, onNavigateBack, currentLanguage, onLanguageChange }: ActivityLogsProps) {
+export default function ActivityLogs({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToQRCodes, onNavigateToMaintenance, currentLanguage, onLanguageChange }: ActivityLogsProps) {
   const t = useTranslation(currentLanguage);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [selectedReservation, setSelectedReservation] = useState<string | null>(null);
@@ -61,9 +64,12 @@ export default function ActivityLogs({ userName, userRole, onLogout, onNavigateB
         userName={userName}
         userRole={userRole}
         currentView="inventory"
-        onViewChange={() => {}}
+        onViewChange={() => onNavigateToInventory?.()}
         onLogout={onLogout}
-        onNavigateToReservations={onNavigateBack}
+        onNavigateToReservations={onNavigateToReservations}
+        onNavigateToActivityLogs={() => {}}
+        onNavigateToQRCodes={onNavigateToQRCodes}
+        onNavigateToMaintenance={onNavigateToMaintenance}
         hideViewToggle={true}
         language={currentLanguage}
         onLanguageChange={onLanguageChange}

@@ -20,11 +20,15 @@ interface UserManagementProps {
   userRole: string;
   onLogout: () => void;
   onNavigateToInventory?: () => void;
+  onNavigateToReservations?: () => void;
+  onNavigateToActivityLogs?: () => void;
+  onNavigateToQRCodes?: () => void;
+  onNavigateToMaintenance?: () => void;
   language: Language;
   onLanguageChange: (language: Language) => void;
 }
 
-export default function UserManagement({ userName, userRole, onLogout, onNavigateToInventory, language, onLanguageChange }: UserManagementProps) {
+export default function UserManagement({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, language, onLanguageChange }: UserManagementProps) {
   const { toast } = useToast();
   const t = useTranslation(language);
   const [showAddUser, setShowAddUser] = useState(false);
@@ -98,12 +102,12 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
         userName={userName}
         userRole={userRole}
         currentView="categories"
-        onViewChange={() => {}}
+        onViewChange={() => onNavigateToInventory?.()}
         onLogout={onLogout}
-        onNavigateToReservations={() => {}}
-        onNavigateToActivityLogs={() => {}}
-        onNavigateToQRCodes={() => {}}
-        onNavigateToMaintenance={() => {}}
+        onNavigateToReservations={onNavigateToReservations}
+        onNavigateToActivityLogs={onNavigateToActivityLogs}
+        onNavigateToQRCodes={onNavigateToQRCodes}
+        onNavigateToMaintenance={onNavigateToMaintenance}
         hideViewToggle={true}
         language={language}
         onLanguageChange={onLanguageChange}

@@ -18,10 +18,10 @@ interface MaintenancePageProps {
   userRole: string;
   userId: string;
   onLogout: () => void;
+  onNavigateToInventory?: () => void;
   onNavigateToReservations?: () => void;
   onNavigateToActivityLogs?: () => void;
   onNavigateToQRCodes?: () => void;
-  onNavigateToInventory?: () => void;
   language?: Language;
   onLanguageChange?: (language: Language) => void;
 }
@@ -31,10 +31,10 @@ export default function Maintenance({
   userRole,
   userId,
   onLogout,
+  onNavigateToInventory,
   onNavigateToReservations,
   onNavigateToActivityLogs,
   onNavigateToQRCodes,
-  onNavigateToInventory,
   language = 'en',
   onLanguageChange
 }: MaintenancePageProps) {

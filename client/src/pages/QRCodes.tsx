@@ -12,12 +12,15 @@ interface QRCodesProps {
   userName: string;
   userRole: string;
   onLogout: () => void;
-  onNavigateBack?: () => void;
+  onNavigateToInventory?: () => void;
+  onNavigateToReservations?: () => void;
+  onNavigateToActivityLogs?: () => void;
+  onNavigateToMaintenance?: () => void;
   language: Language;
   onLanguageChange: (lang: Language) => void;
 }
 
-export default function QRCodes({ userName, userRole, onLogout, onNavigateBack, language, onLanguageChange }: QRCodesProps) {
+export default function QRCodes({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToMaintenance, language, onLanguageChange }: QRCodesProps) {
   const { toast } = useToast();
   const t = useTranslation(language);
   const { data: qrCodes = [], isLoading } = useQuery({
@@ -51,9 +54,12 @@ export default function QRCodes({ userName, userRole, onLogout, onNavigateBack, 
         userName={userName}
         userRole={userRole}
         currentView="inventory"
-        onViewChange={() => {}}
+        onViewChange={() => onNavigateToInventory?.()}
         onLogout={onLogout}
-        onNavigateToReservations={onNavigateBack}
+        onNavigateToReservations={onNavigateToReservations}
+        onNavigateToActivityLogs={onNavigateToActivityLogs}
+        onNavigateToQRCodes={() => {}}
+        onNavigateToMaintenance={onNavigateToMaintenance}
         hideViewToggle={true}
         language={language}
         onLanguageChange={onLanguageChange}

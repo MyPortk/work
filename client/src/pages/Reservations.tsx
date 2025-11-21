@@ -21,11 +21,14 @@ interface ReservationsPageProps {
   userId: string;
   onLogout: () => void;
   onNavigateToInventory?: () => void;
+  onNavigateToActivityLogs?: () => void;
+  onNavigateToQRCodes?: () => void;
+  onNavigateToMaintenance?: () => void;
   language?: Language;
   onLanguageChange?: (language: Language) => void;
 }
 
-export default function Reservations({ userName, userRole, userId, onLogout, onNavigateToInventory, language = 'en', onLanguageChange }: ReservationsPageProps) {
+export default function Reservations({ userName, userRole, userId, onLogout, onNavigateToInventory, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, language = 'en', onLanguageChange }: ReservationsPageProps) {
   const { toast } = useToast();
   const t = useTranslation(language);
   const [searchQuery, setSearchQuery] = useState("");
@@ -145,7 +148,9 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
         currentView="inventory"
         onViewChange={() => onNavigateToInventory?.()}
         onLogout={onLogout}
-        onNavigateToReservations={() => {}}
+        onNavigateToActivityLogs={onNavigateToActivityLogs}
+        onNavigateToQRCodes={onNavigateToQRCodes}
+        onNavigateToMaintenance={onNavigateToMaintenance}
         hideViewToggle={true}
         language={language}
         onLanguageChange={onLanguageChange}
