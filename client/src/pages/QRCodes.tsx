@@ -16,13 +16,15 @@ interface QRCodesProps {
   onNavigateToReservations?: () => void;
   onNavigateToActivityLogs?: () => void;
   onNavigateToMaintenance?: () => void;
-  language: Language;
-  onLanguageChange: (lang: Language) => void;
+  language?: Language;
+  onLanguageChange?: (lang: Language) => void;
+  currentLanguage?: Language;
 }
 
-export default function QRCodes({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToMaintenance, language, onLanguageChange }: QRCodesProps) {
+export default function QRCodes({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToMaintenance, language = 'en', onLanguageChange, currentLanguage = 'en' }: QRCodesProps) {
   const { toast } = useToast();
-  const t = useTranslation(language);
+  const lang: Language = language || currentLanguage || 'en';
+  const t = useTranslation(lang);
   const { data: qrCodes = [], isLoading } = useQuery({
     queryKey: ['/api/qrcodes/all'],
     queryFn: () => api.qrCodes.getAllQRCodes(),
@@ -61,8 +63,8 @@ export default function QRCodes({ userName, userRole, onLogout, onNavigateToInve
         onNavigateToQRCodes={() => {}}
         onNavigateToMaintenance={onNavigateToMaintenance}
         hideViewToggle={true}
-        language={language}
-        onLanguageChange={onLanguageChange}
+        language={lang}
+        onLanguageChange={onLanguageChange || (() => {})}
       />
 
       <main className="max-w-[1400px] mx-auto px-5 py-8">

@@ -20,12 +20,13 @@ interface ActivityLogsProps {
   onNavigateToReservations?: () => void;
   onNavigateToQRCodes?: () => void;
   onNavigateToMaintenance?: () => void;
-  currentLanguage: Language;
-  onLanguageChange: (lang: Language) => void;
+  currentLanguage?: Language;
+  onLanguageChange?: (lang: Language) => void;
 }
 
-export default function ActivityLogs({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToQRCodes, onNavigateToMaintenance, currentLanguage, onLanguageChange }: ActivityLogsProps) {
-  const t = useTranslation(currentLanguage);
+export default function ActivityLogs({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToQRCodes, onNavigateToMaintenance, currentLanguage = 'en', onLanguageChange }: ActivityLogsProps) {
+  const lang: Language = currentLanguage || 'en';
+  const t = useTranslation(lang);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [selectedReservation, setSelectedReservation] = useState<string | null>(null);
 
@@ -59,7 +60,7 @@ export default function ActivityLogs({ userName, userRole, onLogout, onNavigateT
   };
 
   return (
-    <div className="min-h-screen bg-background" dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-background" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <InventoryHeader
         userName={userName}
         userRole={userRole}
@@ -71,8 +72,8 @@ export default function ActivityLogs({ userName, userRole, onLogout, onNavigateT
         onNavigateToQRCodes={onNavigateToQRCodes}
         onNavigateToMaintenance={onNavigateToMaintenance}
         hideViewToggle={true}
-        language={currentLanguage}
-        onLanguageChange={onLanguageChange}
+        language={lang}
+        onLanguageChange={onLanguageChange || (() => {})}
       />
 
       <main className="max-w-[1400px] mx-auto px-5 py-8">
