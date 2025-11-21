@@ -178,7 +178,7 @@ export type ReservationStatusHistory = typeof reservationStatusHistory.$inferSel
 
 export const ITEM_STATUSES = ['Available', 'In Use', 'Reserved', 'Maintenance', 'Disabled'] as const;
 
-export const CATEGORIES = {
+export const EQUIPMENT_CATEGORIES = {
   cameras: {
     name: 'Cameras',
     subTypes: ['Camera', 'Action Cam'] as const,
@@ -238,7 +238,10 @@ export const CATEGORIES = {
     name: 'Storage Devices',
     subTypes: ['Storage Devices'] as const,
     image: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=800&auto=format&fit=crop'
-  },
+  }
+} as const;
+
+export const ASSET_CATEGORIES = {
   softwares: {
     name: 'Softwares',
     subTypes: ['Editing Software', 'Design Software', 'Office Software'] as const,
@@ -275,3 +278,5 @@ export const CATEGORIES = {
     image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop'
   }
 } as const;
+
+export const CATEGORIES = { ...EQUIPMENT_CATEGORIES, ...ASSET_CATEGORIES } as const;

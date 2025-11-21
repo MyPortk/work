@@ -4,7 +4,7 @@ import { z } from "zod";
 import QRCode from "qrcode";
 import { storage } from "./storage";
 import { loginUser, requireAuth, requireAdmin, hashPassword } from "./auth";
-import { CATEGORIES, insertItemSchema, insertReservationSchema, users, itemEditHistory, reservationStatusHistory } from "@shared/schema";
+import { EQUIPMENT_CATEGORIES, ASSET_CATEGORIES, CATEGORIES, insertItemSchema, insertReservationSchema, users, itemEditHistory, reservationStatusHistory } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 import { db } from "./db";
 import { sendReservationRequestEmail, sendReservationApprovedEmail, sendReservationRejectedEmail } from "./email";
@@ -88,8 +88,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Find the category configuration to get its subTypes
         const dbCategories = await storage.getAllCategories();
 
-        // Check if it's a default category
-        const defaultCategory = Object.values(CATEGORIES).find(cat => cat.name === category);
+        // Check if it's a default category (Equipment or Asset)
+        const defaultCategory = Object.values(EQUIPMENT_CATEGORIES).find(cat => cat.name === category) || 
+                               Object.values(ASSET_CATEGORIES).find(cat => cat.name === category);
 
         // Check if it's a custom category
         const customCategory = dbCategories.find(cat => cat.name === category);
