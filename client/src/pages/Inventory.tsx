@@ -49,8 +49,8 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
   const [itemTypeFilter, setItemTypeFilter] = useState<'all' | 'equipment' | 'assets'>('equipment');
 
   const { data: categories = [] } = useQuery({
-    queryKey: ['/api/categories'],
-    queryFn: () => api.categories.getAll(),
+    queryKey: ['/api/categories', itemTypeFilter],
+    queryFn: () => api.categories.getAll(itemTypeFilter === 'equipment'),
     enabled: currentView === 'categories'
   });
 
@@ -280,11 +280,30 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
           <div>
             <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
               <h1 className="text-4xl font-extrabold mb-4" data-testid="text-hero-title">
-                {t('equipmentCategories')}
+                {itemTypeFilter === 'equipment' ? t('equipmentCategories') : 'Asset Categories'}
               </h1>
               <p className="text-lg opacity-90 max-w-2xl mx-auto" data-testid="text-hero-subtitle">
                 {t('browseInventory')}
               </p>
+            </div>
+
+            <div className="flex gap-2 justify-center mb-8">
+              <Button
+                onClick={() => setItemTypeFilter('equipment')}
+                variant={itemTypeFilter === 'equipment' ? 'default' : 'outline'}
+                data-testid="button-filter-equipment-categories"
+                className={itemTypeFilter === 'equipment' ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2]' : ''}
+              >
+                Equipment
+              </Button>
+              <Button
+                onClick={() => setItemTypeFilter('assets')}
+                variant={itemTypeFilter === 'assets' ? 'default' : 'outline'}
+                data-testid="button-filter-assets-categories"
+                className={itemTypeFilter === 'assets' ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2]' : ''}
+              >
+                Assets
+              </Button>
             </div>
 
             <div className="max-w-2xl mx-auto mb-8">

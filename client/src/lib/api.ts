@@ -101,8 +101,11 @@ export const api = {
     }
   },
   categories: {
-    getAll: async (): Promise<Category[]> => {
-      const response = await fetch('/api/categories', { credentials: 'include' });
+    getAll: async (isEquipment?: boolean): Promise<Category[]> => {
+      const params = new URLSearchParams();
+      if (isEquipment !== undefined) params.append('isEquipment', String(isEquipment));
+      const url = params.toString() ? `/api/categories?${params.toString()}` : '/api/categories';
+      const response = await fetch(url, { credentials: 'include' });
       return handleResponse(response);
     }
   },

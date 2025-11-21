@@ -621,41 +621,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Categories route
   app.get("/api/categories", requireAuth, async (req, res) => {
     try {
+      const isEquipmentParam = req.query.isEquipment as string | undefined;
       const allItems = await storage.getAllItems();
       const dbCategories = await storage.getAllCategories();
 
+      // Determine which categories to show based on filter
+      let shouldShowEquipment = true;
+      if (isEquipmentParam !== undefined) {
+        shouldShowEquipment = isEquipmentParam === 'true';
+      }
+
       // Combine default and custom categories
-      const defaultCategories = Object.values(CATEGORIES).map(cat => {
-        const categoryItems = allItems.filter(item => 
-          (cat.subTypes as readonly string[]).includes(item.productType)
-        );
+      const defaultCategories = Object.values(CATEGORIES)
+        .filter(cat => {
+          // Filter based on equipment type
+          const isEquipmentCategory = ['Cameras', 'Lenses', 'Tripods & Stands', 'Grips', 'Audio', 'Lighting', 'Studio Accessories'].includes(cat.name);
+          return shouldShowEquipment === isEquipmentCategory;
+        })
+        .map(cat => {
+          const categoryItems = allItems.filter(item => 
+            (cat.subTypes as readonly string[]).includes(item.productType)
+          );
 
-        return {
-          name: cat.name,
-          image: cat.image,
-          subTypes: cat.subTypes,
-          totalCount: categoryItems.length,
-          availableCount: categoryItems.filter(item => item.status === 'Available').length,
-          isCustom: false
-        };
-      });
+          return {
+            name: cat.name,
+            image: cat.image,
+            subTypes: cat.subTypes,
+            totalCount: categoryItems.length,
+            availableCount: categoryItems.filter(item => item.status === 'Available').length,
+            isCustom: false
+          };
+        });
 
-      const customCategories = dbCategories.map(cat => {
-        const subTypes = JSON.parse(cat.subTypes);
-        const categoryItems = allItems.filter(item => 
-          subTypes.includes(item.productType)
-        );
+      const customCategories = dbCategories
+        .filter(cat => {
+          // Filter custom categories by isEquipment flag
+          return shouldShowEquipment === cat.isEquipment;
+        })
+        .map(cat => {
+          const subTypes = JSON.parse(cat.subTypes);
+          const categoryItems = allItems.filter(item => 
+            subTypes.includes(item.productType)
+          );
 
-        return {
-          id: cat.id,
-          name: cat.name,
-          image: cat.image,
-          subTypes,
-          totalCount: categoryItems.length,
-          availableCount: categoryItems.filter(item => item.status === 'Available').length,
-          isCustom: true
-        };
-      });
+          return {
+            id: cat.id,
+            name: cat.name,
+            image: cat.image,
+            subTypes,
+            totalCount: categoryItems.length,
+            availableCount: categoryItems.filter(item => item.status === 'Available').length,
+            isCustom: true
+          };
+        });
 
       // Show all default categories (even with 0 items) and custom categories
       const allCategories = [...defaultCategories, ...customCategories];

@@ -47,6 +47,7 @@ export const categories = pgTable("categories", {
   image: text("image").notNull(),
   subTypes: text("sub_types").notNull(),
   isDefault: boolean("is_default").notNull().default(false),
+  isEquipment: boolean("is_equipment").notNull().default(true),
   createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`)
 });
 
