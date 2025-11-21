@@ -354,6 +354,10 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                         console.log('Category subTypes:', category.subTypes);
                         setSelectedCategory(category.name);
                         setCurrentView('inventory');
+                        // Auto-lock filter based on category type
+                        const equipmentCategories = ['Cameras', 'Lenses', 'Tripods & Stands', 'Grips', 'Audio', 'Lighting', 'Studio Accessories', 'Bags & Cases', 'Batteries & Power', 'Cables & Adapters', 'Monitors & Displays', 'Storage Devices'];
+                        const isEquipmentCategory = equipmentCategories.includes(category.name);
+                        setItemTypeFilter(isEquipmentCategory ? 'equipment' : 'assets');
                       }}
                     />
                     {userRole === 'admin' && (
@@ -498,25 +502,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
               </div>
             </div>
 
-            <div className="mb-6 space-y-4">
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => setItemTypeFilter('equipment')}
-                  variant={itemTypeFilter === 'equipment' ? 'default' : 'outline'}
-                  data-testid="button-filter-equipment"
-                  className={itemTypeFilter === 'equipment' ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2]' : ''}
-                >
-                  Equipment
-                </Button>
-                <Button
-                  onClick={() => setItemTypeFilter('assets')}
-                  variant={itemTypeFilter === 'assets' ? 'default' : 'outline'}
-                  data-testid="button-filter-assets"
-                  className={itemTypeFilter === 'assets' ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2]' : ''}
-                >
-                  Assets
-                </Button>
-              </div>
+            <div className="mb-6">
               <div className="relative max-w-md">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
