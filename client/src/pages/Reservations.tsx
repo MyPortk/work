@@ -49,11 +49,6 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
     queryFn: () => api.items.getAll(),
   });
 
-  const { data: users = [] } = useQuery({
-    queryKey: ['/api/users'],
-    queryFn: () => api.users.getAll(),
-  });
-
   const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
   const [checkoutReservation, setCheckoutReservation] = useState<any>(null);
   const [checkoutNotes, setCheckoutNotes] = useState("");
@@ -126,8 +121,8 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
   };
 
   const getUserName = (userId: string) => {
-    const user = users.find(u => u.id === userId);
-    return user?.name || 'Unknown User';
+    // Show the user ID - names will be resolved by backend
+    return userId.substring(0, 8) + '...';
   };
 
   const handleCheckout = (reservation: any) => {
@@ -140,7 +135,6 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
     updateReservationMutation.mutate({
       id: checkoutReservation.id,
       data: { 
-        status: 'in-use', 
         checkoutDate: new Date(),
         itemConditionOnReceive: checkoutNotes || undefined
       }
