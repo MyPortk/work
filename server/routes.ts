@@ -635,7 +635,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const defaultCategories = Object.values(CATEGORIES)
         .filter(cat => {
           // Filter based on equipment type
-          const isEquipmentCategory = ['Cameras', 'Lenses', 'Tripods & Stands', 'Grips', 'Audio', 'Lighting', 'Studio Accessories'].includes(cat.name);
+          const isEquipmentCategory = ['Cameras', 'Lenses', 'Tripods & Stands', 'Grips', 'Audio', 'Lighting', 'Studio Accessories', 'Bags & Cases', 'Batteries & Power', 'Cables & Adapters', 'Monitors & Displays', 'Storage Devices'].includes(cat.name);
           return shouldShowEquipment === isEquipmentCategory;
         })
         .map(cat => {
