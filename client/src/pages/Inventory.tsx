@@ -27,11 +27,12 @@ interface InventoryPageProps {
   onNavigateToActivityLogs?: () => void;
   onNavigateToQRCodes?: () => void;
   onNavigateToMaintenance?: () => void;
+  onNavigateToReports?: () => void;
   currentLanguage: Language;
   onLanguageChange: (lang: Language) => void;
 }
 
-export default function Inventory({ userName, userRole, userId, onLogout, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, currentLanguage, onLanguageChange }: InventoryPageProps) {
+export default function Inventory({ userName, userRole, userId, onLogout, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, onNavigateToReports, currentLanguage, onLanguageChange }: InventoryPageProps) {
   const { toast } = useToast();
   const t = useTranslation(currentLanguage);
   const [currentView, setCurrentView] = useState<'categories' | 'inventory'>('categories');

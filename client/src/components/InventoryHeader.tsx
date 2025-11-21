@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LogOut, Users, Calendar, ClipboardList, QrCode, Wrench, Package, Globe } from "lucide-react";
+import { LogOut, Users, Calendar, ClipboardList, QrCode, Wrench, Package, Globe, AlertCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,7 @@ interface InventoryHeaderProps {
   onNavigateToActivityLogs?: () => void;
   onNavigateToQRCodes?: () => void;
   onNavigateToMaintenance?: () => void;
+  onNavigateToReports?: () => void;
   hideViewToggle?: boolean;
   language?: Language;
   onLanguageChange?: (language: Language) => void;
@@ -36,6 +37,7 @@ export default function InventoryHeader({
   onNavigateToActivityLogs,
   onNavigateToQRCodes,
   onNavigateToMaintenance,
+  onNavigateToReports,
   hideViewToggle = false,
   language = 'en',
   onLanguageChange
@@ -128,6 +130,13 @@ export default function InventoryHeader({
                 <DropdownMenuItem onClick={onNavigateToReservations}>
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('reservations')}
+                </DropdownMenuItem>
+              )}
+
+              {onNavigateToReports && (
+                <DropdownMenuItem onClick={onNavigateToReports}>
+                  <AlertCircle className="w-4 h-4 mr-2" />
+                  Reports
                 </DropdownMenuItem>
               )}
 
