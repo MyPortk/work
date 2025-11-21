@@ -291,8 +291,6 @@ export const translations = {
     return: 'الإرجاع',
     requested: 'مطلوب',
     responded: 'تمت الإجابة',
-    approve: 'موافقة',
-    decline: 'رفض',
     markReturned: 'وضع علامة كمرجع',
     
     // User Management
