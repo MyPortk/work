@@ -272,6 +272,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
         onNavigateToActivityLogs={onNavigateToActivityLogs}
         onNavigateToQRCodes={onNavigateToQRCodes}
         onNavigateToMaintenance={onNavigateToMaintenance}
+        onNavigateToReports={() => (window as any).navigateToReports?.()}
         language={currentLanguage}
         onLanguageChange={onLanguageChange}
       />

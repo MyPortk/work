@@ -27,11 +27,12 @@ interface ReservationsPageProps {
   onNavigateToActivityLogs?: () => void;
   onNavigateToQRCodes?: () => void;
   onNavigateToMaintenance?: () => void;
+  onNavigateToReports?: () => void;
   language?: Language;
   onLanguageChange?: (language: Language) => void;
 }
 
-export default function Reservations({ userName, userRole, userId, onLogout, onNavigateToInventory, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, language = 'en', onLanguageChange }: ReservationsPageProps) {
+export default function Reservations({ userName, userRole, userId, onLogout, onNavigateToInventory, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, onNavigateToReports, language = 'en', onLanguageChange }: ReservationsPageProps) {
   const { toast } = useToast();
   const t = useTranslation(language);
   const [searchQuery, setSearchQuery] = useState("");
@@ -186,6 +187,7 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
         onNavigateToActivityLogs={onNavigateToActivityLogs}
         onNavigateToQRCodes={onNavigateToQRCodes}
         onNavigateToMaintenance={onNavigateToMaintenance}
+        onNavigateToReports={onNavigateToReports}
         hideViewToggle={true}
         language={language}
         onLanguageChange={onLanguageChange}

@@ -20,11 +20,12 @@ interface ActivityLogsProps {
   onNavigateToReservations?: () => void;
   onNavigateToQRCodes?: () => void;
   onNavigateToMaintenance?: () => void;
+  onNavigateToReports?: () => void;
   currentLanguage?: Language;
   onLanguageChange?: (lang: Language) => void;
 }
 
-export default function ActivityLogs({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToQRCodes, onNavigateToMaintenance, currentLanguage = 'en', onLanguageChange }: ActivityLogsProps) {
+export default function ActivityLogs({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToQRCodes, onNavigateToMaintenance, onNavigateToReports, currentLanguage = 'en', onLanguageChange }: ActivityLogsProps) {
   const lang: Language = currentLanguage || 'en';
   const t = useTranslation(lang);
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
@@ -71,6 +72,7 @@ export default function ActivityLogs({ userName, userRole, onLogout, onNavigateT
         onNavigateToActivityLogs={() => {}}
         onNavigateToQRCodes={onNavigateToQRCodes}
         onNavigateToMaintenance={onNavigateToMaintenance}
+        onNavigateToReports={onNavigateToReports}
         hideViewToggle={true}
         language={lang}
         onLanguageChange={onLanguageChange || (() => {})}
