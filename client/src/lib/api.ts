@@ -30,8 +30,11 @@ export const api = {
     }
   },
   items: {
-    getAll: (category?: string) => {
-      const url = category ? `/api/items?category=${encodeURIComponent(category)}` : '/api/items';
+    getAll: (category?: string, isEquipment?: boolean) => {
+      const params = new URLSearchParams();
+      if (category) params.append('category', category);
+      if (isEquipment !== undefined) params.append('isEquipment', String(isEquipment));
+      const url = params.toString() ? `/api/items?${params.toString()}` : '/api/items';
       console.log('API request URL:', url);
       return fetch(url, {
         credentials: 'include'

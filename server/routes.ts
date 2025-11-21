@@ -75,7 +75,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/items", requireAuth, async (req, res) => {
     try {
       const category = req.query.category as string | undefined;
-      const allItems = await storage.getAllItems();
+      const isEquipmentParam = req.query.isEquipment as string | undefined;
+      let allItems = await storage.getAllItems();
+
+      // Filter by equipment type if specified
+      if (isEquipmentParam !== undefined) {
+        const isEquipment = isEquipmentParam === 'true';
+        allItems = allItems.filter(item => item.isEquipment === isEquipment);
+      }
 
       if (category) {
         // Find the category configuration to get its subTypes

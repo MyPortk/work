@@ -46,6 +46,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
   const [editingCategory, setEditingCategory] = useState<any>(null);
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
   const [reservingItem, setReservingItem] = useState<Item | null>(null);
+  const [itemTypeFilter, setItemTypeFilter] = useState<'all' | 'equipment' | 'assets'>('equipment');
 
   const { data: categories = [] } = useQuery({
     queryKey: ['/api/categories'],
@@ -54,10 +55,10 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
   });
 
   const { data: items = [] } = useQuery({
-    queryKey: ['/api/items', selectedCategory],
+    queryKey: ['/api/items', selectedCategory, itemTypeFilter],
     queryFn: () => {
-      console.log('Fetching items for category:', selectedCategory);
-      return api.items.getAll(selectedCategory || undefined);
+      console.log('Fetching items for category:', selectedCategory, 'type:', itemTypeFilter);
+      return api.items.getAll(selectedCategory || undefined, itemTypeFilter === 'all' ? undefined : itemTypeFilter === 'equipment');
     },
     enabled: currentView === 'inventory'
   });
