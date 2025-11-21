@@ -4,7 +4,7 @@ import { z } from "zod";
 import QRCode from "qrcode";
 import { storage } from "./storage";
 import { loginUser, requireAuth, requireAdmin, hashPassword } from "./auth";
-import { EQUIPMENT_CATEGORIES, ASSET_CATEGORIES, CATEGORIES, insertItemSchema, insertReservationSchema, users, itemEditHistory, reservationStatusHistory } from "@shared/schema";
+import { EQUIPMENT_CATEGORIES, ASSET_CATEGORIES, CATEGORIES, insertItemSchema, insertReservationSchema, insertDamageReportSchema, users, itemEditHistory, reservationStatusHistory } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 import { db } from "./db";
 import { sendReservationRequestEmail, sendReservationApprovedEmail, sendReservationRejectedEmail } from "./email";
@@ -1257,7 +1257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Activity log routes
-  app.get("/api/activity-logs", requireAdmin, async (req, res) => {
+  app.get("/api/activity-logs", requireAuth, async (req, res) => {
     try {
       const logs = await storage.getAllActivityLogs();
       res.json(logs);
