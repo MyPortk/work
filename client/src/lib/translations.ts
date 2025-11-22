@@ -123,6 +123,7 @@ export const translations = {
     equipmentReservations: 'Equipment Reservations',
     requestManageReservations: 'Request and manage equipment reservations professionally',
     backToInventory: 'Back to Inventory',
+    all_items: 'All Items',
     all: 'All',
     noReservationsFound: 'No reservations found',
     tryChangingFilter: 'Try changing the filter',
@@ -289,7 +290,6 @@ export const translations = {
     return: 'الإرجاع',
     requested: 'مطلوب',
     responded: 'تمت الإجابة',
-    approve: 'موافقة',
     decline: 'رفض',
     markReturned: 'وضع علامة كمرجع',
     
