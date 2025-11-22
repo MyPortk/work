@@ -154,6 +154,7 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
                   <TableHead>{t('username')}</TableHead>
                   <TableHead>{t('name')}</TableHead>
                   <TableHead>{t('email')}</TableHead>
+                  <TableHead>{t('department')}</TableHead>
                   <TableHead>{t('role')}</TableHead>
                   <TableHead className="text-right">{t('actions')}</TableHead>
                 </TableRow>
@@ -164,6 +165,7 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
                     <TableCell className="font-medium">{user.username}</TableCell>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{user.department || '-'}</TableCell>
                     <TableCell>
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                         user.role === 'admin' 
