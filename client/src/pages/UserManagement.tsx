@@ -28,9 +28,9 @@ interface UserManagementProps {
   onLanguageChange: (language: Language) => void;
 }
 
-export default function UserManagement({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, language, onLanguageChange }: UserManagementProps) {
+export default function UserManagement({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToQRCodes, onNavigateToMaintenance, language = 'en', onLanguageChange = () => {} }: UserManagementProps) {
   const { toast } = useToast();
-  const t = useTranslation(language);
+  const t = useTranslation(language || 'en');
   const [showAddUser, setShowAddUser] = useState(false);
   const [formData, setFormData] = useState({
     username: '',

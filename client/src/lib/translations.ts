@@ -321,8 +321,9 @@ export const translations = {
   }
 };
 
-export const useTranslation = (language: Language) => {
+export const useTranslation = (language?: Language) => {
+  const lang = language || 'en';
   return (key: keyof typeof translations.en): string => {
-    return translations[language][key] || key;
+    return translations[lang]?.[key] || key;
   };
 };
