@@ -50,6 +50,11 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
     queryFn: () => api.items.getAll(),
   });
 
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ['/api/users'],
+    queryFn: () => api.users.getAll(),
+  });
+
   const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
   const [checkoutReservation, setCheckoutReservation] = useState<any>(null);
   const [checkoutCondition, setCheckoutCondition] = useState<'good' | 'damage' | ''>("");
@@ -326,7 +331,7 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <span>
-                        <strong>Department:</strong> {users.find(u => u.id === reservation.userId)?.department || '-'}
+                        <strong>Department:</strong> {allUsers.find(u => u.id === reservation.userId)?.department || '-'}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
