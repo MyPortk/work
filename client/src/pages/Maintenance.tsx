@@ -22,6 +22,7 @@ interface MaintenancePageProps {
   onNavigateToReservations?: () => void;
   onNavigateToActivityLogs?: () => void;
   onNavigateToQRCodes?: () => void;
+  onNavigateToReports?: () => void;
   language?: Language;
   onLanguageChange?: (language: Language) => void;
 }
@@ -35,6 +36,7 @@ export default function Maintenance({
   onNavigateToReservations,
   onNavigateToActivityLogs,
   onNavigateToQRCodes,
+  onNavigateToReports,
   language = 'en',
   onLanguageChange
 }: MaintenancePageProps) {
@@ -126,6 +128,7 @@ export default function Maintenance({
         onNavigateToActivityLogs={onNavigateToActivityLogs}
         onNavigateToQRCodes={onNavigateToQRCodes}
         onNavigateToMaintenance={() => {}}
+        onNavigateToReports={onNavigateToReports}
       />
 
       <main className="max-w-[1400px] mx-auto px-5 py-8">

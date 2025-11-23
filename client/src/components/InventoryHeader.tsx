@@ -143,7 +143,7 @@ export default function InventoryHeader({
                 {onNavigateToReports && (
                   <DropdownMenuItem onClick={onNavigateToReports}>
                     <AlertCircle className="w-4 h-4 mr-2" />
-                    Reports
+                    {t('damageReports')}
                   </DropdownMenuItem>
                 )}
 
@@ -252,7 +252,7 @@ export default function InventoryHeader({
                   className="w-full justify-start text-white hover:bg-white/20"
                 >
                   <AlertCircle className="w-4 h-4 mr-2" />
-                  Reports
+                  {t('damageReports')}
                 </Button>
               )}
               {onNavigateToActivityLogs && (

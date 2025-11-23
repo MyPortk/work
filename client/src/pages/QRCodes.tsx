@@ -16,12 +16,13 @@ interface QRCodesProps {
   onNavigateToReservations?: () => void;
   onNavigateToActivityLogs?: () => void;
   onNavigateToMaintenance?: () => void;
+  onNavigateToReports?: () => void;
   language?: Language;
   onLanguageChange?: (lang: Language) => void;
   currentLanguage?: Language;
 }
 
-export default function QRCodes({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToMaintenance, language = 'en', onLanguageChange, currentLanguage = 'en' }: QRCodesProps) {
+export default function QRCodes({ userName, userRole, onLogout, onNavigateToInventory, onNavigateToReservations, onNavigateToActivityLogs, onNavigateToMaintenance, onNavigateToReports, language = 'en', onLanguageChange, currentLanguage = 'en' }: QRCodesProps) {
   const { toast } = useToast();
   const lang: Language = language || currentLanguage || 'en';
   const t = useTranslation(lang);
@@ -62,6 +63,7 @@ export default function QRCodes({ userName, userRole, onLogout, onNavigateToInve
         onNavigateToActivityLogs={onNavigateToActivityLogs}
         onNavigateToQRCodes={() => {}}
         onNavigateToMaintenance={onNavigateToMaintenance}
+        onNavigateToReports={onNavigateToReports}
         hideViewToggle={true}
         language={lang}
         onLanguageChange={onLanguageChange || (() => {})}
