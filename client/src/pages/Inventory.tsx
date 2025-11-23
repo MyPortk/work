@@ -234,12 +234,22 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
   };
 
   const handleAddCategory = (categoryData: any) => {
-    createCategoryMutation.mutate(categoryData);
+    // Add isEquipment flag based on current filter
+    createCategoryMutation.mutate({
+      ...categoryData,
+      isEquipment: itemTypeFilter === 'equipment'
+    });
   };
 
   const handleEditCategory = (categoryData: any) => {
     if (editingCategory?.id) {
-      updateCategoryMutation.mutate({ id: editingCategory.id, data: categoryData });
+      updateCategoryMutation.mutate({ 
+        id: editingCategory.id, 
+        data: {
+          ...categoryData,
+          isEquipment: itemTypeFilter === 'equipment'
+        }
+      });
     }
   };
 
@@ -777,6 +787,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
         onSubmit={editingCategory ? handleEditCategory : handleAddCategory}
         category={editingCategory}
         mode={editingCategory ? 'edit' : 'add'}
+        isEquipment={itemTypeFilter === 'equipment'}
       />
 
       <ReservationFormDialog

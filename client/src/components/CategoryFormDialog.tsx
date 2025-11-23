@@ -18,13 +18,15 @@ interface CategoryFormDialogProps {
     subTypes: string[];
   };
   mode: 'add' | 'edit';
+  isEquipment?: boolean;
 }
 
-export default function CategoryFormDialog({ open, onClose, onSubmit, category, mode }: CategoryFormDialogProps) {
+export default function CategoryFormDialog({ open, onClose, onSubmit, category, mode, isEquipment = true }: CategoryFormDialogProps) {
   const [formData, setFormData] = useState({
     name: category?.name || '',
     image: category?.image || '',
-    subTypes: category?.subTypes || []
+    subTypes: category?.subTypes || [],
+    isEquipment: isEquipment
   });
   const [newSubType, setNewSubType] = useState("");
 
@@ -33,16 +35,18 @@ export default function CategoryFormDialog({ open, onClose, onSubmit, category, 
       setFormData({
         name: category.name,
         image: category.image,
-        subTypes: category.subTypes
+        subTypes: category.subTypes,
+        isEquipment: isEquipment
       });
     } else {
       setFormData({
         name: '',
         image: '',
-        subTypes: []
+        subTypes: [],
+        isEquipment: isEquipment
       });
     }
-  }, [category, open]);
+  }, [category, open, isEquipment]);
 
   const handleAddSubType = () => {
     if (newSubType.trim() && !formData.subTypes.includes(newSubType.trim())) {
