@@ -39,13 +39,13 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
     password: '',
     email: '',
     name: '',
-    role: 'user' as 'admin' | 'user',
+    role: 'user' as 'developer' | 'admin' | 'user',
     department: ''
   });
   const [editFormData, setEditFormData] = useState({
     email: '',
     name: '',
-    role: 'user' as 'admin' | 'user',
+    role: 'user' as 'developer' | 'admin' | 'user',
     department: ''
   });
 
@@ -314,7 +314,7 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
               <Label htmlFor="role">{t('role')} *</Label>
               <Select
                 value={formData.role}
-                onValueChange={(value: 'admin' | 'user') => setFormData({ ...formData, role: value })}
+                onValueChange={(value: 'developer' | 'admin' | 'user') => setFormData({ ...formData, role: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -322,6 +322,7 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
                 <SelectContent>
                   <SelectItem value="user">{t('user')}</SelectItem>
                   <SelectItem value="admin">{t('admin')}</SelectItem>
+                  <SelectItem value="developer">Developer</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -385,7 +386,7 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
               <Label htmlFor="edit-role">{t('role')} *</Label>
               <Select
                 value={editFormData.role}
-                onValueChange={(value: 'admin' | 'user') => setEditFormData({ ...editFormData, role: value })}
+                onValueChange={(value: 'developer' | 'admin' | 'user') => setEditFormData({ ...editFormData, role: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -393,6 +394,7 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
                 <SelectContent>
                   <SelectItem value="user">{t('user')}</SelectItem>
                   <SelectItem value="admin">{t('admin')}</SelectItem>
+                  <SelectItem value="developer">Developer</SelectItem>
                 </SelectContent>
               </Select>
             </div>

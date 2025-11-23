@@ -1217,8 +1217,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // User management routes (admin only)
-  app.get("/api/users", requireAdmin, async (req, res) => {
+  // User management routes (developer only)
+  const requireDeveloper = (req: Request, res: Response, next: NextFunction) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+    if (req.session.role !== 'developer') {
+      return res.status(403).json({ error: 'Developer access required' });
+    }
+    next();
+  };
+
+  app.get("/api/users", requireDeveloper, async (req, res) => {
     try {
       const allUsers = await db.query.users.findMany({
         columns: {
@@ -1237,14 +1247,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/users", requireAdmin, async (req, res) => {
+  app.post("/api/users", requireDeveloper, async (req, res) => {
     try {
       const validatedData = z.object({
         username: z.string().min(3, "Username must be at least 3 characters"),
         password: z.string().min(3, "Password must be at least 3 characters"),
         email: z.string().email("Valid email is required"),
         name: z.string().min(1, "Name is required"),
-        role: z.enum(['admin', 'user']).default('user'),
+        role: z.enum(['developer', 'admin', 'user']).default('user'),
         department: z.string().optional()
       }).parse(req.body);
 
@@ -1287,12 +1297,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch("/api/users/:id", requireAdmin, async (req, res) => {
+  app.patch("/api/users/:id", requireDeveloper, async (req, res) => {
     try {
       const validatedData = z.object({
         email: z.string().email("Valid email is required").optional(),
         name: z.string().min(1, "Name is required").optional(),
-        role: z.enum(['admin', 'user']).optional(),
+        role: z.enum(['developer', 'admin', 'user']).optional(),
         department: z.string().optional()
       }).parse(req.body);
 
@@ -1327,7 +1337,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/users/:id", requireAdmin, async (req, res) => {
+  app.delete("/api/users/:id", requireDeveloper, async (req, res) => {
     try {
       // Prevent deleting self
       if (req.params.id === req.session.userId) {

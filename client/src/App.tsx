@@ -205,7 +205,7 @@ function App() {
             language={language}
             onLanguageChange={handleLanguageChange}
           />
-        ) : currentView === 'users' && currentUser && currentUser.role === 'admin' ? (
+        ) : currentView === 'users' && currentUser && currentUser.role === 'developer' ? (
           <UserManagement
             userName={currentUser.name}
             userRole={currentUser.role}
