@@ -439,19 +439,13 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
                       const returnDate = new Date(reservation.returnDate);
                       const returnDateStr = `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}`;
                       
-                      // Only show button if:
-                      // - Equipment has been received (has checkoutDate and itemConditionOnReceive)
+                      // Admin can mark as returned if:
                       // - Return date has started (today >= returnDate)
                       // - Not already marked as returned
-                      const canMarkReturned = reservation.checkoutDate && 
-                                             reservation.itemConditionOnReceive !== undefined && 
-                                             !reservation.itemConditionOnReturn &&
-                                             todayStr >= returnDateStr;
-                      
                       const isReturnDatePassed = todayStr >= returnDateStr;
-                      const hasBeenReceived = reservation.checkoutDate && reservation.itemConditionOnReceive !== undefined;
+                      const alreadyMarkedReturned = reservation.itemConditionOnReturn !== undefined;
                       
-                      if (!hasBeenReceived) {
+                      if (alreadyMarkedReturned) {
                         return null;
                       }
                       

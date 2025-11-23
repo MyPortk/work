@@ -332,7 +332,6 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
     
     return reservations.find(res => {
       if (res.itemId !== itemId || res.status !== 'approved') return false;
-      if (!res.checkoutDate || res.itemConditionOnReceive === undefined) return false;
       if (res.itemConditionOnReturn !== undefined) return false; // Already marked as returned
       
       // Check if return date has started (today >= returnDate)
