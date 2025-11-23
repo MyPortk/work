@@ -22,6 +22,7 @@ export const items = pgTable("items", {
   status: text("status").notNull().default('Available'),
   location: text("location"),
   notes: text("notes"),
+  quantity: text("quantity").notNull().default('1'),
   isEquipment: boolean("is_equipment").notNull().default(true),
   createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`)
@@ -55,6 +56,9 @@ export const categories = pgTable("categories", {
   subTypes: text("sub_types").notNull(),
   isDefault: boolean("is_default").notNull().default(false),
   isEquipment: boolean("is_equipment").notNull().default(true),
+  showQuantity: boolean("show_quantity").notNull().default(true),
+  showLocation: boolean("show_location").notNull().default(true),
+  showNotes: boolean("show_notes").notNull().default(true),
   createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`)
 });
 

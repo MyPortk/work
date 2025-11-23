@@ -744,7 +744,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         name: validatedData.name,
         image: validatedData.image,
         subTypes: JSON.stringify(validatedData.subTypes),
-        isEquipment: validatedData.isEquipment
+        isEquipment: validatedData.isEquipment,
+        showQuantity: true,
+        showLocation: true,
+        showNotes: true
       });
       console.log('✅ Category created:', { name: category.name, isEquipment: category.isEquipment });
 
@@ -767,7 +770,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         name: z.string().min(1).optional(),
         image: z.string().url().optional(),
         subTypes: z.array(z.string()).optional(),
-        isEquipment: z.boolean().optional()
+        isEquipment: z.boolean().optional(),
+        showQuantity: z.boolean().optional(),
+        showLocation: z.boolean().optional(),
+        showNotes: z.boolean().optional()
       }).parse(req.body);
 
       const updateData: any = { ...validatedData };
