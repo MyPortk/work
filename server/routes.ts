@@ -867,9 +867,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const item = await storage.getItemById(validatedData.itemId);
       const oldStatus = item?.status || 'Available';
 
-      // Update item status to Reserved
-      await storage.updateItem(validatedData.itemId, { status: 'Reserved' });
-
       // Get user details
       const user = await db.query.users.findFirst({
         where: eq(users.id, validatedData.userId)
@@ -914,8 +911,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           userId: validatedData.userId,
           action: 'Reservation Created',
           oldStatus,
-          newStatus: 'Reserved',
-          notes: `${item?.productName || 'Item'} reserved by ${user?.name || 'User'} from ${new Date(validatedData.startDate).toLocaleDateString()} to ${new Date(validatedData.returnDate).toLocaleDateString()}. Status: ${reservation.status}. Created at ${new Date().toLocaleString()}`
+          newStatus: oldStatus,
+          notes: `${item?.productName || 'Item'} reservation requested by ${user?.name || 'User'} from ${new Date(validatedData.startDate).toLocaleDateString()} to ${new Date(validatedData.returnDate).toLocaleDateString()}. Reservation Status: Pending (awaiting admin approval). Created at ${new Date().toLocaleString()}`
         });
       } catch (logError) {
         console.error('Failed to log reservation creation:', logError);
