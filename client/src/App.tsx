@@ -69,7 +69,8 @@ function App() {
     try {
       const response = await fetch('/api/auth/session');
       if (response.ok) {
-        const user = await response.json();
+        const data = await response.json();
+        const user = data.user || data;
         handleLogin(user);
         // Save to localStorage as backup
         localStorage.setItem('currentUser', JSON.stringify(user));
