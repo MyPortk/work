@@ -66,10 +66,17 @@ export default function ReservationFormDialog({
       return;
     }
     
+    // Convert dates to noon UTC to avoid timezone shifts
+    const startDateUTC = new Date(startDate);
+    startDateUTC.setUTCHours(12, 0, 0, 0);
+    
+    const returnDateUTC = new Date(returnDate);
+    returnDateUTC.setUTCHours(12, 0, 0, 0);
+    
     onSubmit({
       itemId,
-      startDate,
-      returnDate,
+      startDate: startDateUTC,
+      returnDate: returnDateUTC,
       startTime: startTime || undefined,
       returnTime: returnTime || undefined,
       purposeOfUse: purposeOfUse.trim(),

@@ -348,13 +348,13 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Calendar className="w-4 h-4" />
                       <span>
-                        <strong>Pickup:</strong> {format(new Date(reservation.startDate), "PPP")} {reservation.startTime || "09:00"}
+                        <strong>Pickup:</strong> {format(new Date(reservation.startDate + 'Z'), "PPP")} {reservation.startTime || "09:00"}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Calendar className="w-4 h-4" />
                       <span>
-                        <strong>Return:</strong> {format(new Date(reservation.returnDate), "PPP")} {reservation.returnTime || "17:00"}
+                        <strong>Return:</strong> {format(new Date(reservation.returnDate + 'Z'), "PPP")} {reservation.returnTime || "17:00"}
                       </span>
                     </div>
                     {reservation.approvalDate && (
@@ -395,9 +395,9 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
                   <div className="flex gap-2 flex-col">
                     {userRole !== 'admin' && (() => {
                       const today = new Date();
-                      today.setHours(0, 0, 0, 0);
-                      const startDate = new Date(reservation.startDate);
-                      startDate.setHours(0, 0, 0, 0);
+                      today.setUTCHours(0, 0, 0, 0);
+                      const startDate = new Date(reservation.startDate + 'Z');
+                      startDate.setUTCHours(0, 0, 0, 0);
                       const isPickupDay = today.getTime() === startDate.getTime();
                       const hasReceivedEquipment = reservation.checkoutDate || reservation.itemConditionOnReceive;
                       
@@ -423,7 +423,7 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
                           className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
                           onClick={() => handleCheckout(reservation)}
                           disabled={!isPickupDay}
-                          title={isPickupDay ? "Click to confirm receipt" : `Available on ${format(startDate, "MMM dd, yyyy")}`}
+                          title={isPickupDay ? "Click to confirm receipt" : `Available on ${format(new Date(reservation.startDate + 'Z'), "MMM dd, yyyy")}`}
                         >
                           <CheckCircle className="w-4 h-4 mr-1" />
                           Receive Equipment {!isPickupDay && "(Not Available)"}
@@ -483,8 +483,8 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
             <div className="space-y-6">
               <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg space-y-2 border border-blue-200 dark:border-blue-800">
                 <div><strong>Equipment:</strong> {getItemName(checkoutReservation.itemId)}</div>
-                <div><strong>Pickup Date & Time:</strong> {format(new Date(checkoutReservation.startDate), "PPP")} {checkoutReservation.startTime || "09:00"}</div>
-                <div><strong>Return Date & Time:</strong> {format(new Date(checkoutReservation.returnDate), "PPP")} {checkoutReservation.returnTime || "17:00"}</div>
+                <div><strong>Pickup Date & Time:</strong> {format(new Date(checkoutReservation.startDate + 'Z'), "PPP")} {checkoutReservation.startTime || "09:00"}</div>
+                <div><strong>Return Date & Time:</strong> {format(new Date(checkoutReservation.returnDate + 'Z'), "PPP")} {checkoutReservation.returnTime || "17:00"}</div>
                 <div><strong>Purpose:</strong> {checkoutReservation.purposeOfUse}</div>
               </div>
 
