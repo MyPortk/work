@@ -120,6 +120,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const matches = subTypes.includes(item.productType);
           if (matches) {
             console.log(`✓ Item "${item.productName}" (${item.productType}) matches category`);
+          } else {
+            console.log(`✗ Item "${item.productName}" (${item.productType}) does NOT match subTypes: ${JSON.stringify(subTypes)}`);
           }
           return matches;
         });
@@ -150,8 +152,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/items", requireAdmin, async (req, res) => {
     try {
+      console.log('📝 Item creation request:', JSON.stringify(req.body, null, 2));
       const validatedData = insertItemSchema.parse(req.body);
+      console.log('✅ Validated data:', JSON.stringify(validatedData, null, 2));
       const item = await storage.createItem(validatedData);
+      console.log('💾 Item created in DB:', JSON.stringify(item, null, 2));
 
       // Log item creation
       try {
@@ -170,6 +175,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(item);
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.error('❌ Zod validation error:', error.errors);
         return res.status(400).json({ error: 'Invalid item data', details: error.errors });
       }
       console.error('Create item error:', error);

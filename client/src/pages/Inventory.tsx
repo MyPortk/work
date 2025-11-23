@@ -761,10 +761,12 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
           productType: editingItem.productType,
           status: editingItem.status,
           location: editingItem.location || undefined,
-          notes: editingItem.notes || undefined
+          notes: editingItem.notes || undefined,
+          isEquipment: editingItem.isEquipment
         } : undefined}
         mode={editingItem ? 'edit' : 'add'}
         userRole={userRole}
+        isEquipment={itemTypeFilter === 'equipment'}
       />
 
       <QRScannerDialog
