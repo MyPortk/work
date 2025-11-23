@@ -25,6 +25,7 @@ function App() {
     role: string;
     name: string;
   } | null>(null);
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
 
   const handleLogin = (user: any) => {
     setCurrentUser(user);
@@ -100,6 +101,8 @@ function App() {
       } else {
         setIsAuthenticated(false);
       }
+    } finally {
+      setIsSessionLoading(false);
     }
   };
 
@@ -126,7 +129,14 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        {!isAuthenticated ? (
+        {isSessionLoading ? (
+          <div className="min-h-screen bg-background flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading...</p>
+            </div>
+          </div>
+        ) : !isAuthenticated ? (
           <Login onLogin={handleLogin} language={language} onLanguageChange={handleLanguageChange} />
         ) : currentView === 'inventory' ? (
           <Inventory
