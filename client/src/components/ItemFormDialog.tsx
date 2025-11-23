@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { CATEGORIES, EQUIPMENT_CATEGORIES, ITEM_STATUSES } from "@shared/schema";
 import { api } from "@/lib/api";
 import { Plus } from "lucide-react";
+import { useTranslation } from "@/lib/translations";
+import type { Language } from "@/lib/translations";
 
 interface ItemFormDialogProps {
   open: boolean;
@@ -28,9 +30,11 @@ interface ItemFormDialogProps {
   mode: 'add' | 'edit';
   userRole?: string;
   isEquipment?: boolean;
+  language?: Language;
 }
 
-export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, userRole, isEquipment = true }: ItemFormDialogProps) {
+export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, userRole, isEquipment = true, language = 'en' }: ItemFormDialogProps) {
+  const t = useTranslation(language);
   const [formData, setFormData] = useState({
     barcode: item?.barcode || '',
     productName: item?.productName || '',
@@ -108,12 +112,12 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl" data-testid={`dialog-${mode}-item`}>
         <DialogHeader>
-          <DialogTitle>{mode === 'add' ? 'Add New Item' : 'Edit Item'}</DialogTitle>
+          <DialogTitle>{mode === 'add' ? t('addItem') : t('editItem')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="barcode">Barcode *</Label>
+              <Label htmlFor="barcode">{t('barcode')} *</Label>
               <Input
                 id="barcode"
                 value={formData.barcode}
@@ -124,7 +128,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="productName">Product Name *</Label>
+              <Label htmlFor="productName">{t('productName')} *</Label>
               <Input
                 id="productName"
                 value={formData.productName}
@@ -138,7 +142,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="productType">Product Type *</Label>
+              <Label htmlFor="productType">{t('type')} *</Label>
               {!showAddType ? (
                 <div className="space-y-2">
                   <Select
@@ -208,7 +212,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="status">Status *</Label>
+              <Label htmlFor="status">{t('status')} *</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => setFormData({ ...formData, status: value })}
@@ -228,7 +232,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="location">Location</Label>
+            <Label htmlFor="location">{t('location_label')}</Label>
             <Input
               id="location"
               value={formData.location}
@@ -239,7 +243,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="notes">{t('notes')}</Label>
             <Textarea
               id="notes"
               value={formData.notes}
@@ -251,7 +255,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="quantity">Quantity *</Label>
+            <Label htmlFor="quantity">{t('quantity_label')}</Label>
             <Input
               id="quantity"
               type="number"
@@ -265,7 +269,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
 
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose} data-testid="button-cancel">
-              Cancel
+              {t('cancel')}
             </Button>
             <Button 
               type="submit" 
@@ -273,7 +277,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               data-testid="button-submit"
               disabled={!formData.barcode || !formData.productName || !formData.productType || !formData.status}
             >
-              {mode === 'add' ? 'Add Item' : 'Save Changes'}
+              {mode === 'add' ? t('save') : t('save')}
             </Button>
           </DialogFooter>
         </form>

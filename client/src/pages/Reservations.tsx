@@ -493,7 +493,7 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
       <Dialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Confirm Equipment Pickup</DialogTitle>
+            <DialogTitle>{t('confirmEquipmentPickup')}</DialogTitle>
           </DialogHeader>
           {checkoutReservation && (
             <div className="space-y-6">
@@ -541,7 +541,7 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
 
               {checkoutCondition === 'damage' && (
                 <div className="space-y-2 p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
-                  <Label htmlFor="damage-notes" className="text-base font-semibold">Please describe the damage or missing items *</Label>
+                  <Label htmlFor="damage-notes" className="text-base font-semibold">{t('describeDamage')}</Label>
                   <Textarea
                     id="damage-notes"
                     value={checkoutNotes}

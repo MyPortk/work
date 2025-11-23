@@ -625,11 +625,11 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                   </PopoverTrigger>
                   <PopoverContent className="w-56">
                     <div className="space-y-4">
-                      <h4 className="font-medium text-sm">Column Visibility</h4>
+                      <h4 className="font-medium text-sm">{t('columnVisibility')}</h4>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <label htmlFor="qty-toggle" className="text-sm cursor-pointer">
-                            Quantity
+                            {t('quantity')}
                           </label>
                           <Switch
                             id="qty-toggle"
@@ -640,7 +640,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                         </div>
                         <div className="flex items-center justify-between">
                           <label htmlFor="location-toggle" className="text-sm cursor-pointer">
-                            Location
+                            {t('location')}
                           </label>
                           <Switch
                             id="location-toggle"
@@ -709,6 +709,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                     quantity={(item as any)?.quantity || 1}
                     userRole={userRole}
                     isEquipment={item.isEquipment}
+                    language={currentLanguage}
                     onEdit={userRole === 'admin' ? () => {
                       setEditingItem(item);
                       setShowItemForm(true);
@@ -734,7 +735,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                       <TableHead>{t('name')}</TableHead>
                       <TableHead>{t('type')}</TableHead>
                       <TableHead>{t('status')}</TableHead>
-                      {showQuantityColumn && <TableHead>Quantity</TableHead>}
+                      {showQuantityColumn && <TableHead>{t('quantity')}</TableHead>}
                       {showLocationColumn && <TableHead>{t('location')}</TableHead>}
                       {userRole === 'admin' && <TableHead className="text-right">{t('actions')}</TableHead>}
                     </TableRow>
@@ -818,6 +819,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
         mode={editingItem ? 'edit' : 'add'}
         userRole={userRole}
         isEquipment={itemTypeFilter === 'equipment'}
+        language={currentLanguage}
       />
 
       <QRScannerDialog
@@ -855,7 +857,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
       <Dialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Confirm Equipment Pickup</DialogTitle>
+            <DialogTitle>{t('confirmEquipmentPickup')}</DialogTitle>
           </DialogHeader>
           {checkoutReservation && (
             <div className="space-y-6">
@@ -903,7 +905,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
 
               {checkoutCondition === 'damage' && (
                 <div className="space-y-2 p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
-                  <Label htmlFor="damage-notes" className="text-base font-semibold">Please describe the damage or missing items *</Label>
+                  <Label htmlFor="damage-notes" className="text-base font-semibold">{t('describeDamage')}</Label>
                   <Textarea
                     id="damage-notes"
                     value={checkoutNotes}

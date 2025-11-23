@@ -159,6 +159,31 @@ export const translations = {
     checkout: 'Check Out',
     checkin: 'Check In',
     reserve: 'Reserve',
+    
+    // Column Visibility
+    columnVisibility: 'Column Visibility',
+    quantity: 'Quantity',
+    
+    // Item Form
+    quantity_label: 'Quantity *',
+    location_label: 'Location',
+    
+    // Item Card
+    quantity_display: 'Quantity:',
+    notes_display: 'Notes:',
+    
+    // Reservations
+    confirmEquipmentPickup: 'Confirm Equipment Pickup',
+    describeDamage: 'Please describe the damage or missing items *',
+    confirmReceipt: 'Confirm Receipt',
+    
+    // Maintenance
+    areYouSureDeleteItem: 'Are you sure you want to delete this item?',
+    
+    // User Management Confirmations
+    areYouSureDeleteUserMessage: 'Are you sure you want to delete user',
+    loginFailedMessage: 'Login failed. Please try again.',
+    tryAgain: 'Please try again',
   },
   ar: {
     // Header
@@ -318,6 +343,31 @@ export const translations = {
     checkout: 'تسجيل خروج',
     checkin: 'تسجيل دخول',
     reserve: 'حجز',
+    
+    // Column Visibility
+    columnVisibility: 'رؤية الأعمدة',
+    quantity: 'الكمية',
+    
+    // Item Form
+    quantity_label: 'الكمية *',
+    location_label: 'الموقع',
+    
+    // Item Card
+    quantity_display: 'الكمية:',
+    notes_display: 'ملاحظات:',
+    
+    // Reservations
+    confirmEquipmentPickup: 'تأكيد استلام المعدات',
+    describeDamage: 'يرجى وصف الضرر أو العناصر المفقودة *',
+    confirmReceipt: 'تأكيد الاستلام',
+    
+    // Maintenance
+    areYouSureDeleteItem: 'هل أنت متأكد من حذف هذا العنصر؟',
+    
+    // User Management Confirmations
+    areYouSureDeleteUserMessage: 'هل أنت متأكد من حذف المستخدم',
+    loginFailedMessage: 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.',
+    tryAgain: 'يرجى المحاولة مرة أخرى',
   }
 };
 

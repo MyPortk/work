@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useTranslation } from "@/lib/translations";
 
 interface ItemCardProps {
   id: string;
@@ -26,6 +27,7 @@ interface ItemCardProps {
   onMarkReturned?: () => void;
   userRole: string;
   isEquipment?: boolean;
+  language?: 'en' | 'ar';
 }
 
 const statusColors: Record<string, string> = {
@@ -53,8 +55,10 @@ export default function ItemCard({
   onReceiveEquipment,
   onMarkReturned,
   userRole,
+  language = 'en',
   isEquipment = true,
 }: ItemCardProps) {
+  const t = useTranslation(language);
   const [showQRDialog, setShowQRDialog] = useState(false);
 
   const { data: qrData, isLoading: qrLoading } = useQuery({
@@ -93,7 +97,7 @@ export default function ItemCard({
         <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0 pb-3">
           <div className="flex-1">
             <h3 className="font-bold text-lg" data-testid={`text-product-name-${id}`}>{productName}</h3>
-            <p className="text-sm text-muted-foreground" data-testid={`text-barcode-${id}`}>Barcode: {barcode}</p>
+            <p className="text-sm text-muted-foreground" data-testid={`text-barcode-${id}`}>{t('barcode')}: {barcode}</p>
           </div>
           <Badge
             className={`${statusColors[status]} text-white`}
@@ -106,23 +110,23 @@ export default function ItemCard({
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <span className="text-muted-foreground">Type:</span>
+                <span className="text-muted-foreground">{t('type')}:</span>
                 <span className="ml-2 font-medium" data-testid={`text-type-${id}`}>{productType}</span>
               </div>
               <div>
-                <span className="text-muted-foreground">Quantity:</span>
+                <span className="text-muted-foreground">{t('quantity_display')}</span>
                 <span className="ml-2 font-medium" data-testid={`text-quantity-${id}`}>{quantity}</span>
               </div>
               {location && (
                 <div>
-                  <span className="text-muted-foreground">Location:</span>
+                  <span className="text-muted-foreground">{t('location')}:</span>
                   <span className="ml-2 font-medium" data-testid={`text-location-${id}`}>{location}</span>
                 </div>
               )}
             </div>
             {notes && (
               <p className="text-sm text-muted-foreground" data-testid={`text-notes-${id}`}>
-                <span className="font-medium">Notes:</span> {notes}
+                <span className="font-medium">{t('notes_display')}</span> {notes}
               </p>
             )}
             
@@ -139,7 +143,7 @@ export default function ItemCard({
                         data-testid={`button-mark-returned-${id}`}
                       >
                         <LogIn className="w-4 h-4 mr-2" />
-                        Mark Returned
+                        {t('markReturned')}
                       </Button>
                     )}
                     <div className="flex gap-2 flex-wrap">
@@ -151,7 +155,7 @@ export default function ItemCard({
                           className="bg-blue-600 hover:bg-blue-700 flex-1"
                         >
                           <LogOut className="w-4 h-4 mr-2" />
-                          Check Out
+                          {t('checkout')}
                         </Button>
                       )}
                       {status === 'In Use' && (
@@ -162,7 +166,7 @@ export default function ItemCard({
                           className="bg-green-600 hover:bg-green-700 flex-1"
                         >
                           <LogIn className="w-4 h-4 mr-2" />
-                          Check In
+                          {t('checkin')}
                         </Button>
                       )}
                       <Button
