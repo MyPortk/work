@@ -38,8 +38,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         req.session.name = result.user!.name;
         req.session.department = result.user!.department;
 
-        res.json({
-          user: result.user
+        // Save session to database
+        req.session.save((saveErr) => {
+          if (saveErr) {
+            return res.status(500).json({ error: 'Failed to save session' });
+          }
+          res.json({
+            user: result.user
+          });
         });
       });
     } catch (error) {
