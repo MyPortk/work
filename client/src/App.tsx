@@ -202,6 +202,7 @@ function App() {
             onNavigateToReservations={handleNavigateToReservations}
             onNavigateToActivityLogs={handleNavigateToActivityLogs}
             onNavigateToQRCodes={handleNavigateToQRCodes}
+            onNavigateToReports={handleNavigateToReports}
             language={language}
             onLanguageChange={handleLanguageChange}
           />
@@ -216,6 +217,7 @@ function App() {
             onNavigateToActivityLogs={handleNavigateToActivityLogs}
             onNavigateToQRCodes={handleNavigateToQRCodes}
             onNavigateToMaintenance={handleNavigateToMaintenance}
+            onNavigateToReports={() => {}}
             language={language}
             onLanguageChange={handleLanguageChange}
           />

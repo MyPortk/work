@@ -21,6 +21,7 @@ interface ReportsPageProps {
   onNavigateToActivityLogs?: () => void;
   onNavigateToQRCodes?: () => void;
   onNavigateToMaintenance?: () => void;
+  onNavigateToReports?: () => void;
   language?: Language;
   onLanguageChange?: (language: Language) => void;
 }
@@ -35,6 +36,7 @@ export default function Reports({
   onNavigateToActivityLogs,
   onNavigateToQRCodes,
   onNavigateToMaintenance,
+  onNavigateToReports,
   language = 'en',
   onLanguageChange
 }: ReportsPageProps) {
@@ -87,9 +89,11 @@ export default function Reports({
         currentView="inventory"
         onViewChange={() => onNavigateToInventory?.()}
         onLogout={onLogout}
+        onNavigateToReservations={onNavigateToReservations}
         onNavigateToActivityLogs={onNavigateToActivityLogs}
         onNavigateToQRCodes={onNavigateToQRCodes}
         onNavigateToMaintenance={onNavigateToMaintenance}
+        onNavigateToReports={() => {}}
         hideViewToggle={true}
         language={language}
         onLanguageChange={onLanguageChange}
