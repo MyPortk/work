@@ -7,7 +7,7 @@ import { loginUser, requireAuth, requireAdmin, hashPassword } from "./auth";
 import { EQUIPMENT_CATEGORIES, ASSET_CATEGORIES, CATEGORIES, insertItemSchema, insertReservationSchema, insertDamageReportSchema, users, itemEditHistory, reservationStatusHistory } from "@shared/schema";
 import { eq, desc } from "drizzle-orm";
 import { db } from "./db";
-import { sendReservationRequestEmail, sendReservationApprovedEmail, sendReservationRejectedEmail } from "./email";
+import { sendReservationRequestEmail, sendReservationApprovedEmail, sendReservationRejectedEmail } from "./emailService";
 import { format } from "date-fns";
 
 export async function registerRoutes(app: Express): Promise<Server> {
