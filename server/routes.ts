@@ -1011,37 +1011,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.error('Failed to log reservation status change:', logError);
         }
       } else if (validatedData.status === 'completed') {
-        await storage.updateItem(reservation.itemId, { status: 'Available' });
-
-        // Log activity
+        // Only record the return condition - do NOT change item status
+        // Log activity for return confirmation (condition only, no status change)
         try {
           await storage.createActivityLog({
             itemId: reservation.itemId,
             userId: req.session.userId!,
-            action: 'Reservation Completed',
+            action: 'Equipment Return Confirmed',
             oldStatus: item?.status || 'Reserved',
-            newStatus: 'Available',
-            notes: `${item?.productName || 'Item'} reservation completed by ${req.session.name}. Status: Reserved → Available. Updated at ${new Date().toLocaleString()}`
+            newStatus: item?.status || 'Reserved',
+            notes: `${item?.productName || 'Item'} return confirmed by ${req.session.name}. Condition: ${validatedData.itemConditionOnReturn || 'No notes provided'}. Status remains: ${item?.status || 'Reserved'}. Returned at ${new Date().toLocaleString()}`
           });
         } catch (logError) {
-          console.error('Failed to log reservation status change:', logError);
+          console.error('Failed to log return confirmation:', logError);
         }
       } else if (validatedData.checkoutDate && validatedData.itemConditionOnReceive !== undefined) {
-        // Handle equipment checkout/receive
-        await storage.updateItem(reservation.itemId, { status: 'In Use' });
-
-        // Log activity for checkout
+        // Only record the receipt condition - do NOT change item status
+        // Log activity for receipt confirmation (condition only, no status change)
         try {
           await storage.createActivityLog({
             itemId: reservation.itemId,
             userId: req.session.userId!,
-            action: 'Equipment Received',
+            action: 'Equipment Receipt Confirmed',
             oldStatus: item?.status || 'Reserved',
-            newStatus: 'In Use',
-            notes: `${item?.productName || 'Item'} received by ${req.session.name}. Condition: ${validatedData.itemConditionOnReceive || 'No notes provided'}. Status: Reserved → In Use. Received at ${new Date().toLocaleString()}`
+            newStatus: item?.status || 'Reserved',
+            notes: `${item?.productName || 'Item'} received by ${req.session.name}. Condition: ${validatedData.itemConditionOnReceive || 'No notes provided'}. Status remains: ${item?.status || 'Reserved'}. Received at ${new Date().toLocaleString()}`
           });
         } catch (logError) {
-          console.error('Failed to log checkout activity:', logError);
+          console.error('Failed to log receipt confirmation:', logError);
         }
 
         // Create notification for admin
