@@ -209,9 +209,15 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
     return matchesSearch;
   });
 
-  const filteredCategories = categories.filter(cat =>
-    cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter categories by both equipment type AND search query for complete separation
+  const filteredCategories = categories.filter(cat => {
+    // Only show categories matching the current equipment type filter
+    if (itemTypeFilter === 'equipment' && cat.isCustom && !cat.isEquipment) return false;
+    if (itemTypeFilter === 'assets' && cat.isCustom && cat.isEquipment) return false;
+    
+    // Then filter by search query
+    return cat.name.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
   const handleAddItem = (itemData: any) => {
     createItemMutation.mutate(itemData);

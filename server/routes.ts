@@ -663,7 +663,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             subTypes: cat.subTypes,
             totalCount: categoryItems.length,
             availableCount: categoryItems.filter(item => item.status === 'Available').length,
-            isCustom: false
+            isCustom: false,
+            isEquipment: shouldShowEquipment
           };
         });
 
@@ -685,7 +686,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             subTypes,
             totalCount: categoryItems.length,
             availableCount: categoryItems.filter(item => item.status === 'Available').length,
-            isCustom: true
+            isCustom: true,
+            isEquipment: cat.isEquipment
           };
         });
 
@@ -719,12 +721,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'A category with this name already exists' });
       }
 
+      console.log('📁 Creating custom category with isEquipment:', validatedData.isEquipment);
       const category = await storage.createCategory({
         name: validatedData.name,
         image: validatedData.image,
         subTypes: JSON.stringify(validatedData.subTypes),
         isEquipment: validatedData.isEquipment
       });
+      console.log('✅ Category created:', { name: category.name, isEquipment: category.isEquipment });
 
       res.status(201).json(category);
     } catch (error) {
