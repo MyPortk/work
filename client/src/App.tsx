@@ -37,6 +37,7 @@ function App() {
     setCurrentUser(null);
     setIsAuthenticated(false);
     setCurrentView('login');
+    localStorage.removeItem('currentUser');
   };
 
   const handleNavigateToReservations = () => {
@@ -69,12 +70,36 @@ function App() {
       if (response.ok) {
         const user = await response.json();
         handleLogin(user);
+        // Save to localStorage as backup
+        localStorage.setItem('currentUser', JSON.stringify(user));
       } else {
-        setIsAuthenticated(false);
+        // Try localStorage fallback
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+          try {
+            const user = JSON.parse(savedUser);
+            handleLogin(user);
+          } catch {
+            setIsAuthenticated(false);
+          }
+        } else {
+          setIsAuthenticated(false);
+        }
       }
     } catch (error) {
       console.error("Session check failed:", error);
-      setIsAuthenticated(false);
+      // Try localStorage fallback on error
+      const savedUser = localStorage.getItem('currentUser');
+      if (savedUser) {
+        try {
+          const user = JSON.parse(savedUser);
+          handleLogin(user);
+        } catch {
+          setIsAuthenticated(false);
+        }
+      } else {
+        setIsAuthenticated(false);
+      }
     }
   };
 
