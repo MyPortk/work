@@ -103,16 +103,16 @@ export default function Reports({
             className="gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Inventory
+            {t('backToInventory')}
           </Button>
         </div>
 
         <div className="text-center mb-10 p-6 md:p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
-          <h1 className="text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">Damage Reports</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">{t('damageReports')}</h1>
           <p className="text-sm md:text-lg opacity-90 max-w-2xl mx-auto">
             {userRole === 'admin' 
-              ? 'View all damage reports from equipment checkout and return inspections'
-              : 'View damage reports for equipment you received'}
+              ? t('viewAllDamageReports')
+              : t('viewDamageReportsReceived')}
           </p>
         </div>
 
@@ -120,7 +120,7 @@ export default function Reports({
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
-              placeholder="Search by equipment name..."
+              placeholder={t('searchItems')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12"

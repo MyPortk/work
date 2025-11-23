@@ -103,7 +103,7 @@ export default function Maintenance({
   };
 
   const handleDeleteItem = (id: string) => {
-    if (confirm('Are you sure you want to delete this item?')) {
+    if (confirm(t('areYouSureDeleteItem'))) {
       deleteItemMutation.mutate(id);
     }
   };

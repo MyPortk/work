@@ -184,6 +184,11 @@ export const translations = {
     areYouSureDeleteUserMessage: 'Are you sure you want to delete user',
     loginFailedMessage: 'Login failed. Please try again.',
     tryAgain: 'Please try again',
+    
+    // Reports Page
+    damageReports: 'Damage Reports',
+    viewAllDamageReports: 'View all damage reports from equipment checkout and return inspections',
+    viewDamageReportsReceived: 'View damage reports for equipment you received',
   },
   ar: {
     // Header
@@ -368,6 +373,11 @@ export const translations = {
     areYouSureDeleteUserMessage: 'هل أنت متأكد من حذف المستخدم',
     loginFailedMessage: 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.',
     tryAgain: 'يرجى المحاولة مرة أخرى',
+    
+    // Reports Page
+    damageReports: 'تقارير الأضرار',
+    viewAllDamageReports: 'عرض جميع تقارير الأضرار من عمليات فحص الاستلام والإرجاع للمعدات',
+    viewDamageReportsReceived: 'عرض تقارير الأضرار للمعدات التي استلمتها',
   }
 };
 
