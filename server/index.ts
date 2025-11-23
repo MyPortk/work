@@ -35,7 +35,8 @@ app.use(
   session({
     store: new PostgresStore({
       pool,
-      tableName: 'session'
+      tableName: 'session',
+      createTableIfMissing: true
     }),
     secret: process.env.SESSION_SECRET || 'inventory-management-secret-key',
     resave: false,
