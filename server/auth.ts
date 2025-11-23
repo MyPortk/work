@@ -47,7 +47,7 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
   if (!req.session?.userId) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
-  if (req.session.role !== 'admin') {
+  if (req.session.role !== 'admin' && req.session.role !== 'developer') {
     return res.status(403).json({ error: 'Forbidden - Admin access required' });
   }
   next();
