@@ -884,7 +884,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/reservations", requireAuth, async (req, res) => {
     try {
-      const validatedData = insertReservationSchema.parse(req.body);
+      console.log('📝 POST /api/reservations body:', req.body);
+      console.log('📝 Session userId:', req.session.userId);
+      
+      // Use session userId instead of body userId
+      const bodyData = req.body;
+      const validatedData = insertReservationSchema.parse({
+        ...bodyData,
+        userId: req.session.userId // Override with session userId
+      });
 
       // Check for date conflicts
       const hasConflict = await storage.checkReservationConflict(
