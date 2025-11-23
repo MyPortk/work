@@ -259,6 +259,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               type="submit" 
               className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
               data-testid="button-submit"
+              disabled={!formData.barcode || !formData.productName || !formData.productType || !formData.status}
             >
               {mode === 'add' ? 'Add Item' : 'Save Changes'}
             </Button>

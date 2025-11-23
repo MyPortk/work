@@ -699,7 +699,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = z.object({
         name: z.string().min(1, "Category name is required"),
         image: z.string().url("Valid image URL is required"),
-        subTypes: z.array(z.string()).min(1, "At least one product type is required")
+        subTypes: z.array(z.string()).min(1, "At least one product type is required"),
+        isEquipment: z.boolean().default(true)
       }).parse(req.body);
 
       // Check if category name already exists
@@ -715,7 +716,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const category = await storage.createCategory({
         name: validatedData.name,
         image: validatedData.image,
-        subTypes: JSON.stringify(validatedData.subTypes)
+        subTypes: JSON.stringify(validatedData.subTypes),
+        isEquipment: validatedData.isEquipment
       });
 
       res.status(201).json(category);
@@ -736,7 +738,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = z.object({
         name: z.string().min(1).optional(),
         image: z.string().url().optional(),
-        subTypes: z.array(z.string()).optional()
+        subTypes: z.array(z.string()).optional(),
+        isEquipment: z.boolean().optional()
       }).parse(req.body);
 
       const updateData: any = { ...validatedData };
