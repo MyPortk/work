@@ -605,16 +605,18 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                   {viewMode === 'card' ? <TableIcon className="w-4 h-4 mr-2" /> : <LayoutGrid className="w-4 h-4 mr-2" />}
                   {viewMode === 'card' ? t('tableView') : t('cardView')}
                 </Button>
-                {userRole === 'admin' && itemTypeFilter === 'equipment' && (
+                {userRole === 'admin' && (
                   <>
-                    <Button
-                      onClick={() => setShowQRScanner(true)}
-                      variant="outline"
-                      data-testid="button-scan-item"
-                    >
-                      <Search className="w-4 h-4 mr-2" />
-                      {t('scanItem')}
-                    </Button>
+                    {itemTypeFilter === 'equipment' && (
+                      <Button
+                        onClick={() => setShowQRScanner(true)}
+                        variant="outline"
+                        data-testid="button-scan-item"
+                      >
+                        <Search className="w-4 h-4 mr-2" />
+                        {t('scanItem')}
+                      </Button>
+                    )}
                     <Button
                       onClick={() => {
                         setEditingItem(null);
