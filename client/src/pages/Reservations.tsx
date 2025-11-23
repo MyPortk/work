@@ -433,16 +433,10 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
                       );
                     })()}
                     {userRole === 'admin' && (() => {
-                      const today = new Date();
-                      const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-                      
-                      const returnDate = new Date(reservation.returnDate);
-                      const returnDateStr = `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}`;
-                      
                       // Admin can mark as returned if:
-                      // - Return date has started (today >= returnDate)
-                      // - Not already marked as returned
-                      const isReturnDatePassed = todayStr >= returnDateStr;
+                      // - Equipment has been checked out (itemConditionOnReceive is set)
+                      // - Not already marked as returned (itemConditionOnReturn is not set)
+                      const hasCheckedOut = reservation.checkoutDate || reservation.itemConditionOnReceive;
                       const alreadyMarkedReturned = reservation.itemConditionOnReturn !== undefined;
                       
                       if (alreadyMarkedReturned) {
@@ -455,11 +449,11 @@ export default function Reservations({ userName, userRole, userId, onLogout, onN
                           variant="outline"
                           className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
                           onClick={() => handleComplete(reservation.id, reservation.itemId)}
-                          disabled={!isReturnDatePassed}
-                          title={isReturnDatePassed ? "Click to confirm return" : `Available on ${format(new Date(reservation.returnDate), "MMM dd, yyyy")}`}
+                          disabled={!hasCheckedOut}
+                          title={hasCheckedOut ? "Click to confirm return" : "Equipment must be checked out first"}
                         >
                           <CheckCircle className="w-4 h-4 mr-1" />
-                          {t('markReturned')} {!isReturnDatePassed && "(Not Available)"}
+                          {t('markReturned')} {!hasCheckedOut && "(Not Available)"}
                         </Button>
                       );
                     })()}
