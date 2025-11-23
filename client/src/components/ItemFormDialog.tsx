@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CATEGORIES, ITEM_STATUSES } from "@shared/schema";
+import { CATEGORIES, EQUIPMENT_CATEGORIES, ITEM_STATUSES } from "@shared/schema";
 import { api } from "@/lib/api";
 import { Plus } from "lucide-react";
 
@@ -44,16 +44,24 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
   const [showAddType, setShowAddType] = useState(false);
   const [newTypeName, setNewTypeName] = useState('');
 
-  // Fetch all categories to get custom subTypes
+  // Fetch categories based on item type to get custom subTypes
   const { data: categories = [] } = useQuery({
-    queryKey: ['/api/categories'],
-    queryFn: () => api.categories.getAll(),
+    queryKey: ['/api/categories', isEquipment],
+    queryFn: () => api.categories.getAll(isEquipment),
     enabled: open
   });
 
-  // Combine all subTypes from default and custom categories
+  // Combine subTypes from default and custom categories
   const allSubTypes = [
-    ...Object.values(CATEGORIES).flatMap(cat => cat.subTypes),
+    // Include default categories of the same type
+    ...Object.values(CATEGORIES)
+      .filter(cat => {
+        // Filter based on equipment type
+        const isEquipmentCategory = Object.values(EQUIPMENT_CATEGORIES).some(c => c.name === cat.name);
+        return isEquipment === isEquipmentCategory;
+      })
+      .flatMap(cat => cat.subTypes),
+    // Include custom categories subTypes
     ...categories
       .filter(cat => cat.isCustom)
       .flatMap(cat => cat.subTypes)
