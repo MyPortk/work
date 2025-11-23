@@ -66,14 +66,14 @@ export default function ReservationFormDialog({
       return;
     }
     
-    // Convert dates to YYYY-MM-DD strings at local midnight to avoid timezone issues
-    const startDateStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}T00:00:00`;
-    const returnDateStr = `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}T00:00:00`;
+    // Send dates as YYYY-MM-DD strings to avoid timezone conversion
+    const startDateStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+    const returnDateStr = `${returnDate.getFullYear()}-${String(returnDate.getMonth() + 1).padStart(2, '0')}-${String(returnDate.getDate()).padStart(2, '0')}`;
     
     onSubmit({
       itemId,
-      startDate: new Date(startDateStr),
-      returnDate: new Date(returnDateStr),
+      startDate: startDateStr,
+      returnDate: returnDateStr,
       startTime: startTime || undefined,
       returnTime: returnTime || undefined,
       purposeOfUse: purposeOfUse.trim(),

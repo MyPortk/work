@@ -139,8 +139,8 @@ export const insertReservationSchema = createInsertSchema(reservations).omit({
   requestDate: true,
   approvalDate: true
 }).extend({
-  startDate: z.coerce.date(),
-  returnDate: z.coerce.date()
+  startDate: z.union([z.date(), z.string().transform(val => new Date(val + 'T00:00:00'))]),
+  returnDate: z.union([z.date(), z.string().transform(val => new Date(val + 'T00:00:00'))])
 });
 
 export const insertActivityLogSchema = createInsertSchema(activityLogs).omit({
