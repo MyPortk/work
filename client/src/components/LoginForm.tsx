@@ -35,12 +35,7 @@ export default function LoginForm({ onLogin, isLoading = false, error }: LoginFo
       </div>
 
       <Card className="w-full max-w-md relative z-10 shadow-2xl border-0">
-        <CardHeader className="text-center space-y-6 pb-8">
-          <div className="flex justify-center">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center text-white font-bold text-2xl shadow-lg transform hover:scale-105 transition-transform">
-              OMG
-            </div>
-          </div>
+        <CardHeader className="text-center space-y-4 pb-8">
           <div>
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
               Welcome Back
