@@ -7,6 +7,53 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Lock, User, Package } from "lucide-react";
 
+const styles = `
+  @keyframes subtleGlow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .glow-effect {
+    animation: subtleGlow 4s ease-in-out infinite;
+  }
+  
+  .shimmer-effect {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    background-size: 1000px 100%;
+    animation: shimmer 3s infinite;
+  }
+  
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+  
+  .fade-in-up-delay-1 {
+    animation: fadeInUp 0.8s ease-out 0.1s forwards;
+    opacity: 0;
+  }
+  
+  .fade-in-up-delay-2 {
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+`;
+
 interface LoginFormProps {
   onLogin: (username: string, password: string) => void;
   isLoading?: boolean;
@@ -24,26 +71,31 @@ export default function LoginForm({ onLogin, isLoading = false, error }: LoginFo
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-5 relative overflow-hidden" 
-         style={{
-           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-         }}>
-      {/* Lighting effects - optimized for performance */}
-      {/* Radial glow from center - light to dark */}
-      <div className="absolute inset-0" style={{
-        background: 'radial-gradient(ellipse 1200px 800px at 50% 30%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 25%, transparent 70%)'
-      }}></div>
-      
-      {/* Vignette effect - darken edges */}
-      <div className="absolute inset-0" style={{
-        background: 'radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(0,0,0,0.3) 100%)'
-      }}></div>
-      
-      {/* Subtle top-to-bottom lighting */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/20"></div>
+    <>
+      <style>{styles}</style>
+      <div className="min-h-screen flex items-center justify-center p-5 relative overflow-hidden" 
+           style={{
+             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+           }}>
+        {/* Lighting effects - optimized for performance */}
+        {/* Radial glow from center - light to dark */}
+        <div className="absolute inset-0 glow-effect" style={{
+          background: 'radial-gradient(ellipse 1200px 800px at 50% 30%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 25%, transparent 70%)'
+        }}></div>
+        
+        {/* Vignette effect - darken edges */}
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(0,0,0,0.3) 100%)'
+        }}></div>
+        
+        {/* Subtle top-to-bottom lighting */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/20"></div>
+        
+        {/* Shimmer overlay - very subtle */}
+        <div className="absolute inset-0 shimmer-effect pointer-events-none"></div>
 
-      <Card className="w-full max-w-md relative z-10 shadow-2xl border-0">
-        <CardHeader className="text-center space-y-6 pb-8">
+        <Card className="w-full max-w-md relative z-10 shadow-2xl border-0 fade-in-up">
+        <CardHeader className="text-center space-y-6 pb-8 fade-in-up-delay-1">
           <div className="flex justify-center">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center text-white font-bold text-2xl shadow-lg transform hover:scale-105 transition-transform">
               <Package className="w-8 h-8" />
@@ -58,7 +110,7 @@ export default function LoginForm({ onLogin, isLoading = false, error }: LoginFo
             </CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 fade-in-up-delay-2">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="username" className="text-sm font-semibold">Username</Label>
