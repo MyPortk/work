@@ -28,21 +28,8 @@ export default function LoginForm({ onLogin, isLoading = false, error }: LoginFo
          style={{
            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
          }}>
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Glowing orbs */}
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/20 rounded-full blur-3xl animate-pulse" style={{animationDuration: '4s'}}></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-white/15 rounded-full blur-3xl animate-pulse" style={{animationDuration: '6s', animationDelay: '1s'}}></div>
-        <div className="absolute top-1/2 right-1/4 w-72 h-72 bg-blue-300/10 rounded-full blur-3xl animate-pulse" style={{animationDuration: '5s', animationDelay: '2s'}}></div>
-        
-        {/* Floating elements */}
-        <div className="absolute top-20 right-20 w-32 h-32 border-2 border-white/20 rounded-3xl animate-pulse" style={{animationDuration: '3s'}}></div>
-        <div className="absolute bottom-32 left-16 w-24 h-24 border border-white/15 rounded-full animate-pulse" style={{animationDuration: '4s', animationDelay: '1s'}}></div>
-        <div className="absolute top-1/3 left-1/3 w-16 h-16 border-2 border-white/20 rounded-lg animate-pulse" style={{animationDuration: '5s', animationDelay: '2s'}}></div>
-        
-        {/* Gradient overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-purple-900/20"></div>
-      </div>
+      {/* Simple background - optimized for performance */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/10"></div>
 
       <Card className="w-full max-w-md relative z-10 shadow-2xl border-0">
         <CardHeader className="text-center space-y-6 pb-8">
