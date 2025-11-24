@@ -28,8 +28,19 @@ export default function LoginForm({ onLogin, isLoading = false, error }: LoginFo
          style={{
            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
          }}>
-      {/* Simple background - optimized for performance */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-black/10"></div>
+      {/* Lighting effects - optimized for performance */}
+      {/* Radial glow from center - light to dark */}
+      <div className="absolute inset-0" style={{
+        background: 'radial-gradient(ellipse 1200px 800px at 50% 30%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 25%, transparent 70%)'
+      }}></div>
+      
+      {/* Vignette effect - darken edges */}
+      <div className="absolute inset-0" style={{
+        background: 'radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(0,0,0,0.3) 100%)'
+      }}></div>
+      
+      {/* Subtle top-to-bottom lighting */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/20"></div>
 
       <Card className="w-full max-w-md relative z-10 shadow-2xl border-0">
         <CardHeader className="text-center space-y-6 pb-8">
