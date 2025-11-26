@@ -11,6 +11,38 @@ export async function seedDatabase() {
     return;
   }
 
+  // Seed equipment categories (12 categories)
+  const equipmentCategories = [
+    { name: 'Cameras', image: '📷', subTypes: JSON.stringify(['Camera', 'Action Cam']), isEquipment: true },
+    { name: 'Lenses', image: '🔍', subTypes: JSON.stringify(['Lenses', 'Digital Filter']), isEquipment: true },
+    { name: 'Tripods & Stands', image: '🎥', subTypes: JSON.stringify(['Stands', 'Small Tripods', 'Backdrop Stands', 'Monopod']), isEquipment: true },
+    { name: 'Grips & Stabilization', image: '✋', subTypes: JSON.stringify(['Crane', 'Gimbal', 'Dolly / Wheels Tripod', 'Shoulder Rig', 'Spider Rig', 'Slider', 'Camera Support Equipment', 'Rig & Stabilization Gear']), isEquipment: true },
+    { name: 'Audio Equipment', image: '🎤', subTypes: JSON.stringify(['Microphone', 'Mic', 'Wireless Device', 'Recorder', 'Mixer', 'Boom Arm', 'Transmitter', 'Receiver']), isEquipment: true },
+    { name: 'Lighting', image: '💡', subTypes: JSON.stringify(['LED Light', 'LED', 'Soft Box', 'Light', 'RGB Lights', 'LED Ring', 'Lighting Equipment']), isEquipment: true },
+    { name: 'Studio Accessories', image: '🎭', subTypes: JSON.stringify(['Clapper', 'Reflector', 'Kit', 'Background Screen']), isEquipment: true },
+    { name: 'Bags & Cases', image: '🎒', subTypes: JSON.stringify(['Bag', 'Backpacks', 'Bags & Cases']), isEquipment: true },
+    { name: 'Batteries & Power', image: '🔋', subTypes: JSON.stringify(['V-Mount Battery', 'Battery', 'Charger', 'Inverter', 'Power Bank', 'Battery Power Tester', 'Power & Accessories']), isEquipment: true },
+    { name: 'Cables & Adapters', image: '🔌', subTypes: JSON.stringify(['Cable', 'Socket', 'Extension']), isEquipment: true },
+    { name: 'Monitors & Displays', image: '📺', subTypes: JSON.stringify(['Monitor', 'Screen', 'Computing & Display']), isEquipment: true },
+    { name: 'Storage Devices', image: '💾', subTypes: JSON.stringify(['Storage Devices']), isEquipment: true },
+  ];
+
+  // Seed asset categories (7 categories)
+  const assetCategories = [
+    { name: 'Software Licenses', image: '💻', subTypes: JSON.stringify(['Editing Software', 'Design Software', 'Office Software']), isEquipment: false },
+    { name: 'Office Supplies', image: '📎', subTypes: JSON.stringify(['Stationery', 'Desk Items', 'Printer Supplies']), isEquipment: false },
+    { name: 'Pantry Items', image: '🥤', subTypes: JSON.stringify(['Snacks', 'Disposable Items']), isEquipment: false },
+    { name: 'Transportation', image: '🚚', subTypes: JSON.stringify(['Vehicles', 'Delivery Equipment', 'Travel Accessories']), isEquipment: false },
+    { name: 'Furniture', image: '🪑', subTypes: JSON.stringify(['Chairs', 'Tables', 'Storage Units']), isEquipment: false },
+    { name: 'Communication Devices', image: '📱', subTypes: JSON.stringify(['SIM Cards', 'Internet Devices', 'Mobile Devices']), isEquipment: false },
+    { name: 'Uniforms & Branding', image: '👕', subTypes: JSON.stringify(['Uniforms', 'Badges', 'Tags', 'T-Shirts', 'Tote Bags', 'Uniform Bags']), isEquipment: false },
+  ];
+
+  for (const category of [...equipmentCategories, ...assetCategories]) {
+    await storage.createCategory(category);
+    console.log(`  ✓ Created category: ${category.name}`);
+  }
+
   const users = [
     {
       username: 'developer',
@@ -252,5 +284,6 @@ export async function seedDatabase() {
   }
 
   console.log('✅ Database seeded successfully!');
+  console.log(`📊 Total categories: ${equipmentCategories.length + assetCategories.length}`);
   console.log(`📊 Total items: ${items.length}`);
 }
