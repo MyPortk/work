@@ -31,6 +31,8 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: false }));
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 app.use(
   session({
     store: new PostgresStore({
@@ -44,8 +46,9 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax'
+      secure: isProduction,
+      sameSite: isProduction ? 'strict' : 'lax',
+      domain: undefined
     }
   })
 );
