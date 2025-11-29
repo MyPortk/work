@@ -713,7 +713,6 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                       setEditingItem(item);
                       setShowItemForm(true);
                     } : undefined}
-                    onDelete={userRole === 'admin' ? () => handleDeleteItem(item.id) : undefined}
                     onScan={item.isEquipment && userRole !== 'admin' ? () => {
                       setShowQRScanner(true);
                     } : undefined}
@@ -769,13 +768,6 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                                 }}
                               >
                                 <Pencil className="w-3 h-3" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => handleDeleteItem(item.id)}
-                              >
-                                <Trash2 className="w-3 h-3" />
                               </Button>
                             </div>
                           </TableCell>

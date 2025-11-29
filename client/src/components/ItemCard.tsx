@@ -187,14 +187,6 @@ export default function ItemCard({
                         <Edit className="w-4 h-4 mr-2" />
                         Edit
                       </Button>
-                      <Button
-                        onClick={onDelete}
-                        variant="destructive"
-                        size="sm"
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Delete
-                      </Button>
                     </div>
                   </div>
                 )}
@@ -251,14 +243,6 @@ export default function ItemCard({
                     >
                       <Edit className="w-4 h-4 mr-2" />
                       Edit
-                    </Button>
-                    <Button
-                      onClick={onDelete}
-                      variant="destructive"
-                      size="sm"
-                    >
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Delete
                     </Button>
                   </div>
                 )}
