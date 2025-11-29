@@ -36,7 +36,7 @@ export default function CategoryCard({
         style={{ backgroundImage: `url(${image})` }}
       >
         <Badge 
-          className="absolute top-3 right-5 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white"
+          className="absolute top-3 left-3 bg-[#667eea] text-white"
           data-testid={`badge-available-${name.toLowerCase().replace(/\s+/g, '-')}`}
         >
           {availableCount} {t('available')}
