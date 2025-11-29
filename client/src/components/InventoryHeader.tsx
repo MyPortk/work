@@ -75,15 +75,6 @@ export default function InventoryHeader({
                 >
                   {t('categories')}
                 </Button>
-                <Button
-                  variant={currentView === 'inventory' ? 'secondary' : 'ghost'}
-                  size="sm"
-                  onClick={() => onViewChange('inventory')}
-                  className={currentView === 'inventory' ? '' : 'text-white hover:bg-white/20'}
-                  data-testid="button-view-inventory"
-                >
-                  {t('all_items')}
-                </Button>
               </div>
             )}
 
@@ -211,17 +202,6 @@ export default function InventoryHeader({
                   className={`flex-1 ${currentView === 'categories' ? '' : 'text-white hover:bg-white/20'}`}
                 >
                   {t('categories')}
-                </Button>
-                <Button
-                  variant={currentView === 'inventory' ? 'secondary' : 'ghost'}
-                  size="sm"
-                  onClick={() => {
-                    onViewChange('inventory');
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`flex-1 ${currentView === 'inventory' ? '' : 'text-white hover:bg-white/20'}`}
-                >
-                  {t('all_items')}
                 </Button>
               </div>
             )}
