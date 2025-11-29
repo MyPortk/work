@@ -124,6 +124,11 @@ export default function InventoryHeader({
                 <DropdownMenuLabel>{t('navigation')}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
 
+                <DropdownMenuItem onClick={() => onViewChange('categories')}>
+                  <Package className="w-4 h-4 mr-2" />
+                  {t('categories')}
+                </DropdownMenuItem>
+
                 {onNavigateToReservations && (
                   <DropdownMenuItem onClick={onNavigateToReservations}>
                     <Calendar className="w-4 h-4 mr-2" />
