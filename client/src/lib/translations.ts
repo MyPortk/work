@@ -13,14 +13,14 @@ export const translations = {
     reservations: 'Reservations',
     activityLog: 'Activity Log',
     qrCodes: 'QR Codes',
-    maintenance: 'Maintenance',
+    maintenancePage: 'Maintenance',
     userManagement: 'User Management',
     logout: 'Logout',
 
     // Notifications
-    notifications: 'Notifications',
-    markAllRead: 'Mark all read',
-    noNotifications: 'No notifications',
+    notificationsBell: 'Notifications',
+    markAllAsRead: 'Mark all read',
+    noNotificationsFound: 'No notifications',
 
     // Login
     login: 'Login',
