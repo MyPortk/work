@@ -694,6 +694,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                     status={item.status}
                     location={item.location || undefined}
                     notes={item.notes || undefined}
+                    maintenanceAvailableDate={item.maintenanceAvailableDate || undefined}
                     userRole={userRole}
                     isEquipment={item.isEquipment}
                     language={currentLanguage}
