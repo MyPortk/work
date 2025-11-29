@@ -26,6 +26,7 @@ interface ItemFormDialogProps {
     location?: string;
     notes?: string;
     isEquipment?: boolean;
+    maintenanceAvailableDate?: string;
   };
   mode: 'add' | 'edit';
   userRole?: string;
@@ -42,7 +43,8 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
     status: item?.status || 'Available',
     location: item?.location || '',
     notes: item?.notes || '',
-    isEquipment: item?.isEquipment !== undefined ? item.isEquipment : isEquipment
+    isEquipment: item?.isEquipment !== undefined ? item.isEquipment : isEquipment,
+    maintenanceAvailableDate: item?.maintenanceAvailableDate || ''
   });
 
   const [showAddType, setShowAddType] = useState(false);
@@ -77,7 +79,8 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
         status: item.status,
         location: item.location || '',
         notes: item.notes || '',
-        isEquipment: item.isEquipment !== undefined ? item.isEquipment : isEquipment
+        isEquipment: item.isEquipment !== undefined ? item.isEquipment : isEquipment,
+        maintenanceAvailableDate: item.maintenanceAvailableDate || ''
       });
     } else {
       setFormData({
@@ -87,7 +90,8 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
         status: 'Available',
         location: '',
         notes: '',
-        isEquipment: isEquipment
+        isEquipment: isEquipment,
+        maintenanceAvailableDate: ''
       });
     }
   }, [item, open, isEquipment]);
@@ -231,6 +235,20 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               </Select>
             </div>
           </div>
+
+          {formData.status === 'Maintenance' && (
+            <div className="space-y-2">
+              <Label htmlFor="maintenanceDate">{t('maintenanceAvailableDate')} *</Label>
+              <Input
+                id="maintenanceDate"
+                type="date"
+                value={formData.maintenanceAvailableDate}
+                onChange={(e) => setFormData({ ...formData, maintenanceAvailableDate: e.target.value })}
+                required={formData.status === 'Maintenance'}
+                data-testid="input-maintenance-date"
+              />
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="location">{t('location_label')}</Label>

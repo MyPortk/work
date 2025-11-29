@@ -40,6 +40,8 @@ export const translations = {
     inUse: 'In Use',
     reserved: 'Reserved',
     maintenance: 'Maintenance',
+    maintenanceAvailableDate: 'Available from Date',
+    maintenanceMessage: 'This item will be available for use from',
 
     // Reservations
     newReservation: 'New Reservation',
@@ -245,6 +247,8 @@ export const translations = {
     inUse: 'قيد الاستخدام',
     reserved: 'محجوز',
     maintenance: 'صيانة',
+    maintenanceAvailableDate: 'التاريخ المتاح من',
+    maintenanceMessage: 'سيكون هذا العنصر متاحًا للاستخدام من',
 
     // Reservations
     newReservation: 'حجز جديد',

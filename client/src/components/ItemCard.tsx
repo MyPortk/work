@@ -16,6 +16,7 @@ interface ItemCardProps {
   status: string;
   location?: string;
   notes?: string;
+  maintenanceAvailableDate?: string;
   onEdit?: () => void;
   onDelete?: () => void;
   onScan?: () => void;
@@ -44,6 +45,7 @@ export default function ItemCard({
   status,
   location,
   notes,
+  maintenanceAvailableDate,
   onEdit,
   onDelete,
   onScan,
@@ -60,6 +62,16 @@ export default function ItemCard({
   const translatedType = t(productType as any) || productType;
   const translatedStatus = t(status as any) || status;
   const [showQRDialog, setShowQRDialog] = useState(false);
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString(language === 'ar' ? 'ar-SA' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   const { data: qrData, isLoading: qrLoading } = useQuery({
     queryKey: ['/api/items', id, 'qrcode'],
@@ -124,6 +136,15 @@ export default function ItemCard({
               <p className="text-sm text-muted-foreground" data-testid={`text-notes-${id}`}>
                 <span className="font-medium">{t('notes_display')}</span> {notes}
               </p>
+            )}
+
+            {status === 'Maintenance' && maintenanceAvailableDate && (
+              <div className="flex flex-col items-center justify-center py-4 px-2 bg-blue-50 dark:bg-blue-950 rounded-md text-center" data-testid={`maintenance-message-${id}`}>
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  <span className="font-medium">{t('maintenanceMessage')}</span>
+                </p>
+                <p className="text-lg font-bold text-blue-900 dark:text-blue-100">{formatDate(maintenanceAvailableDate)}</p>
+              </div>
             )}
             
             {isEquipment ? (

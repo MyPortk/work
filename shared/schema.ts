@@ -23,6 +23,7 @@ export const items = pgTable("items", {
   location: text("location"),
   notes: text("notes"),
   isEquipment: boolean("is_equipment").notNull().default(true),
+  maintenanceAvailableDate: date("maintenance_available_date"),
   createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`)
 });
