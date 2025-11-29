@@ -124,6 +124,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
                 onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
                 placeholder="e.g., CAM-001-2024"
                 required
+                disabled={mode === 'edit'}
                 data-testid="input-barcode"
               />
             </div>
@@ -135,6 +136,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
                 onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
                 placeholder="e.g., Canon EOS R5"
                 required
+                disabled={mode === 'edit'}
                 data-testid="input-product-name"
               />
             </div>
@@ -143,7 +145,11 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="productType">{t('type')} *</Label>
-              {!showAddType ? (
+              {mode === 'edit' ? (
+                <div className="bg-muted p-2 rounded text-sm text-muted-foreground">
+                  {formData.productType}
+                </div>
+              ) : !showAddType ? (
                 <div className="space-y-2">
                   <Select
                     value={formData.productType}
@@ -238,6 +244,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               placeholder="e.g., Studio A - Shelf 2"
+              disabled={mode === 'edit'}
               data-testid="input-location"
             />
           </div>
@@ -250,6 +257,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               placeholder="Additional notes about the item"
               rows={3}
+              disabled={mode === 'edit'}
               data-testid="textarea-notes"
             />
           </div>
@@ -263,6 +271,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               value={formData.quantity}
               onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
               placeholder="Enter quantity (e.g., 2 for 2 cameras)"
+              disabled={mode === 'edit'}
               data-testid="input-quantity"
             />
           </div>
