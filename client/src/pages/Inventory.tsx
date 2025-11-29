@@ -487,6 +487,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                   <div key={category.name} className="relative group">
                     <CategoryCard
                       {...category}
+                      language={currentLanguage}
                       onClick={() => {
                         console.log('Category clicked:', category.name, 'isEquipment:', category.isEquipment);
                         setSelectedCategory(category.name);
@@ -729,7 +730,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                       <TableRow key={item.id}>
                         <TableCell className="font-mono">{item.barcode}</TableCell>
                         <TableCell className="font-medium">{item.productName}</TableCell>
-                        <TableCell>{item.productType}</TableCell>
+                        <TableCell>{t(item.productType as any) || item.productType}</TableCell>
                         <TableCell>
                           <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                             item.status === 'Available' ? 'bg-green-100 text-green-800' :
@@ -737,7 +738,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                             item.status === 'Reserved' ? 'bg-amber-100 text-amber-800' :
                             'bg-red-100 text-red-800'
                           }`}>
-                            {item.status}
+                            {t(item.status as any) || item.status}
                           </span>
                         </TableCell>
                         {showLocationColumn && <TableCell>{item.location || '-'}</TableCell>}

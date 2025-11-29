@@ -57,6 +57,8 @@ export default function ItemCard({
   isEquipment = true,
 }: ItemCardProps) {
   const t = useTranslation(language);
+  const translatedType = t(productType as any) || productType;
+  const translatedStatus = t(status as any) || status;
   const [showQRDialog, setShowQRDialog] = useState(false);
 
   const { data: qrData, isLoading: qrLoading } = useQuery({
@@ -101,7 +103,7 @@ export default function ItemCard({
             className={`${statusColors[status]} text-white`}
             data-testid={`badge-status-${id}`}
           >
-            {status}
+            {translatedStatus}
           </Badge>
         </CardHeader>
         <CardContent>
@@ -109,7 +111,7 @@ export default function ItemCard({
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
                 <span className="text-muted-foreground">{t('type')}:</span>
-                <span className="ml-2 font-medium" data-testid={`text-type-${id}`}>{productType}</span>
+                <span className="ml-2 font-medium" data-testid={`text-type-${id}`}>{translatedType}</span>
               </div>
               {location && (
                 <div>

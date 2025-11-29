@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation, type Language } from "@/lib/translations";
 
 interface CategoryCardProps {
   name: string;
@@ -8,6 +9,7 @@ interface CategoryCardProps {
   availableCount: number;
   subTypes: readonly string[];
   onClick?: () => void;
+  language?: Language;
 }
 
 export default function CategoryCard({
@@ -16,8 +18,13 @@ export default function CategoryCard({
   totalCount,
   availableCount,
   subTypes,
-  onClick
+  onClick,
+  language = 'en'
 }: CategoryCardProps) {
+  const t = useTranslation(language);
+  const translatedName = t(name as any) || name;
+  const translatedSubTypes = subTypes.map(subType => t(subType as any) || subType);
+
   return (
     <Card 
       className="overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
@@ -32,18 +39,18 @@ export default function CategoryCard({
           className="absolute top-3 right-3 bg-green-600 hover:bg-green-700"
           data-testid={`badge-available-${name.toLowerCase().replace(/\s+/g, '-')}`}
         >
-          {availableCount} Available
+          {availableCount} {t('available')}
         </Badge>
       </div>
       <div className="p-5">
         <h3 className="text-lg font-bold mb-2 text-card-foreground" data-testid={`text-category-name-${name.toLowerCase().replace(/\s+/g, '-')}`}>
-          {name}
+          {translatedName}
         </h3>
         <p className="text-sm text-muted-foreground mb-3" data-testid={`text-category-count-${name.toLowerCase().replace(/\s+/g, '-')}`}>
-          {totalCount} total items
+          {totalCount} {t('totalItems')}
         </p>
         <div className="flex flex-wrap gap-1.5">
-          {subTypes.map((subType, index) => (
+          {translatedSubTypes.map((subType, index) => (
             <Badge 
               key={index} 
               variant="secondary"
