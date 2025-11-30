@@ -309,16 +309,30 @@ export default function ReservationFormDialog({
             />
           </div>
           
-          <div className="space-y-2 border-t pt-4">
-            <Button 
-              type="button"
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={() => setShowDeliveryDialog(true)}
-            >
-              <Truck className="w-4 h-4" />
-              {hasDelivery ? `Delivery Info Saved` : 'Add Delivery Details'}
-            </Button>
+          <div className="space-y-3 border-t pt-4">
+            <div className="flex items-center gap-2">
+              <input 
+                type="checkbox" 
+                id="delivery" 
+                checked={hasDelivery}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setShowDeliveryDialog(true);
+                  } else {
+                    setHasDelivery(false);
+                    setDeliveryLocation("");
+                    setDeliveryStreet("");
+                    setDeliveryArea("");
+                    setGoogleMapLink("");
+                  }
+                }}
+                className="w-4 h-4 rounded"
+              />
+              <Label htmlFor="delivery" className="cursor-pointer flex items-center gap-2">
+                <Truck className="w-4 h-4" />
+                Request Delivery
+              </Label>
+            </div>
           </div>
 
           <div className="flex gap-3 justify-end">
