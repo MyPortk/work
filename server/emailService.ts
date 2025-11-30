@@ -120,8 +120,7 @@ export async function sendReservationRequestEmail(
                 ` : ''}
                 ${data.deliveryRequired === 'yes' ? `
                 <div class="detail-row">
-                  <div class="detail-label" style="font-size: 16px; font-weight: 700;">🚚 Delivery Required:</div>
-                  <div class="detail-value">Yes</div>
+                  <div style="font-size: 16px; font-weight: 700; background-color: #e3f2fd; padding: 10px 12px; border-radius: 4px; color: #1565c0;">🚚 Delivery Required:</div>
                 </div>
                 <div class="detail-row">
                   <div class="detail-label">Location:</div>
