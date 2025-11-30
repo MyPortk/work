@@ -129,21 +129,21 @@ export default function InventoryHeader({
                   </DropdownMenuItem>
                 )}
 
-                {userRole === 'admin' && onNavigateToActivityLogs && (
+                {(userRole === 'admin' || userRole === 'developer') && onNavigateToActivityLogs && (
                   <DropdownMenuItem onClick={onNavigateToActivityLogs}>
                     <ClipboardList className="w-4 h-4 mr-2" />
                     {t('activityLog')}
                   </DropdownMenuItem>
                 )}
 
-                {userRole === 'admin' && onNavigateToQRCodes && (
+                {(userRole === 'admin' || userRole === 'developer') && onNavigateToQRCodes && (
                   <DropdownMenuItem onClick={onNavigateToQRCodes}>
                     <QrCode className="w-4 h-4 mr-2" />
                     {t('qrCodes')}
                   </DropdownMenuItem>
                 )}
 
-                {userRole === 'admin' && onNavigateToMaintenance && (
+                {(userRole === 'admin' || userRole === 'developer') && onNavigateToMaintenance && (
                   <DropdownMenuItem onClick={onNavigateToMaintenance}>
                     <Wrench className="w-4 h-4 mr-2" />
                     {t('maintenance')}
