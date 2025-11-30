@@ -48,6 +48,10 @@ export async function sendReservationRequestEmail(
     startDate: string;
     returnDate: string;
     notes?: string;
+    deliveryRequired?: string;
+    deliveryLocation?: string;
+    deliveryStreet?: string;
+    deliveryArea?: string;
   }
 ): Promise<boolean> {
   const html = `
@@ -64,12 +68,13 @@ export async function sendReservationRequestEmail(
           .value { color: #333; margin-left: 10px; line-height: 1.5; }
           .section { margin-bottom: 25px; }
           .notes { margin-top: 15px; padding: 10px; background-color: #fffbf0; border-left: 3px solid #f59e0b; }
+          .delivery { margin-top: 15px; padding: 10px; background-color: #eff6ff; border-left: 3px solid #3b82f6; }
           .footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 12px; color: #999; }
         </style>
       </head>
       <body>
         <div class="container">
-          <h2>New Reservation Request</h2>
+          <h2>📋 New Reservation Request</h2>
           
           <div class="section">
             <div class="field">
@@ -107,6 +112,28 @@ export async function sendReservationRequestEmail(
             <div class="notes">
               <span class="label">Notes:</span>
               <span class="value">${data.notes}</span>
+            </div>
+          </div>
+          ` : ''}
+
+          ${data.deliveryRequired === 'yes' ? `
+          <div class="section">
+            <div class="delivery">
+              <span class="label">🚚 Delivery Required</span>
+              <div style="margin-top: 8px;">
+                <div class="field">
+                  <span class="label" style="color: #3b82f6;">Location:</span>
+                  <span class="value">${data.deliveryLocation || 'N/A'}</span>
+                </div>
+                <div class="field">
+                  <span class="label" style="color: #3b82f6;">Street:</span>
+                  <span class="value">${data.deliveryStreet || 'N/A'}</span>
+                </div>
+                <div class="field">
+                  <span class="label" style="color: #3b82f6;">Area:</span>
+                  <span class="value">${data.deliveryArea || 'N/A'}</span>
+                </div>
+              </div>
             </div>
           </div>
           ` : ''}
@@ -160,7 +187,7 @@ export async function sendReservationApprovedEmail(
       </head>
       <body>
         <div class="container">
-          <h2>Reservation Approved</h2>
+          <h2>✅ Reservation Approved</h2>
           
           <div class="success">Your reservation has been approved!</div>
 
@@ -237,7 +264,7 @@ export async function sendReservationRejectedEmail(
       </head>
       <body>
         <div class="container">
-          <h2>Reservation Not Approved</h2>
+          <h2>❌ Reservation Not Approved</h2>
           
           <div class="alert">Unfortunately, your reservation request has been rejected.</div>
 
