@@ -298,17 +298,6 @@ export default function ReservationFormDialog({
             />
           </div>
           
-          <div className="space-y-2">
-            <Label htmlFor="notes">Request Notes (Optional)</Label>
-            <Textarea
-              id="notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add any special requests or notes..."
-              rows={3}
-            />
-          </div>
-
           <div className="space-y-3 border-t pt-4">
             <div className="flex items-center gap-2">
               <input 
