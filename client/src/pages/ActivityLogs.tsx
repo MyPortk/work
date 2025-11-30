@@ -80,6 +80,10 @@ export default function ActivityLogs({ userName, userRole, onLogout, onNavigateT
     return 'bg-gray-500';
   };
 
+  const translateAction = (action: string): string => {
+    return t(action as any) || action;
+  };
+
   return (
     <div className="min-h-screen bg-background" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <InventoryHeader
@@ -169,7 +173,7 @@ export default function ActivityLogs({ userName, userRole, onLogout, onNavigateT
                         </div>
                         <div className="text-right">
                           <Badge className={`${getActionColor(log.action)} text-white`}>
-                            {log.action}
+                            {translateAction(log.action)}
                           </Badge>
                           <div className="flex items-center gap-1 text-xs text-muted-foreground mt-2">
                             <Clock className="w-3 h-3" />

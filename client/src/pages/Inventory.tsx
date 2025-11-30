@@ -418,7 +418,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
           <div>
             <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
               <h1 className="text-4xl font-extrabold mb-4" data-testid="text-hero-title">
-                {itemTypeFilter === 'equipment' ? t('equipmentCategories') : 'Asset Categories'}
+                {itemTypeFilter === 'equipment' ? t('equipmentCategories') : t('assetCategories')}
               </h1>
               <p className="text-lg opacity-90 max-w-2xl mx-auto" data-testid="text-hero-subtitle">
                 {t('browseInventory')}
@@ -432,7 +432,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                 data-testid="button-filter-equipment-categories"
                 className={itemTypeFilter === 'equipment' ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2]' : ''}
               >
-                Equipment
+                {t('equipment')}
               </Button>
               <Button
                 onClick={() => setItemTypeFilter('assets')}
@@ -440,7 +440,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
                 data-testid="button-filter-assets-categories"
                 className={itemTypeFilter === 'assets' ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2]' : ''}
               >
-                Assets
+                {t('assets')}
               </Button>
             </div>
 

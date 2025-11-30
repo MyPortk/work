@@ -207,6 +207,28 @@ export const translations = {
     notifications: 'Notifications',
     markAllRead: 'Mark all read',
     noNotifications: 'No notifications',
+
+    // Activity Log Actions (for database content translation)
+    'Item Created': 'Item Created',
+    'Item Deleted (Soft)': 'Item Deleted',
+    'Status Updated': 'Status Updated',
+    'Checked Out (Manual)': 'Checked Out',
+    'Checked In (Manual)': 'Checked In',
+    'Marked as Reserved': 'Marked as Reserved',
+    'Sent to Maintenance': 'Sent to Maintenance',
+    'Checked Out (QR Scan)': 'Checked Out',
+    'Checked In (QR Scan)': 'Checked In',
+    'Checked Out (Public QR)': 'Checked Out',
+    'Checked In (Public QR)': 'Checked In',
+    'Reservation Created': 'Reservation Created',
+    'Reservation Approved': 'Reservation Approved',
+    'Reservation Rejected': 'Reservation Rejected',
+    'Equipment Return Confirmed': 'Equipment Returned',
+    'Equipment Receipt Confirmed': 'Equipment Received',
+
+    // Missing filter keys
+    assets: 'Assets',
+    assetCategories: 'Asset Categories',
   },
   ar: {
     // Header
@@ -516,12 +538,31 @@ export const translations = {
     'Tote Bags': 'حقائب اليد',
     'Uniform Bags': 'حقائب الزي الموحد',
 
+    // Activity Log Actions (translated to Arabic)
+    'Item Created': 'تم إنشاء العنصر',
+    'Item Deleted (Soft)': 'تم حذف العنصر',
+    'Status Updated': 'تم تحديث الحالة',
+    'Checked Out (Manual)': 'تم الاستلام',
+    'Checked In (Manual)': 'تم الإرجاع',
+    'Marked as Reserved': 'تم وضع علامة كمحجوز',
+    'Sent to Maintenance': 'تم إرساله للصيانة',
+    'Checked Out (QR Scan)': 'تم الاستلام',
+    'Checked In (QR Scan)': 'تم الإرجاع',
+    'Checked Out (Public QR)': 'تم الاستلام',
+    'Checked In (Public QR)': 'تم الإرجاع',
+    'Reservation Created': 'تم إنشاء الحجز',
+    'Reservation Approved': 'تم الموافقة على الحجز',
+    'Reservation Rejected': 'تم رفض الحجز',
+    'Equipment Return Confirmed': 'تم تأكيد إرجاع المعدات',
+    'Equipment Receipt Confirmed': 'تم تأكيد استلام المعدات',
+
     // Other missing translations
     maintenance: 'الصيانة',
     Maintenance: 'صيانة',
     developer: 'مطور',
     developer_mode: 'وضع المطور',
     assetCategories: 'فئات الأصول',
+    assets: 'أصول',
   }
 };
 
