@@ -62,8 +62,8 @@ export async function sendReservationRequestEmail(
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: #f9f9f9; padding: 20px; line-height: 1.6; }
-          .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: white; padding: 0; line-height: 1.6; }
+          .container { padding: 40px 60px; text-align: left; }
           .header { text-align: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 25px; margin-bottom: 25px; }
           .title { font-size: 20px; font-weight: 600; margin-bottom: 5px; color: #2c3e50; }
           .subtitle { font-size: 13px; color: #7f8c8d; }
@@ -193,8 +193,8 @@ export async function sendReservationApprovedEmail(
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: #f9f9f9; padding: 20px; line-height: 1.6; }
-          .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: white; padding: 0; line-height: 1.6; }
+          .container { padding: 40px 60px; text-align: left; }
           .header { text-align: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 25px; margin-bottom: 25px; }
           .title { font-size: 20px; font-weight: 600; margin-bottom: 5px; color: #27ae60; }
           .subtitle { font-size: 13px; color: #7f8c8d; }
@@ -290,8 +290,8 @@ export async function sendReservationRejectedEmail(
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: #f9f9f9; padding: 20px; line-height: 1.6; }
-          .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: white; padding: 0; line-height: 1.6; }
+          .container { padding: 40px 60px; text-align: left; }
           .header { text-align: center; border-bottom: 2px solid #ecf0f1; padding-bottom: 25px; margin-bottom: 25px; }
           .title { font-size: 20px; font-weight: 600; margin-bottom: 5px; color: #e74c3c; }
           .subtitle { font-size: 13px; color: #7f8c8d; }
