@@ -55,7 +55,7 @@ export async function seedDatabase() {
       username: 'admin',
       password: await hashPassword('omg'),
       role: 'admin',
-      email: 'ironhub1746@gmail.com',
+      email: 'omg.inventorysystem@gmail.com',
       name: 'System Administrator'
     },
     {
