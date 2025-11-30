@@ -8,10 +8,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, AlertCircle } from "lucide-react";
+import { CalendarIcon, AlertCircle, Truck } from "lucide-react";
 import { format } from "date-fns";
 import { api, type Item } from "@/lib/api";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import DeliveryDialog from "@/components/DeliveryDialog";
 
 interface ReservationFormDialogProps {
   open: boolean;
@@ -33,7 +34,8 @@ export default function ReservationFormDialog({
   const [returnTime, setReturnTime] = useState("17:00");
   const [purposeOfUse, setPurposeOfUse] = useState("");
   const [notes, setNotes] = useState("");
-  const [showDelivery, setShowDelivery] = useState(false);
+  const [showDeliveryDialog, setShowDeliveryDialog] = useState(false);
+  const [hasDelivery, setHasDelivery] = useState(false);
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [deliveryStreet, setDeliveryStreet] = useState("");
   const [deliveryArea, setDeliveryArea] = useState("");
@@ -83,7 +85,7 @@ export default function ReservationFormDialog({
       returnTime: returnTime || undefined,
       purposeOfUse: purposeOfUse.trim(),
       notes: notes.trim() || undefined,
-      deliveryRequired: showDelivery ? 'yes' : 'no',
+      deliveryRequired: hasDelivery ? 'yes' : 'no',
       deliveryLocation: deliveryLocation.trim() || undefined,
       deliveryStreet: deliveryStreet.trim() || undefined,
       deliveryArea: deliveryArea.trim() || undefined,
@@ -97,7 +99,7 @@ export default function ReservationFormDialog({
     setReturnTime("17:00");
     setPurposeOfUse("");
     setNotes("");
-    setShowDelivery(false);
+    setHasDelivery(false);
     setDeliveryLocation("");
     setDeliveryStreet("");
     setDeliveryArea("");
@@ -112,12 +114,21 @@ export default function ReservationFormDialog({
     setReturnTime("17:00");
     setPurposeOfUse("");
     setNotes("");
-    setShowDelivery(false);
+    setHasDelivery(false);
     setDeliveryLocation("");
     setDeliveryStreet("");
     setDeliveryArea("");
     setGoogleMapLink("");
     onClose();
+  };
+
+  const handleDeliverySave = (data: { location: string; street: string; area: string; mapLink: string }) => {
+    setDeliveryLocation(data.location);
+    setDeliveryStreet(data.street);
+    setDeliveryArea(data.area);
+    setGoogleMapLink(data.mapLink);
+    setHasDelivery(true);
+    setShowDeliveryDialog(false);
   };
 
   // Check if a date is blocked by existing reservations
@@ -298,66 +309,16 @@ export default function ReservationFormDialog({
             />
           </div>
           
-          <div className="space-y-3 border-t pt-4">
-            <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                id="delivery" 
-                checked={showDelivery}
-                onChange={(e) => setShowDelivery(e.target.checked)}
-                className="w-4 h-4 rounded"
-              />
-              <Label htmlFor="delivery" className="cursor-pointer">Request Delivery</Label>
-            </div>
-
-            {showDelivery && (
-              <div className="space-y-3 bg-muted p-3 rounded">
-                <div className="space-y-2">
-                  <Label htmlFor="location">Delivery Location</Label>
-                  <input
-                    id="location"
-                    type="text"
-                    value={deliveryLocation}
-                    onChange={(e) => setDeliveryLocation(e.target.value)}
-                    placeholder="e.g., Building A, Studio 3"
-                    className="w-full border rounded-md px-3 py-2 text-sm"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="street">Street / Road</Label>
-                  <input
-                    id="street"
-                    type="text"
-                    value={deliveryStreet}
-                    onChange={(e) => setDeliveryStreet(e.target.value)}
-                    placeholder="e.g., Al Corniche Street"
-                    className="w-full border rounded-md px-3 py-2 text-sm"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="area">Area / District</Label>
-                  <input
-                    id="area"
-                    type="text"
-                    value={deliveryArea}
-                    onChange={(e) => setDeliveryArea(e.target.value)}
-                    placeholder="e.g., West Bay, Lusail"
-                    className="w-full border rounded-md px-3 py-2 text-sm"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="maplink">Google Maps Link (Optional)</Label>
-                  <input
-                    id="maplink"
-                    type="url"
-                    value={googleMapLink}
-                    onChange={(e) => setGoogleMapLink(e.target.value)}
-                    placeholder="Paste Google Maps link..."
-                    className="w-full border rounded-md px-3 py-2 text-sm"
-                  />
-                </div>
-              </div>
-            )}
+          <div className="space-y-2 border-t pt-4">
+            <Button 
+              type="button"
+              variant="outline"
+              className="w-full justify-start gap-2"
+              onClick={() => setShowDeliveryDialog(true)}
+            >
+              <Truck className="w-4 h-4" />
+              {hasDelivery ? `Delivery Info Saved` : 'Add Delivery Details'}
+            </Button>
           </div>
 
           <div className="flex gap-3 justify-end">
@@ -374,6 +335,18 @@ export default function ReservationFormDialog({
           </div>
         </form>
       </DialogContent>
+
+      <DeliveryDialog
+        open={showDeliveryDialog}
+        onClose={() => setShowDeliveryDialog(false)}
+        onSave={handleDeliverySave}
+        initialData={{
+          location: deliveryLocation,
+          street: deliveryStreet,
+          area: deliveryArea,
+          mapLink: googleMapLink
+        }}
+      />
     </Dialog>
   );
 }
