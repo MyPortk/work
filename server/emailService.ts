@@ -120,7 +120,7 @@ export async function sendReservationRequestEmail(
                 ` : ''}
                 ${data.deliveryRequired === 'yes' ? `
                 <div class="detail-row">
-                  <div class="detail-label">🚚 Delivery Required:</div>
+                  <div class="detail-label" style="font-size: 16px; font-weight: 700;">🚚 Delivery Required:</div>
                   <div class="detail-value">Yes</div>
                 </div>
                 <div class="detail-row">
@@ -138,7 +138,7 @@ export async function sendReservationRequestEmail(
                 ${data.googleMapLink ? `
                 <div class="detail-row">
                   <div class="detail-label">Map:</div>
-                  <div class="detail-value"><a href="${data.googleMapLink}" style="color: #3498db; text-decoration: none;">View on Google Maps</a></div>
+                  <div class="detail-value"><a href="${data.googleMapLink}" style="color: #3498db; text-decoration: none; word-break: break-all;">${data.googleMapLink}</a></div>
                 </div>
                 ` : ''}
                 ` : ''}
