@@ -946,7 +946,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
               userEmail: user?.email || '',
               startDate: format(new Date(validatedData.startDate), 'MMM dd, yyyy'),
               returnDate: format(new Date(validatedData.returnDate), 'MMM dd, yyyy'),
-              notes: validatedData.notes
+              notes: validatedData.notes,
+              deliveryRequired: validatedData.deliveryRequired,
+              deliveryLocation: validatedData.deliveryLocation,
+              deliveryStreet: validatedData.deliveryStreet,
+              deliveryArea: validatedData.deliveryArea
             });
           }
         }
