@@ -186,13 +186,16 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
             <Users className="w-6 h-6 text-[#667eea]" />
             <h2 className="text-2xl font-bold">{users.length} {t('totalUsers')}</h2>
           </div>
-          <Button
-            onClick={() => setShowAddUser(true)}
-            className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
-          >
-            <UserPlus className="w-4 h-4 mr-2" />
-            {t('addNewUser')}
-          </Button>
+          {userRole === 'developer' && (
+            <Button
+              onClick={() => setShowAddUser(true)}
+              className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
+              data-testid="button-add-user"
+            >
+              <UserPlus className="w-4 h-4 mr-2" />
+              {t('addNewUser')}
+            </Button>
+          )}
         </div>
 
         <Card>
@@ -205,7 +208,7 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
                   <TableHead>{t('email')}</TableHead>
                   <TableHead>{t('department')}</TableHead>
                   <TableHead>{t('role')}</TableHead>
-                  <TableHead className="text-right">{t('actions')}</TableHead>
+                  {userRole === 'developer' && <TableHead className="text-right">{t('actions')}</TableHead>}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -219,29 +222,35 @@ export default function UserManagement({ userName, userRole, onLogout, onNavigat
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                         user.role === 'admin' 
                           ? 'bg-red-100 text-red-800' 
+                          : user.role === 'developer'
+                          ? 'bg-purple-100 text-purple-800'
                           : 'bg-green-100 text-green-800'
                       }`}>
-                        {user.role === 'admin' ? t('admin').toUpperCase() : t('user').toUpperCase()}
+                        {user.role === 'admin' ? t('admin').toUpperCase() : user.role === 'developer' ? 'DEVELOPER' : t('user').toUpperCase()}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex gap-2 justify-end">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleEditUser(user)}
-                        >
-                          <Edit className="w-3 h-3" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => handleDeleteUser(user.id, user.username)}
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
-                      </div>
-                    </TableCell>
+                    {userRole === 'developer' && (
+                      <TableCell className="text-right">
+                        <div className="flex gap-2 justify-end">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleEditUser(user)}
+                            data-testid={`button-edit-user-${user.id}`}
+                          >
+                            <Edit className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => handleDeleteUser(user.id, user.username)}
+                            data-testid={`button-delete-user-${user.id}`}
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>
