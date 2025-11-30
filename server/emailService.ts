@@ -62,118 +62,97 @@ export async function sendReservationRequestEmail(
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #2d3748; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; }
-          .wrapper { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); overflow: hidden; }
-          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
-          .header p { font-size: 14px; margin: 8px 0 0 0; opacity: 0.95; }
-          .content { padding: 40px 30px; }
-          .section { margin-bottom: 30px; }
-          .section-title { font-size: 12px; font-weight: 700; color: #667eea; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-          .info-grid { display: table; width: 100%; border-spacing: 0; }
-          .info-row { display: table-row; border-bottom: 1px solid #f0f0f0; }
-          .info-row:last-child { border-bottom: none; }
-          .info-cell { display: table-cell; padding: 12px 0; }
-          .info-label { font-weight: 700; color: #667eea; font-size: 13px; width: 120px; }
-          .info-value { color: #2d3748; font-size: 14px; word-break: break-word; }
-          .highlight-box { background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%); border: 1px solid rgba(102, 126, 234, 0.2); border-left: 4px solid #667eea; padding: 20px; border-radius: 8px; margin: 20px 0; }
-          .delivery-box { background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(37, 99, 235, 0.05) 100%); border: 1px solid rgba(59, 130, 246, 0.2); border-left: 4px solid #3b82f6; padding: 20px; border-radius: 8px; margin: 20px 0; }
-          .delivery-title { font-weight: 700; color: #3b82f6; font-size: 14px; margin-bottom: 12px; }
-          .notes-box { background: #fffbf0; border: 1px solid #fde68a; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 8px; margin: 20px 0; }
-          .notes-label { font-weight: 700; color: #b45309; font-size: 12px; margin-bottom: 8px; }
-          .notes-text { color: #78350f; font-size: 14px; line-height: 1.6; }
-          .cta-section { background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); padding: 24px; border-radius: 8px; text-align: center; margin-top: 30px; }
-          .cta-text { font-size: 14px; color: #2d3748; margin: 0; }
-          .footer { background: #f8f9fa; padding: 24px 30px; text-align: center; border-top: 1px solid #e5e7eb; }
-          .footer-text { font-size: 12px; color: #718096; line-height: 1.6; margin: 0; }
-          .divider { height: 1px; background: #e5e7eb; margin: 20px 0; }
+          body { font-family: 'Times New Roman', Times, serif; line-height: 1.8; color: #1a1a1a; background: #f5f5f5; padding: 20px; }
+          .document { max-width: 700px; margin: 0 auto; background: white; padding: 60px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+          .header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+          .title { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 5px; letter-spacing: 1px; }
+          .subtitle { font-size: 12px; text-align: center; color: #666; }
+          .date-line { text-align: right; font-size: 13px; margin-bottom: 30px; color: #666; }
+          .salutation { margin-bottom: 25px; font-size: 14px; }
+          .body-text { font-size: 14px; margin-bottom: 20px; text-align: justify; }
+          .section-header { font-weight: bold; margin-top: 25px; margin-bottom: 12px; font-size: 14px; }
+          .info-row { margin-bottom: 10px; display: flex; font-size: 14px; }
+          .info-label { font-weight: bold; width: 150px; }
+          .info-value { flex: 1; }
+          .closing-section { margin-top: 35px; font-size: 14px; }
+          .signature-line { margin-top: 40px; }
+          .footer-line { border-top: 2px solid #333; margin-top: 30px; padding-top: 15px; font-size: 12px; color: #666; text-align: center; }
         </style>
       </head>
       <body>
-        <div class="wrapper">
+        <div class="document">
           <div class="header">
-            <h1>📋 New Reservation Request</h1>
-            <p>Action Required: Review this request</p>
+            <div class="title">EQUIPMENT RESERVATION REQUEST</div>
+            <div class="subtitle">Inventory Management System - Administrative Notice</div>
           </div>
-          <div class="content">
-            <div class="section">
-              <div class="section-title">Equipment Details</div>
-              <div class="highlight-box">
-                <div class="info-grid">
-                  <div class="info-row">
-                    <div class="info-cell"><span class="info-label">Item:</span></div>
-                    <div class="info-cell"><span class="info-value">${data.itemName}</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          
+          <div class="date-line">Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          
+          <div class="salutation">Dear Administrator,</div>
+          
+          <div class="body-text">
+            We hereby notify you that a new equipment reservation request has been submitted and requires your review and approval. Please find the complete details of this request below.
+          </div>
 
-            <div class="section">
-              <div class="section-title">Requester Information</div>
-              <div class="info-grid">
-                <div class="info-row">
-                  <div class="info-cell"><span class="info-label">Name:</span></div>
-                  <div class="info-cell"><span class="info-value">${data.userName}</span></div>
-                </div>
-                <div class="info-row">
-                  <div class="info-cell"><span class="info-label">Email:</span></div>
-                  <div class="info-cell"><span class="info-value"><a href="mailto:${data.userEmail}" style="color: #667eea; text-decoration: none; font-weight: 500;">${data.userEmail}</a></span></div>
-                </div>
-              </div>
-            </div>
+          <div class="section-header">REQUEST DETAILS</div>
+          <div class="info-row">
+            <div class="info-label">Equipment Item:</div>
+            <div class="info-value">${data.itemName}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Requested Period:</div>
+            <div class="info-value">${data.startDate} to ${data.returnDate}</div>
+          </div>
 
-            <div class="section">
-              <div class="section-title">Reservation Period</div>
-              <div class="info-grid">
-                <div class="info-row">
-                  <div class="info-cell"><span class="info-label">Start Date:</span></div>
-                  <div class="info-cell"><span class="info-value">${data.startDate}</span></div>
-                </div>
-                <div class="info-row">
-                  <div class="info-cell"><span class="info-label">Return Date:</span></div>
-                  <div class="info-cell"><span class="info-value">${data.returnDate}</span></div>
-                </div>
-              </div>
-            </div>
+          <div class="section-header">REQUESTER INFORMATION</div>
+          <div class="info-row">
+            <div class="info-label">Full Name:</div>
+            <div class="info-value">${data.userName}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Email Address:</div>
+            <div class="info-value"><a href="mailto:${data.userEmail}" style="color: #0066cc; text-decoration: none;">${data.userEmail}</a></div>
+          </div>
 
-            ${data.deliveryRequired === 'yes' ? `
-            <div class="section">
-              <div class="section-title">Delivery Information</div>
-              <div class="delivery-box">
-                <div class="delivery-title">🚚 Delivery Requested</div>
-                <div class="info-grid">
-                  <div class="info-row">
-                    <div class="info-cell"><span class="info-label">Location:</span></div>
-                    <div class="info-cell"><span class="info-value">${data.deliveryLocation || 'N/A'}</span></div>
-                  </div>
-                  <div class="info-row">
-                    <div class="info-cell"><span class="info-label">Street:</span></div>
-                    <div class="info-cell"><span class="info-value">${data.deliveryStreet || 'N/A'}</span></div>
-                  </div>
-                  <div class="info-row">
-                    <div class="info-cell"><span class="info-label">Area:</span></div>
-                    <div class="info-cell"><span class="info-value">${data.deliveryArea || 'N/A'}</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            ` : ''}
+          ${data.deliveryRequired === 'yes' ? `
+          <div class="section-header">DELIVERY INFORMATION</div>
+          <div class="body-text">The requester has indicated that delivery is required for this equipment. The following delivery details have been provided:</div>
+          <div class="info-row">
+            <div class="info-label">Delivery Location:</div>
+            <div class="info-value">${data.deliveryLocation || 'Not specified'}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Street Address:</div>
+            <div class="info-value">${data.deliveryStreet || 'Not specified'}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Area/District:</div>
+            <div class="info-value">${data.deliveryArea || 'Not specified'}</div>
+          </div>
+          ` : ''}
 
-            ${data.notes ? `
-            <div class="section">
-              <div class="notes-box">
-                <div class="notes-label">📝 Additional Notes</div>
-                <div class="notes-text">${data.notes}</div>
-              </div>
-            </div>
-            ` : ''}
+          ${data.notes ? `
+          <div class="section-header">ADDITIONAL NOTES</div>
+          <div class="body-text">${data.notes}</div>
+          ` : ''}
 
-            <div class="cta-section">
-              <p class="cta-text"><strong>Log in to the Inventory Management System</strong> to review, approve, or reject this reservation request.</p>
+          <div class="closing-section">
+            <div class="body-text">
+              Please proceed to the Inventory Management System to review this request. You may approve or reject the reservation based on the availability of the requested equipment and the feasibility of the requested dates. Should you require any additional information from the requester, please contact them directly at the email address provided above.
+            </div>
+            
+            <div class="body-text">
+              Thank you for your prompt attention to this matter.
             </div>
           </div>
-          <div class="footer">
-            <p class="footer-text">This is an automated notification from your Inventory Management System.<br>Please do not reply directly to this email.</p>
+
+          <div class="signature-line">
+            <div>Inventory Management System</div>
+            <div style="font-size: 13px; color: #666; margin-top: 8px;">Automated Administrative Notification</div>
+          </div>
+
+          <div class="footer-line">
+            This is an automated communication from the Inventory Management System. Please do not reply directly to this email.
           </div>
         </div>
       </body>
@@ -182,7 +161,7 @@ export async function sendReservationRequestEmail(
 
   return sendEmail({
     to: adminEmail,
-    subject: `📋 New Reservation Request for ${data.itemName}`,
+    subject: `EQUIPMENT RESERVATION REQUEST - ${data.itemName}`,
     html
   });
 }
@@ -205,81 +184,83 @@ export async function sendReservationApprovedEmail(
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #2d3748; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); padding: 40px 20px; }
-          .wrapper { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); overflow: hidden; }
-          .header { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
-          .header p { font-size: 14px; margin: 8px 0 0 0; opacity: 0.95; }
-          .success-banner { background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.1) 100%); border: 2px solid #86efac; border-radius: 8px; padding: 24px; text-align: center; margin: 30px 0; }
-          .success-badge { font-size: 40px; margin-bottom: 12px; }
-          .success-title { font-size: 18px; font-weight: 700; color: #16a34a; margin: 12px 0; }
-          .success-text { font-size: 14px; color: #22c55e; }
-          .content { padding: 40px 30px; }
-          .section { margin-bottom: 30px; }
-          .section-title { font-size: 12px; font-weight: 700; color: #22c55e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-          .info-grid { display: table; width: 100%; border-spacing: 0; }
-          .info-row { display: table-row; border-bottom: 1px solid #f0f0f0; }
-          .info-row:last-child { border-bottom: none; }
-          .info-cell { display: table-cell; padding: 12px 0; }
-          .info-label { font-weight: 700; color: #22c55e; font-size: 13px; width: 120px; }
-          .info-value { color: #2d3748; font-size: 14px; word-break: break-word; }
-          .highlight-box { background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(22, 163, 74, 0.05) 100%); border: 1px solid rgba(34, 197, 94, 0.2); border-left: 4px solid #22c55e; padding: 20px; border-radius: 8px; }
-          .checklist { background: #f0fdf4; padding: 20px; border-radius: 8px; border-left: 4px solid #22c55e; }
-          .checklist-title { font-weight: 700; color: #22c55e; font-size: 14px; margin-bottom: 12px; }
-          .checklist ul { list-style: none; margin: 0; padding: 0; }
-          .checklist li { padding: 8px 0; color: #166534; font-size: 14px; padding-left: 24px; position: relative; }
-          .checklist li:before { content: "✓"; position: absolute; left: 0; font-weight: bold; color: #22c55e; }
-          .footer { background: #f8f9fa; padding: 24px 30px; text-align: center; border-top: 1px solid #e5e7eb; }
-          .footer-text { font-size: 12px; color: #718096; line-height: 1.6; margin: 0; }
+          body { font-family: 'Times New Roman', Times, serif; line-height: 1.8; color: #1a1a1a; background: #f5f5f5; padding: 20px; }
+          .document { max-width: 700px; margin: 0 auto; background: white; padding: 60px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+          .header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+          .title { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 5px; letter-spacing: 1px; }
+          .subtitle { font-size: 12px; text-align: center; color: #666; }
+          .date-line { text-align: right; font-size: 13px; margin-bottom: 30px; color: #666; }
+          .salutation { margin-bottom: 25px; font-size: 14px; }
+          .body-text { font-size: 14px; margin-bottom: 20px; text-align: justify; line-height: 1.8; }
+          .section-header { font-weight: bold; margin-top: 25px; margin-bottom: 12px; font-size: 14px; }
+          .info-row { margin-bottom: 10px; display: flex; font-size: 14px; }
+          .info-label { font-weight: bold; width: 150px; }
+          .info-value { flex: 1; }
+          .important-box { border: 1px solid #333; padding: 15px; margin: 20px 0; font-size: 14px; }
+          .closing-section { margin-top: 35px; font-size: 14px; }
+          .signature-line { margin-top: 40px; }
+          .footer-line { border-top: 2px solid #333; margin-top: 30px; padding-top: 15px; font-size: 12px; color: #666; text-align: center; }
         </style>
       </head>
       <body>
-        <div class="wrapper">
+        <div class="document">
           <div class="header">
-            <h1>✅ Reservation Approved</h1>
-            <p>Your request has been approved</p>
+            <div class="title">EQUIPMENT RESERVATION APPROVAL</div>
+            <div class="subtitle">Inventory Management System - Approval Notice</div>
           </div>
-          <div class="content">
-            <div class="success-banner">
-              <div class="success-badge">🎉</div>
-              <div class="success-title">Great News!</div>
-              <div class="success-text">Your equipment reservation has been approved and is ready for pickup.</div>
+          
+          <div class="date-line">Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          
+          <div class="salutation">Dear ${data.userName},</div>
+          
+          <div class="body-text">
+            We are pleased to inform you that your equipment reservation request has been reviewed and approved by the Inventory Management System. Your requested equipment is now reserved and ready for pickup.
+          </div>
+
+          <div class="section-header">RESERVATION CONFIRMATION</div>
+          <div class="info-row">
+            <div class="info-label">Equipment Item:</div>
+            <div class="info-value">${data.itemName}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Pickup Date:</div>
+            <div class="info-value">${data.startDate}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Return Date:</div>
+            <div class="info-value">${data.returnDate}</div>
+          </div>
+
+          <div class="important-box">
+            <div style="font-weight: bold; margin-bottom: 10px;">IMPORTANT INSTRUCTIONS</div>
+            <div style="margin-bottom: 8px;">1. Please inspect the equipment carefully upon pickup for any damage or defects.</div>
+            <div style="margin-bottom: 8px;">2. Report any issues or damage immediately to the appropriate administrator.</div>
+            <div style="margin-bottom: 8px;">3. Use the equipment in accordance with all applicable policies and guidelines.</div>
+            <div>4. Ensure the equipment is returned in the same condition by the specified return date.</div>
+          </div>
+
+          <div class="closing-section">
+            <div class="body-text">
+              Please note that you are responsible for the safekeeping and proper use of this equipment during the reservation period. In the event of damage or loss, appropriate charges may be assessed as per company policy.
+            </div>
+            
+            <div class="body-text">
+              Should you have any questions regarding this approval or require further assistance, please contact the administrative office directly.
             </div>
 
-            <div class="section">
-              <div class="section-title">Reservation Details</div>
-              <div class="highlight-box">
-                <div class="info-grid">
-                  <div class="info-row">
-                    <div class="info-cell"><span class="info-label">Equipment:</span></div>
-                    <div class="info-cell"><span class="info-value">${data.itemName}</span></div>
-                  </div>
-                  <div class="info-row">
-                    <div class="info-cell"><span class="info-label">Pickup Date:</span></div>
-                    <div class="info-cell"><span class="info-value">${data.startDate}</span></div>
-                  </div>
-                  <div class="info-row">
-                    <div class="info-cell"><span class="info-label">Return Date:</span></div>
-                    <div class="info-cell"><span class="info-value">${data.returnDate}</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="section">
-              <div class="checklist">
-                <div class="checklist-title">Before You Pick Up</div>
-                <ul>
-                  <li>Inspect the item for any damage or defects</li>
-                  <li>Report any issues immediately to the system</li>
-                  <li>Use the item according to the guidelines</li>
-                  <li>Return the item in the same condition by the return date</li>
-                </ul>
-              </div>
+            <div class="body-text">
+              Yours sincerely,
             </div>
           </div>
-          <div class="footer">
-            <p class="footer-text">This is an automated notification from your Inventory Management System.<br>Please do not reply directly to this email.</p>
+
+          <div class="signature-line">
+            <div style="height: 50px;"></div>
+            <div>Inventory Management System</div>
+            <div style="font-size: 13px; color: #666; margin-top: 8px;">Administrative Services</div>
+          </div>
+
+          <div class="footer-line">
+            This is an automated communication from the Inventory Management System. Please do not reply directly to this email.
           </div>
         </div>
       </body>
@@ -288,7 +269,7 @@ export async function sendReservationApprovedEmail(
 
   return sendEmail({
     to: userEmail,
-    subject: `✅ Your Reservation for ${data.itemName} Has Been Approved`,
+    subject: `EQUIPMENT RESERVATION APPROVAL - ${data.itemName}`,
     html
   });
 }
@@ -312,86 +293,78 @@ export async function sendReservationRejectedEmail(
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #2d3748; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 40px 20px; }
-          .wrapper { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); overflow: hidden; }
-          .header { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 40px 30px; text-align: center; }
-          .header h1 { font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
-          .header p { font-size: 14px; margin: 8px 0 0 0; opacity: 0.95; }
-          .alert-banner { background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%); border: 2px solid #fecaca; border-radius: 8px; padding: 24px; text-align: center; margin: 30px 0; }
-          .alert-badge { font-size: 40px; margin-bottom: 12px; }
-          .alert-title { font-size: 18px; font-weight: 700; color: #dc2626; margin: 12px 0; }
-          .alert-text { font-size: 14px; color: #ef4444; }
-          .content { padding: 40px 30px; }
-          .section { margin-bottom: 30px; }
-          .section-title { font-size: 12px; font-weight: 700; color: #ef4444; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-          .info-grid { display: table; width: 100%; border-spacing: 0; }
-          .info-row { display: table-row; border-bottom: 1px solid #f0f0f0; }
-          .info-row:last-child { border-bottom: none; }
-          .info-cell { display: table-cell; padding: 12px 0; }
-          .info-label { font-weight: 700; color: #ef4444; font-size: 13px; width: 120px; }
-          .info-value { color: #2d3748; font-size: 14px; word-break: break-word; }
-          .reason-box { background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #ef4444; padding: 20px; border-radius: 8px; }
-          .reason-title { font-weight: 700; color: #dc2626; font-size: 14px; margin-bottom: 12px; }
-          .reason-text { color: #7f1d1d; font-size: 14px; line-height: 1.6; }
-          .help-box { background: #f3f4f6; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; margin: 20px 0; }
-          .help-title { font-weight: 700; color: #667eea; font-size: 14px; margin-bottom: 12px; }
-          .help-text { color: #4b5563; font-size: 14px; line-height: 1.6; }
-          .help-text ul { list-style: none; margin: 0; padding: 0; margin-top: 8px; }
-          .help-text li { padding: 6px 0; padding-left: 20px; position: relative; }
-          .help-text li:before { content: "→"; position: absolute; left: 0; color: #667eea; font-weight: bold; }
-          .footer { background: #f8f9fa; padding: 24px 30px; text-align: center; border-top: 1px solid #e5e7eb; }
-          .footer-text { font-size: 12px; color: #718096; line-height: 1.6; margin: 0; }
+          body { font-family: 'Times New Roman', Times, serif; line-height: 1.8; color: #1a1a1a; background: #f5f5f5; padding: 20px; }
+          .document { max-width: 700px; margin: 0 auto; background: white; padding: 60px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+          .header { border-bottom: 2px solid #333; padding-bottom: 20px; margin-bottom: 30px; }
+          .title { font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 5px; letter-spacing: 1px; }
+          .subtitle { font-size: 12px; text-align: center; color: #666; }
+          .date-line { text-align: right; font-size: 13px; margin-bottom: 30px; color: #666; }
+          .salutation { margin-bottom: 25px; font-size: 14px; }
+          .body-text { font-size: 14px; margin-bottom: 20px; text-align: justify; line-height: 1.8; }
+          .section-header { font-weight: bold; margin-top: 25px; margin-bottom: 12px; font-size: 14px; }
+          .info-row { margin-bottom: 10px; display: flex; font-size: 14px; }
+          .info-label { font-weight: bold; width: 150px; }
+          .info-value { flex: 1; }
+          .reason-box { border: 1px solid #333; padding: 15px; margin: 20px 0; font-size: 14px; }
+          .closing-section { margin-top: 35px; font-size: 14px; }
+          .signature-line { margin-top: 40px; }
+          .footer-line { border-top: 2px solid #333; margin-top: 30px; padding-top: 15px; font-size: 12px; color: #666; text-align: center; }
         </style>
       </head>
       <body>
-        <div class="wrapper">
+        <div class="document">
           <div class="header">
-            <h1>❌ Reservation Not Approved</h1>
-            <p>Your request requires attention</p>
+            <div class="title">EQUIPMENT RESERVATION DECISION</div>
+            <div class="subtitle">Inventory Management System - Notification of Status</div>
           </div>
-          <div class="content">
-            <div class="alert-banner">
-              <div class="alert-badge">⚠️</div>
-              <div class="alert-title">Request Not Approved</div>
-              <div class="alert-text">Unfortunately, your reservation could not be approved at this time.</div>
+          
+          <div class="date-line">Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          
+          <div class="salutation">Dear ${data.userName},</div>
+          
+          <div class="body-text">
+            We regret to inform you that your equipment reservation request has been reviewed and, unfortunately, cannot be approved at this time. Below you will find the details pertaining to your request and the reason for this decision.
+          </div>
+
+          <div class="section-header">REQUEST DETAILS</div>
+          <div class="info-row">
+            <div class="info-label">Equipment Item:</div>
+            <div class="info-value">${data.itemName}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Requested Period:</div>
+            <div class="info-value">${data.startDate} to ${data.returnDate}</div>
+          </div>
+
+          ${data.rejectionReason ? `
+          <div class="reason-box">
+            <div style="font-weight: bold; margin-bottom: 10px;">REASON FOR REJECTION</div>
+            <div>${data.rejectionReason}</div>
+          </div>
+          ` : ''}
+
+          <div class="closing-section">
+            <div class="body-text">
+              We understand that this may be disappointing. Should you wish to proceed, we recommend considering alternative dates for the same equipment, or exploring other available equipment that may meet your requirements. Additionally, you may wish to contact the administrative office directly to discuss your options and explore potential solutions.
+            </div>
+            
+            <div class="body-text">
+              We appreciate your understanding and remain available to assist you with future reservation requests.
             </div>
 
-            <div class="section">
-              <div class="section-title">Reservation Details</div>
-              <div class="info-grid">
-                <div class="info-row">
-                  <div class="info-cell"><span class="info-label">Equipment:</span></div>
-                  <div class="info-cell"><span class="info-value">${data.itemName}</span></div>
-                </div>
-                <div class="info-row">
-                  <div class="info-cell"><span class="info-label">Requested Period:</span></div>
-                  <div class="info-cell"><span class="info-value">${data.startDate} to ${data.returnDate}</span></div>
-                </div>
-              </div>
-            </div>
-
-            ${data.rejectionReason ? `
-            <div class="section">
-              <div class="reason-box">
-                <div class="reason-title">📋 Reason for Rejection</div>
-                <div class="reason-text">${data.rejectionReason}</div>
-              </div>
-            </div>
-            ` : ''}
-
-            <div class="help-box">
-              <div class="help-title">What You Can Do</div>
-              <div class="help-text">
-                <ul>
-                  <li>Request different dates for the same equipment</li>
-                  <li>Look for alternative equipment that meets your needs</li>
-                  <li>Contact your administrator to discuss options</li>
-                </ul>
-              </div>
+            <div class="body-text">
+              Yours sincerely,
             </div>
           </div>
-          <div class="footer">
-            <p class="footer-text">This is an automated notification from your Inventory Management System.<br>Please do not reply directly to this email.</p>
+
+          <div class="signature-line">
+            <div style="height: 50px;"></div>
+            <div>Inventory Management System</div>
+            <div style="font-size: 13px; color: #666; margin-top: 8px;">Administrative Services</div>
+          </div>
+
+          <div class="footer-line">
+            This is an automated communication from the Inventory Management System. Please do not reply directly to this email.
           </div>
         </div>
       </body>
@@ -400,7 +373,7 @@ export async function sendReservationRejectedEmail(
 
   return sendEmail({
     to: userEmail,
-    subject: `❌ Your Reservation for ${data.itemName} Has Been Rejected`,
+    subject: `EQUIPMENT RESERVATION DECISION - ${data.itemName}`,
     html
   });
 }
