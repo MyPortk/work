@@ -264,27 +264,34 @@ export default function Dashboard({
         {/* Most Requested Equipment Chart */}
         {mostRequestedData.length > 0 && (
           <Card className="hover-elevate" data-testid="card-most-requested">
-            <CardHeader className="pb-2">
+            <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-sm">
                 <TrendingUp className="w-4 h-4" />
                 {currentLanguage === 'ar' ? 'الأكثر طلباً' : 'Most Requested'}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {mostRequestedData.map((item: any, index: number) => (
-                <div key={index} className="space-y-1">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground truncate">{item.name}</span>
-                    <span className="font-semibold text-foreground">{item.requests}</span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div
-                      className="bg-gradient-to-r from-[#667eea] to-[#764ba2] h-2 rounded-full transition-all"
-                      style={{ width: `${(item.requests / (mostRequestedData[0]?.requests || 1)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
+            <CardContent>
+              <div className="flex items-end justify-center gap-4 h-48">
+                {mostRequestedData.map((item: any, index: number) => {
+                  const maxRequests = Math.max(...mostRequestedData.map((d: any) => d.requests), 1);
+                  const heightPercent = (item.requests / maxRequests) * 100;
+                  return (
+                    <div key={index} className="flex flex-col items-center gap-2 flex-1">
+                      <div className="relative w-full h-32 flex items-end justify-center">
+                        <div
+                          className="w-full bg-gradient-to-t from-[#667eea] to-[#764ba2] rounded-t-md transition-all hover:opacity-80 cursor-pointer"
+                          style={{ height: `${heightPercent}%`, minHeight: '8px' }}
+                          title={`${item.name}: ${item.requests} requests`}
+                        ></div>
+                      </div>
+                      <div className="flex flex-col items-center gap-1 w-full">
+                        <span className="text-2xl font-bold text-foreground">{item.requests}</span>
+                        <span className="text-xs text-muted-foreground text-center truncate">{item.name}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
         )}
