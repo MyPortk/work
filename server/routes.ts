@@ -1515,8 +1515,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.patch('/api/permissions/:key', requireAdmin, async (req, res) => {
+  app.patch('/api/permissions/:key', requireAuth, async (req, res) => {
     try {
+      // Only admins and developers can update permissions
+      if (req.session?.role !== 'admin' && req.session?.role !== 'developer') {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+
       const { key } = req.params;
       const { enabled } = req.body;
       
