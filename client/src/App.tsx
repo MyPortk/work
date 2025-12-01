@@ -12,6 +12,7 @@ import QRCodes from "@/pages/QRCodes";
 import Maintenance from "@/pages/Maintenance";
 import UserManagement from "@/pages/UserManagement";
 import Reports from "@/pages/Reports";
+import Sidebar from "@/components/Sidebar";
 import type { Language } from "@/lib/translations";
 
 type View = 'login' | 'dashboard' | 'inventory' | 'reservations' | 'activity-logs' | 'qr-codes' | 'maintenance' | 'users' | 'reports';
@@ -134,18 +135,177 @@ function App() {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
+  const renderContent = () => {
+    if (!isAuthenticated) {
+      return <Login onLogin={handleLogin} />;
+    }
+
+    if (currentView === 'dashboard' && (currentUser?.role === 'admin' || currentUser?.role === 'developer')) {
+      return (
+        <Dashboard
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          userId={currentUser?.id || ''}
+          onLogout={handleLogout}
+          onNavigateToDashboard={handleNavigateToDashboard}
+          onNavigateToInventory={handleNavigateToInventory}
+          onNavigateToReservations={handleNavigateToReservations}
+          onNavigateToActivityLogs={handleNavigateToActivityLogs}
+          onNavigateToQRCodes={handleNavigateToQRCodes}
+          onNavigateToMaintenance={handleNavigateToMaintenance}
+          onNavigateToReports={handleNavigateToReports}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
+    if (currentView === 'inventory') {
+      return (
+        <Inventory
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          userId={currentUser?.id || ''}
+          onLogout={handleLogout}
+          onNavigateToDashboard={handleNavigateToDashboard}
+          onNavigateToReservations={handleNavigateToReservations}
+          onNavigateToActivityLogs={handleNavigateToActivityLogs}
+          onNavigateToQRCodes={handleNavigateToQRCodes}
+          onNavigateToMaintenance={handleNavigateToMaintenance}
+          onNavigateToReports={handleNavigateToReports}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
+    if (currentView === 'reservations') {
+      return (
+        <Reservations
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          userId={currentUser?.id || ''}
+          onLogout={handleLogout}
+          onNavigateToDashboard={handleNavigateToDashboard}
+          onNavigateToInventory={handleNavigateToInventory}
+          onNavigateToActivityLogs={handleNavigateToActivityLogs}
+          onNavigateToQRCodes={handleNavigateToQRCodes}
+          onNavigateToMaintenance={handleNavigateToMaintenance}
+          onNavigateToReports={handleNavigateToReports}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
+    if (currentView === 'activity-logs') {
+      return (
+        <ActivityLogs
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          onLogout={handleLogout}
+          onNavigateToDashboard={handleNavigateToDashboard}
+          onNavigateToInventory={handleNavigateToInventory}
+          onNavigateToReservations={handleNavigateToReservations}
+          onNavigateToQRCodes={handleNavigateToQRCodes}
+          onNavigateToMaintenance={handleNavigateToMaintenance}
+          onNavigateToReports={handleNavigateToReports}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
+    if (currentView === 'qr-codes') {
+      return (
+        <QRCodes
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          onLogout={handleLogout}
+          onNavigateToDashboard={handleNavigateToDashboard}
+          onNavigateToInventory={handleNavigateToInventory}
+          onNavigateToReservations={handleNavigateToReservations}
+          onNavigateToActivityLogs={handleNavigateToActivityLogs}
+          onNavigateToMaintenance={handleNavigateToMaintenance}
+          onNavigateToReports={handleNavigateToReports}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
+    if (currentView === 'maintenance') {
+      return (
+        <Maintenance
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          onLogout={handleLogout}
+          onNavigateToDashboard={handleNavigateToDashboard}
+          onNavigateToInventory={handleNavigateToInventory}
+          onNavigateToReservations={handleNavigateToReservations}
+          onNavigateToActivityLogs={handleNavigateToActivityLogs}
+          onNavigateToQRCodes={handleNavigateToQRCodes}
+          onNavigateToReports={handleNavigateToReports}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
+    if (currentView === 'users') {
+      return (
+        <UserManagement
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          onLogout={handleLogout}
+          onNavigateToDashboard={handleNavigateToDashboard}
+          onNavigateToInventory={handleNavigateToInventory}
+          onNavigateToReservations={handleNavigateToReservations}
+          onNavigateToActivityLogs={handleNavigateToActivityLogs}
+          onNavigateToQRCodes={handleNavigateToQRCodes}
+          onNavigateToMaintenance={handleNavigateToMaintenance}
+          onNavigateToReports={handleNavigateToReports}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
+    if (currentView === 'reports') {
+      return (
+        <Reports
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          onLogout={handleLogout}
+          onNavigateToDashboard={handleNavigateToDashboard}
+          onNavigateToInventory={handleNavigateToInventory}
+          onNavigateToReservations={handleNavigateToReservations}
+          onNavigateToActivityLogs={handleNavigateToActivityLogs}
+          onNavigateToQRCodes={handleNavigateToQRCodes}
+          onNavigateToMaintenance={handleNavigateToMaintenance}
+          currentLanguage={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
+    return null;
+  };
+
+  const content = renderContent();
+  const showSidebar = isAuthenticated && content;
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="min-h-screen bg-background">
-          {!isAuthenticated ? (
-            <Login onLogin={handleLogin} />
-          ) : currentView === 'dashboard' && (currentUser?.role === 'admin' || currentUser?.role === 'developer') ? (
-            <Dashboard
+        {!showSidebar ? (
+          content
+        ) : (
+          <div className="flex">
+            <Sidebar
               userName={currentUser?.name || 'User'}
               userRole={currentUser?.role || 'user'}
-              userId={currentUser?.id || ''}
-              onLogout={handleLogout}
+              currentView={currentView}
               onNavigateToDashboard={handleNavigateToDashboard}
               onNavigateToInventory={handleNavigateToInventory}
               onNavigateToReservations={handleNavigateToReservations}
@@ -153,112 +313,16 @@ function App() {
               onNavigateToQRCodes={handleNavigateToQRCodes}
               onNavigateToMaintenance={handleNavigateToMaintenance}
               onNavigateToReports={handleNavigateToReports}
-              currentLanguage={language}
-              onLanguageChange={handleLanguageChange}
-            />
-          ) : currentView === 'inventory' ? (
-            <Inventory
-              userName={currentUser?.name || 'User'}
-              userRole={currentUser?.role || 'user'}
-              userId={currentUser?.id || ''}
+              onNavigateToUsers={() => setCurrentView('users')}
               onLogout={handleLogout}
-              onNavigateToDashboard={handleNavigateToDashboard}
-              onNavigateToReservations={handleNavigateToReservations}
-              onNavigateToActivityLogs={handleNavigateToActivityLogs}
-              onNavigateToQRCodes={handleNavigateToQRCodes}
-              onNavigateToMaintenance={handleNavigateToMaintenance}
-              onNavigateToReports={handleNavigateToReports}
-              currentLanguage={language}
+              language={language}
               onLanguageChange={handleLanguageChange}
             />
-          ) : currentView === 'reservations' ? (
-            <Reservations
-              userName={currentUser?.name || 'User'}
-              userRole={currentUser?.role || 'user'}
-              userId={currentUser?.id || ''}
-              onLogout={handleLogout}
-              onNavigateToDashboard={handleNavigateToDashboard}
-              onNavigateToInventory={handleNavigateToInventory}
-              onNavigateToActivityLogs={handleNavigateToActivityLogs}
-              onNavigateToQRCodes={handleNavigateToQRCodes}
-              onNavigateToMaintenance={handleNavigateToMaintenance}
-              onNavigateToReports={handleNavigateToReports}
-              currentLanguage={language}
-              onLanguageChange={handleLanguageChange}
-            />
-          ) : currentView === 'activity-logs' ? (
-            <ActivityLogs
-              userName={currentUser?.name || 'User'}
-              userRole={currentUser?.role || 'user'}
-              onLogout={handleLogout}
-              onNavigateToDashboard={handleNavigateToDashboard}
-              onNavigateToInventory={handleNavigateToInventory}
-              onNavigateToReservations={handleNavigateToReservations}
-              onNavigateToQRCodes={handleNavigateToQRCodes}
-              onNavigateToMaintenance={handleNavigateToMaintenance}
-              onNavigateToReports={handleNavigateToReports}
-              currentLanguage={language}
-              onLanguageChange={handleLanguageChange}
-            />
-          ) : currentView === 'qr-codes' ? (
-            <QRCodes
-              userName={currentUser?.name || 'User'}
-              userRole={currentUser?.role || 'user'}
-              onLogout={handleLogout}
-              onNavigateToDashboard={handleNavigateToDashboard}
-              onNavigateToInventory={handleNavigateToInventory}
-              onNavigateToReservations={handleNavigateToReservations}
-              onNavigateToActivityLogs={handleNavigateToActivityLogs}
-              onNavigateToMaintenance={handleNavigateToMaintenance}
-              onNavigateToReports={handleNavigateToReports}
-              currentLanguage={language}
-              onLanguageChange={handleLanguageChange}
-            />
-          ) : currentView === 'maintenance' ? (
-            <Maintenance
-              userName={currentUser?.name || 'User'}
-              userRole={currentUser?.role || 'user'}
-              onLogout={handleLogout}
-              onNavigateToDashboard={handleNavigateToDashboard}
-              onNavigateToInventory={handleNavigateToInventory}
-              onNavigateToReservations={handleNavigateToReservations}
-              onNavigateToActivityLogs={handleNavigateToActivityLogs}
-              onNavigateToQRCodes={handleNavigateToQRCodes}
-              onNavigateToReports={handleNavigateToReports}
-              currentLanguage={language}
-              onLanguageChange={handleLanguageChange}
-            />
-          ) : currentView === 'users' ? (
-            <UserManagement
-              userName={currentUser?.name || 'User'}
-              userRole={currentUser?.role || 'user'}
-              onLogout={handleLogout}
-              onNavigateToDashboard={handleNavigateToDashboard}
-              onNavigateToInventory={handleNavigateToInventory}
-              onNavigateToReservations={handleNavigateToReservations}
-              onNavigateToActivityLogs={handleNavigateToActivityLogs}
-              onNavigateToQRCodes={handleNavigateToQRCodes}
-              onNavigateToMaintenance={handleNavigateToMaintenance}
-              onNavigateToReports={handleNavigateToReports}
-              currentLanguage={language}
-              onLanguageChange={handleLanguageChange}
-            />
-          ) : currentView === 'reports' ? (
-            <Reports
-              userName={currentUser?.name || 'User'}
-              userRole={currentUser?.role || 'user'}
-              onLogout={handleLogout}
-              onNavigateToDashboard={handleNavigateToDashboard}
-              onNavigateToInventory={handleNavigateToInventory}
-              onNavigateToReservations={handleNavigateToReservations}
-              onNavigateToActivityLogs={handleNavigateToActivityLogs}
-              onNavigateToQRCodes={handleNavigateToQRCodes}
-              onNavigateToMaintenance={handleNavigateToMaintenance}
-              currentLanguage={language}
-              onLanguageChange={handleLanguageChange}
-            />
-          ) : null}
-        </div>
+            <div className="flex-1 overflow-auto">
+              {content}
+            </div>
+          </div>
+        )}
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
