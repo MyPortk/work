@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle, AlertCircle } from "lucide-react";
-import { useTranslation } from "@/lib/translations";
-import type { Language } from "@/lib/translations";
 
 interface ReservationActionDialogProps {
   open: boolean;
@@ -14,7 +12,6 @@ interface ReservationActionDialogProps {
   onSubmit: (data: { rejectionReason?: string; itemConditionOnReturn?: string; returnCondition?: 'good' | 'damage' }) => void;
   action: 'reject' | 'complete';
   itemName: string;
-  language?: Language;
 }
 
 export default function ReservationActionDialog({
@@ -22,10 +19,8 @@ export default function ReservationActionDialog({
   onClose,
   onSubmit,
   action,
-  itemName,
-  language = 'en'
+  itemName
 }: ReservationActionDialogProps) {
-  const t = useTranslation(language);
   const [reason, setReason] = useState("");
   const [returnCondition, setReturnCondition] = useState<'good' | 'damage' | ''>("");
 
@@ -51,7 +46,7 @@ export default function ReservationActionDialog({
       <Dialog open={open} onOpenChange={onClose}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{t('markAsReturned')}</DialogTitle>
+            <DialogTitle>Mark Equipment as Returned</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">

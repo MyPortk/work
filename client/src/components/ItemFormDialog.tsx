@@ -173,7 +173,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
                         <SelectItem value="__add_new__" className="text-blue-600 font-medium">
                           <div className="flex items-center">
                             <Plus className="w-4 h-4 mr-2" />
-                            {t('addNewType')}
+                            Add New Type
                           </div>
                         </SelectItem>
                       )}
@@ -185,7 +185,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
                   <Input
                     value={newTypeName}
                     onChange={(e) => setNewTypeName(e.target.value)}
-                    placeholder={t('enterNewType')}
+                    placeholder="Enter new product type"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
@@ -200,7 +200,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
                     disabled={!newTypeName.trim()}
                     size="sm"
                   >
-                    {t('addType')}
+                    Add
                   </Button>
                   <Button
                     type="button"
@@ -211,7 +211,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
                     }}
                     size="sm"
                   >
-                    {t('cancel')}
+                    Cancel
                   </Button>
                 </div>
               )}
