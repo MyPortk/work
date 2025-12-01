@@ -78,11 +78,11 @@ export default function Dashboard({
       
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
         {/* Page Header */}
-        <div className="space-y-2">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground" data-testid="text-dashboard-title">
+        <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
+          <h1 className="text-4xl font-extrabold mb-4" data-testid="text-dashboard-title">
             {t('dashboard')}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-lg opacity-90 max-w-2xl mx-auto">
             {t('overviewInventory')}
           </p>
         </div>
