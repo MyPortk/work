@@ -830,6 +830,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
         onClose={() => setReservingItem(null)}
         onSubmit={(data) => createReservationMutation.mutate({ ...data, userId })}
         items={reservingItem ? [reservingItem] : []}
+        language={currentLanguage}
       />
 
       <Dialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog}>
