@@ -13,20 +13,25 @@ import { format } from "date-fns";
 import { api, type Item } from "@/lib/api";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import DeliveryDialog from "@/components/DeliveryDialog";
+import { useTranslation } from "@/lib/translations";
+import type { Language } from "@/lib/translations";
 
 interface ReservationFormDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: { itemId: string; startDate: Date; returnDate: Date; startTime?: string; returnTime?: string; purposeOfUse?: string; notes?: string; deliveryRequired?: string; deliveryLocation?: string; deliveryStreet?: string; deliveryArea?: string; googleMapLink?: string }) => void;
   items: Item[];
+  language?: Language;
 }
 
 export default function ReservationFormDialog({
   open,
   onClose,
   onSubmit,
-  items
+  items,
+  language = 'en'
 }: ReservationFormDialogProps) {
+  const t = useTranslation(language);
   const [itemId, setItemId] = useState("");
   const [startDate, setStartDate] = useState<Date>();
   const [returnDate, setReturnDate] = useState<Date>();
@@ -64,12 +69,12 @@ export default function ReservationFormDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!itemId || !startDate || !returnDate || !purposeOfUse) {
-      alert("Please fill in all required fields");
+      alert(t('fillAllRequiredFields'));
       return;
     }
     
     if (returnDate < startDate) {
-      alert("Return date must be after start date");
+      alert(t('returnDateAfterStart'));
       return;
     }
     
@@ -167,14 +172,14 @@ export default function ReservationFormDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>New Reservation Request</DialogTitle>
+          <DialogTitle>{t('newReservation')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="item">Select Item *</Label>
+            <Label htmlFor="item">{t('selectItem')} *</Label>
             <Select value={itemId} onValueChange={setItemId} required disabled={items.length === 1}>
               <SelectTrigger>
-                <SelectValue placeholder="Choose an item..." />
+                <SelectValue placeholder={t('chooseItem')} />
               </SelectTrigger>
               <SelectContent>
                 {items.map((item) => (
@@ -186,7 +191,7 @@ export default function ReservationFormDialog({
             </Select>
             {items.length === 1 && (
               <p className="text-sm text-muted-foreground">
-                Reserving: {items[0].productName}
+                {t('reserving')} {items[0].productName}
               </p>
             )}
           </div>
@@ -195,14 +200,13 @@ export default function ReservationFormDialog({
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                This item has {itemReservations.length} existing reservation(s). 
-                Unavailable dates are highlighted in red on the calendar.
+                {t('existingReservations')}
               </AlertDescription>
             </Alert>
           )}
           
           <div className="space-y-2">
-            <Label>Pickup Date & Time *</Label>
+            <Label>{t('pickupDateTime')} *</Label>
             <div className="flex gap-2">
               <Popover>
                 <PopoverTrigger asChild>
@@ -211,7 +215,7 @@ export default function ReservationFormDialog({
                     className="flex-1 justify-start text-left font-normal"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP") : <span>Pick date</span>}
+                    {startDate ? format(startDate, "PPP") : <span>{t('pickDate')}</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -244,7 +248,7 @@ export default function ReservationFormDialog({
           </div>
 
           <div className="space-y-2">
-            <Label>Return Date & Time *</Label>
+            <Label>{t('returnDateTime')} *</Label>
             <div className="flex gap-2">
               <Popover>
                 <PopoverTrigger asChild>
@@ -253,7 +257,7 @@ export default function ReservationFormDialog({
                     className="flex-1 justify-start text-left font-normal"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {returnDate ? format(returnDate, "PPP") : <span>Pick date</span>}
+                    {returnDate ? format(returnDate, "PPP") : <span>{t('pickDate')}</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -292,13 +296,13 @@ export default function ReservationFormDialog({
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                The selected dates conflict with an existing reservation. Please choose different dates.
+                {t('dateConflictWarning')}
               </AlertDescription>
             </Alert>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="purpose">Purpose of Use *</Label>
+            <Label htmlFor="purpose">{t('purpose')} *</Label>
             <Textarea
               id="purpose"
               value={purposeOfUse}
@@ -330,21 +334,21 @@ export default function ReservationFormDialog({
               />
               <Label htmlFor="delivery" className="cursor-pointer flex items-center gap-2">
                 <Truck className="w-4 h-4" />
-                Request Delivery
+                {t('requestDelivery')}
               </Label>
             </div>
           </div>
 
           <div className="flex gap-3 justify-end">
             <Button type="button" variant="outline" onClick={handleClose}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button 
               type="submit" 
               className="bg-gradient-to-r from-[#667eea] to-[#764ba2]"
               disabled={!itemId || !startDate || !returnDate || hasDateConflict()}
             >
-              Submit Request
+              {t('submitRequest')}
             </Button>
           </div>
         </form>
