@@ -115,7 +115,7 @@ export default function InventoryHeader({
                 {onNavigateToDashboard && (
                   <DropdownMenuItem onClick={onNavigateToDashboard}>
                     <Package className="w-4 h-4 mr-2" />
-                    {currentLanguage === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+                    {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
                   </DropdownMenuItem>
                 )}
 
