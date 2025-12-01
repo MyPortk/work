@@ -316,7 +316,6 @@ function App() {
               onNavigateToUsers={() => setCurrentView('users')}
               onLogout={handleLogout}
               language={language}
-              onLanguageChange={handleLanguageChange}
             />
             <div className="flex-1 overflow-auto">
               {content}

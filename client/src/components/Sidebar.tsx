@@ -1,8 +1,5 @@
-import { useState } from "react";
-import { LayoutDashboard, Package, Calendar, ClipboardList, QrCode, Wrench, Users, FileText, LogOut, Plus, Globe } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LayoutDashboard, Package, Calendar, ClipboardList, QrCode, Wrench, Users, FileText, LogOut } from "lucide-react";
 import { useTranslation, type Language } from "@/lib/translations";
-import NotificationBell from "./NotificationBell";
 
 interface SidebarProps {
   userName: string;
@@ -18,7 +15,6 @@ interface SidebarProps {
   onNavigateToUsers?: () => void;
   onLogout: () => void;
   language: Language;
-  onLanguageChange: (lang: Language) => void;
 }
 
 export default function Sidebar({
@@ -35,10 +31,8 @@ export default function Sidebar({
   onNavigateToUsers,
   onLogout,
   language,
-  onLanguageChange,
 }: SidebarProps) {
   const t = useTranslation(language);
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const isAdmin = userRole === 'admin' || userRole === 'developer';
 
@@ -96,21 +90,6 @@ export default function Sidebar({
 
         {/* Bottom Actions */}
         <div className="border-t border-white border-opacity-20 p-4 space-y-3">
-          {/* Language Toggle */}
-          <button
-            onClick={() => onLanguageChange(language === 'en' ? 'ar' : 'en')}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all"
-            data-testid="button-language-toggle"
-          >
-            <Globe className="w-5 h-5 flex-shrink-0" />
-            <span>{language === 'en' ? 'العربية' : 'English'}</span>
-          </button>
-
-          {/* Notifications */}
-          <div className="px-4">
-            <NotificationBell language={language} />
-          </div>
-
           {/* Logout */}
           <button
             onClick={onLogout}
