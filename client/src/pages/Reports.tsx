@@ -111,9 +111,11 @@ export default function Reports({
           </Button>
         </div>
 
-        <div className="text-center mb-10 p-6 md:p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
-          <h1 className="text-3xl md:text-4xl font-extrabold mb-3 md:mb-4">{t('damageReports')}</h1>
-          <p className="text-sm md:text-lg opacity-90 max-w-2xl mx-auto">
+        <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
+          <h1 className="text-4xl font-extrabold mb-4" data-testid="text-reports-title">
+            {t('damageReports')}
+          </h1>
+          <p className="text-lg opacity-90 max-w-2xl mx-auto" data-testid="text-reports-subtitle">
             {(userRole === 'admin' || userRole === 'developer')
               ? t('viewAllDamageReports')
               : t('viewDamageReportsReceived')}

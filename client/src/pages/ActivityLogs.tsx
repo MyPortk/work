@@ -103,9 +103,13 @@ export default function ActivityLogs({ userName, userRole, onLogout, onNavigateT
       />
 
       <main className="max-w-[1400px] mx-auto px-5 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold">{t('activityLogHistory')}</h1>
-          <p className="text-muted-foreground">{t('completeAuditTrail')}</p>
+        <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
+          <h1 className="text-4xl font-extrabold mb-4" data-testid="text-activity-title">
+            {t('activityLogHistory')}
+          </h1>
+          <p className="text-lg opacity-90 max-w-2xl mx-auto" data-testid="text-activity-subtitle">
+            {t('completeAuditTrail')}
+          </p>
         </div>
 
         <div className="mb-6 flex items-center gap-4">

@@ -70,16 +70,22 @@ export default function QRCodes({ userName, userRole, onLogout, onNavigateToInve
       />
 
       <main className="max-w-[1400px] mx-auto px-5 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold">{t('qrCodes')}</h1>
-            <p className="text-muted-foreground">{t('scanQRCodes')}</p>
-          </div>
+        <div className="text-center mb-10 p-10 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-2xl text-white">
+          <h1 className="text-4xl font-extrabold mb-4" data-testid="text-qrcodes-title">
+            {t('qrCodes')}
+          </h1>
+          <p className="text-lg opacity-90 max-w-2xl mx-auto" data-testid="text-qrcodes-subtitle">
+            {t('scanQRCodes')}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-end mb-6">
           <div className="flex gap-2">
             <Button
               onClick={downloadAllQRCodes}
               variant="outline"
               disabled={qrCodes.length === 0}
+              className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white border-0"
             >
               <Download className="w-4 h-4 mr-2" />
               {t('downloadAll')}
