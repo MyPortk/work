@@ -1,4 +1,6 @@
-import { LayoutDashboard, Package, Calendar, ClipboardList, QrCode, Wrench, Users, FileText, LogOut, Shield } from "lucide-react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { LayoutDashboard, Package, Calendar, ClipboardList, QrCode, Wrench, Users, FileText, LogOut, Shield, ChevronLeft } from "lucide-react";
 import { useTranslation, type Language } from "@/lib/translations";
 
 interface SidebarProps {
@@ -35,6 +37,22 @@ export default function Sidebar({
   language,
 }: SidebarProps) {
   const t = useTranslation(language);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const { data: permissions = {} } = useQuery({
+    queryKey: ['/api/permissions'],
+    queryFn: async () => {
+      try {
+        const response = await fetch('/api/permissions', { credentials: 'include' });
+        if (!response.ok) return { hide_sidebar_toggle: true };
+        return response.json();
+      } catch {
+        return { hide_sidebar_toggle: true };
+      }
+    },
+  });
+
+  const showCollapseButton = permissions.hide_sidebar_toggle !== false;
 
   const isAdmin = userRole === 'admin' || userRole === 'developer';
   const isDeveloper = userRole === 'developer';
@@ -69,7 +87,19 @@ export default function Sidebar({
 
   return (
     <div className="flex h-screen bg-background">
-      <div className="w-60 bg-gradient-to-b from-[#667eea] to-[#764ba2] text-white flex flex-col fixed h-screen overflow-y-auto">
+      <div className={`bg-gradient-to-b from-[#667eea] to-[#764ba2] text-white flex flex-col fixed h-screen overflow-y-auto transition-all duration-300 ${isCollapsed ? 'w-0 -left-60' : 'w-60'}`}>
+        {showCollapseButton && (
+          <div className="p-3 flex justify-end">
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-2 rounded-lg bg-white bg-opacity-20 hover:bg-opacity-30 transition-all backdrop-blur-sm"
+              data-testid="button-collapse-sidebar"
+              title="Toggle sidebar"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {menuItems.map((item) => {
             const IconComponent = item.icon;
@@ -104,7 +134,7 @@ export default function Sidebar({
         </div>
       </div>
 
-      <div className="flex-1 overflow-auto" style={{ marginLeft: '15rem' }} />
+      <div className="flex-1 overflow-auto" style={{ marginLeft: isCollapsed ? '0' : '15rem', transition: 'margin-left 0.3s' }} />
     </div>
   );
 }

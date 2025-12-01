@@ -165,6 +165,31 @@ export default function Permissions({
               </div>
             </CardContent>
           </Card>
+
+          {/* Sidebar Collapse Toggle */}
+          <Card className="hover-elevate" data-testid="card-permission-sidebar">
+            <CardHeader>
+              <CardTitle className="text-lg">Sidebar Collapse</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                When enabled, users can collapse the sidebar using the arrow button at the top. When disabled, the sidebar remains visible at all times.
+              </p>
+              <div className="flex items-center gap-4">
+                <Switch
+                  checked={permissions.hide_sidebar_toggle !== false}
+                  onCheckedChange={() =>
+                    handleToggle('hide_sidebar_toggle', permissions.hide_sidebar_toggle !== false)
+                  }
+                  disabled={updatePermissionMutation.isPending}
+                  data-testid="switch-permission-sidebar"
+                />
+                <span className="text-sm font-medium">
+                  {permissions.hide_sidebar_toggle !== false ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
