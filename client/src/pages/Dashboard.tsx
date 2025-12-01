@@ -103,6 +103,13 @@ export default function Dashboard({
     .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
     .slice(0, 5);
 
+  // Product type to image mapping
+  const productTypeImages: { [key: string]: string } = {
+    'Lenses': 'https://images.unsplash.com/photo-1606986628025-35d57e735ae0?w=500&h=300&fit=crop',
+    'Camera': 'https://images.unsplash.com/photo-1606933248051-5ce98adc9d50?w=500&h=300&fit=crop',
+    'Backdrop Stands': 'https://images.unsplash.com/photo-1611532736579-6b16e2b50449?w=500&h=300&fit=crop',
+  };
+
   // Calculate top 4 product types by checkout count (most used)
   const productTypeCheckouts: { [key: string]: number } = {};
   
@@ -116,14 +123,13 @@ export default function Dashboard({
     }
   });
 
-  // Build top categories from product types with images from matching categories
+  // Build top categories from product types with images
   const topCategories = Object.entries(productTypeCheckouts)
     .map(([productType, checkouts]) => {
-      const matchingCategory = (categories as any[]).find((c: any) => c.name === productType);
       return {
         name: productType,
         checkouts: checkouts,
-        image: matchingCategory?.image || 'https://images.unsplash.com/photo-1606986628025-35d57e735ae0?w=400'
+        image: productTypeImages[productType] || 'https://images.unsplash.com/photo-1606986628025-35d57e735ae0?w=500&h=300&fit=crop'
       };
     })
     .sort((a, b) => b.checkouts - a.checkouts)
