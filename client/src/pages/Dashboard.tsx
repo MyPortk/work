@@ -325,10 +325,10 @@ export default function Dashboard({
           </Card>
         </div>
 
-        {/* Most Requested & Overdue Grid - 70/30 Split */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
-          {/* Most Requested Bar Chart - Left (70%) - 7 cols */}
-          <Card className="hover-elevate lg:col-span-7" data-testid="card-most-requested">
+        {/* Most Requested & Top Categories Grid - 50/50 Split */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {/* Most Requested Bar Chart - Left (50%) */}
+          <Card className="hover-elevate" data-testid="card-most-requested">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-sm">
                 <TrendingUp className="w-4 h-4" />
@@ -365,8 +365,8 @@ export default function Dashboard({
             </CardContent>
           </Card>
 
-          {/* Top Categories - Right (30%) - 3 cols */}
-          <Card className="hover-elevate lg:col-span-3">
+          {/* Top Categories - Right (50%) */}
+          <Card className="hover-elevate">
             <CardHeader className="pb-3 flex flex-row items-center justify-between gap-2">
               <CardTitle className="text-sm">
                 {currentLanguage === 'ar' ? 'الفئات الرئيسية' : 'Top Categories'}
