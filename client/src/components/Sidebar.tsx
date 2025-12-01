@@ -44,9 +44,13 @@ export default function Sidebar({
       : []),
     { icon: Package, label: 'inventory', action: onNavigateToInventory, view: 'inventory' },
     { icon: Calendar, label: 'reservations', action: onNavigateToReservations, view: 'reservations' },
-    { icon: QrCode, label: 'qr_codes', action: onNavigateToQRCodes, view: 'qr-codes' },
-    { icon: Wrench, label: 'maintenance', action: onNavigateToMaintenance, view: 'maintenance' },
-    { icon: ClipboardList, label: 'activity_logs', action: onNavigateToActivityLogs, view: 'activity-logs' },
+    ...(isAdmin
+      ? [
+          { icon: QrCode, label: 'qr_codes', action: onNavigateToQRCodes, view: 'qr-codes' },
+          { icon: Wrench, label: 'maintenance', action: onNavigateToMaintenance, view: 'maintenance' },
+          { icon: ClipboardList, label: 'activity_logs', action: onNavigateToActivityLogs, view: 'activity-logs' },
+        ]
+      : []),
     { icon: FileText, label: 'reports', action: onNavigateToReports, view: 'reports' },
     ...(isAdmin
       ? [
