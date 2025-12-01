@@ -335,40 +335,36 @@ export default function Dashboard({
                 {currentLanguage === 'ar' ? 'الأكثر طلباً' : 'Most Requested Equipment'}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="py-2">
               {mostRequestedData.length > 0 ? (
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={200}>
                   <BarChart
                     data={mostRequestedData}
-                    margin={{ top: 20, right: 30, left: 0, bottom: 60 }}
+                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="currentColor" opacity={0.1} />
-                    <XAxis
-                      dataKey="name"
-                      angle={-45}
-                      textAnchor="end"
-                      height={80}
-                      tick={{ fontSize: 12 }}
-                    />
-                    <YAxis
-                      tick={{ fontSize: 12 }}
-                      label={{ value: currentLanguage === 'ar' ? 'الطلبات' : 'Requests', angle: -90, position: 'insideLeft' }}
+                    <CartesianGrid strokeDasharray="3 3" stroke="currentColor" opacity={0.05} vertical={false} />
+                    <XAxis dataKey="name" hide={true} />
+                    <YAxis 
+                      tick={{ fontSize: 11 }}
+                      width={35}
                     />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: 'hsl(var(--background))',
                         border: '1px solid hsl(var(--border))',
-                        borderRadius: '8px',
-                        padding: '10px'
+                        borderRadius: '6px',
+                        padding: '8px'
                       }}
                       labelStyle={{ color: 'hsl(var(--foreground))' }}
-                      formatter={(value: any) => [`${value} ${currentLanguage === 'ar' ? 'طلب' : 'request'}${value !== 1 ? 's' : ''}`, currentLanguage === 'ar' ? 'الطلبات' : 'Requests']}
+                      formatter={(value: any) => `${value} ${currentLanguage === 'ar' ? 'طلب' : 'requests'}`}
+                      cursor={{ fill: 'rgba(102, 126, 234, 0.1)' }}
                     />
                     <Bar
                       dataKey="requests"
                       fill="url(#colorGradient)"
-                      radius={[8, 8, 0, 0]}
-                      animationDuration={1000}
+                      radius={[4, 4, 0, 0]}
+                      maxBarSize={20}
+                      animationDuration={800}
                     />
                     <defs>
                       <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
@@ -379,8 +375,8 @@ export default function Dashboard({
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="h-64 flex items-center justify-center">
-                  <p className="text-sm text-muted-foreground">
+                <div className="h-48 flex items-center justify-center">
+                  <p className="text-xs text-muted-foreground">
                     {currentLanguage === 'ar' ? 'لا توجد بيانات' : 'No data available'}
                   </p>
                 </div>
