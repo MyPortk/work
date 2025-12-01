@@ -75,7 +75,7 @@ export default function Dashboard({
     })
     .filter((data: any) => data.name !== `Equipment ${equipmentRequestCount}`)
     .sort((a, b) => b.requests - a.requests)
-    .slice(0, 10); // Top 10 most requested
+    .slice(0, 6); // Top 6 most requested
 
   return (
     <div className="min-h-screen bg-background">
@@ -264,31 +264,33 @@ export default function Dashboard({
         {/* Most Requested Equipment Chart */}
         {mostRequestedData.length > 0 && (
           <Card className="hover-elevate" data-testid="card-most-requested">
-            <CardHeader className="pb-4">
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                {currentLanguage === 'ar' ? 'الأكثر طلباً' : 'Most Requested Equipment'}
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <TrendingUp className="w-4 h-4" />
+                {currentLanguage === 'ar' ? 'الأكثر طلباً' : 'Most Requested'}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {mostRequestedData.map((item: any, index: number) => {
-                const maxRequests = Math.max(...mostRequestedData.map((d: any) => d.requests), 1);
-                const widthPercent = (item.requests / maxRequests) * 100;
-                return (
-                  <div key={index} className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-foreground truncate">{item.name}</span>
-                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{item.requests}</span>
+            <CardContent>
+              <div className="flex items-end justify-center gap-3 h-36 py-2">
+                {mostRequestedData.map((item: any, index: number) => {
+                  const maxRequests = Math.max(...mostRequestedData.map((d: any) => d.requests), 1);
+                  const heightPercent = (item.requests / maxRequests) * 100;
+                  return (
+                    <div key={index} className="flex flex-col items-center gap-1 flex-1">
+                      <span className="text-xs font-semibold text-foreground">{item.requests}</span>
+                      <div className="w-8 bg-muted rounded-t-sm relative flex items-end justify-center"
+                        style={{ height: '100px' }}>
+                        <div
+                          className="w-full bg-gradient-to-t from-[#667eea] to-[#764ba2] rounded-t-sm transition-all hover:opacity-80 cursor-pointer"
+                          style={{ height: `${heightPercent}%`, minHeight: '4px' }}
+                          title={`${item.name}: ${item.requests} requests`}
+                        ></div>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground text-center leading-tight max-w-[50px]">{item.name}</span>
                     </div>
-                    <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
-                      <div
-                        className="bg-gradient-to-r from-[#667eea] to-[#764ba2] h-3 rounded-full transition-all duration-300"
-                        style={{ width: `${widthPercent}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
         )}
