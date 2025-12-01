@@ -104,31 +104,31 @@ export default function Dashboard({
     .slice(0, 5);
 
   // Calculate categories with checkout count (most used)
-  const categoryCheckouts: { [key: string]: { name: string; checkouts: number; image: string } } = {};
+  // Build a map of product types to checkout counts
+  const productTypeCheckouts: { [key: string]: number } = {};
   
-  // Initialize all categories
-  (categories as any[]).forEach((cat: any) => {
-    categoryCheckouts[cat.id] = { name: cat.name, checkouts: 0, image: cat.image };
-  });
-
-  // Count checkouts per category (only items that have been actually checked out)
+  // Count checkouts per product type (only items that have been actually checked out)
   (reservations as any[]).forEach((reservation: any) => {
     if (reservation.checkoutDate) {
       const item = (items as any[]).find((i: any) => String(i.id) === String(reservation.itemId));
-      if (item) {
-        const category = (categories as any[]).find((c: any) => c.name === item.productType);
-        if (category && categoryCheckouts[category.id]) {
-          categoryCheckouts[category.id].checkouts += 1;
-        }
+      if (item && item.productType) {
+        productTypeCheckouts[item.productType] = (productTypeCheckouts[item.productType] || 0) + 1;
       }
     }
   });
 
-  // Sort by checkouts (most used first), show top 4
-  const topCategories = Object.values(categoryCheckouts)
+  // Build category list with checkout counts
+  const categoryCheckoutsList = (categories as any[])
+    .map((cat: any) => ({
+      name: cat.name,
+      checkouts: productTypeCheckouts[cat.name] || 0,
+      image: cat.image
+    }))
     .filter((cat: any) => cat.checkouts > 0)
-    .sort((a, b) => b.checkouts - a.checkouts)
-    .slice(0, 4);
+    .sort((a, b) => b.checkouts - a.checkouts);
+
+  // Sort by checkouts (most used first), show top 4
+  const topCategories = categoryCheckoutsList.slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background">
