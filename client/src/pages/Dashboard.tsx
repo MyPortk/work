@@ -103,8 +103,7 @@ export default function Dashboard({
     .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
     .slice(0, 5);
 
-  // Calculate categories with checkout count (most used)
-  // Build a map of product types to checkout counts
+  // Calculate top 4 product types by checkout count (most used)
   const productTypeCheckouts: { [key: string]: number } = {};
   
   // Count checkouts per product type (only items that have been actually checked out)
@@ -117,18 +116,18 @@ export default function Dashboard({
     }
   });
 
-  // Build category list with checkout counts
-  const categoryCheckoutsList = (categories as any[])
-    .map((cat: any) => ({
-      name: cat.name,
-      checkouts: productTypeCheckouts[cat.name] || 0,
-      image: cat.image
-    }))
-    .filter((cat: any) => cat.checkouts > 0)
-    .sort((a, b) => b.checkouts - a.checkouts);
-
-  // Sort by checkouts (most used first), show top 4
-  const topCategories = categoryCheckoutsList.slice(0, 4);
+  // Build top categories from product types with images from matching categories
+  const topCategories = Object.entries(productTypeCheckouts)
+    .map(([productType, checkouts]) => {
+      const matchingCategory = (categories as any[]).find((c: any) => c.name === productType);
+      return {
+        name: productType,
+        checkouts: checkouts,
+        image: matchingCategory?.image || 'https://images.unsplash.com/photo-1606986628025-35d57e735ae0?w=400'
+      };
+    })
+    .sort((a, b) => b.checkouts - a.checkouts)
+    .slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background">
