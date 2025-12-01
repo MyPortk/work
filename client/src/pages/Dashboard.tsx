@@ -103,42 +103,31 @@ export default function Dashboard({
     .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
     .slice(0, 5);
 
-  // Calculate categories with reservation count and item count
-  const categoryStats: { [key: string]: { name: string; reservations: number; items: number; image: string } } = {};
+  // Calculate categories with checkout count (most used)
+  const categoryCheckouts: { [key: string]: { name: string; checkouts: number; image: string } } = {};
   
   // Initialize all categories
   (categories as any[]).forEach((cat: any) => {
-    categoryStats[cat.id] = { name: cat.name, reservations: 0, items: 0, image: cat.image };
+    categoryCheckouts[cat.id] = { name: cat.name, checkouts: 0, image: cat.image };
   });
 
-  // Count items per category
-  (items as any[]).forEach((item: any) => {
-    const category = (categories as any[]).find((c: any) => c.name === item.productType);
-    if (category && categoryStats[category.id]) {
-      categoryStats[category.id].items += 1;
-    }
-  });
-
-  // Count reservations per category
+  // Count checkouts per category (active and completed reservations)
   (reservations as any[]).forEach((reservation: any) => {
-    const item = (items as any[]).find((i: any) => String(i.id) === String(reservation.itemId));
-    if (item) {
-      const category = (categories as any[]).find((c: any) => c.name === item.productType);
-      if (category && categoryStats[category.id]) {
-        categoryStats[category.id].reservations += 1;
+    if (reservation.status === 'active' || reservation.status === 'completed' || reservation.checkoutDate) {
+      const item = (items as any[]).find((i: any) => String(i.id) === String(reservation.itemId));
+      if (item) {
+        const category = (categories as any[]).find((c: any) => c.name === item.productType);
+        if (category && categoryCheckouts[category.id]) {
+          categoryCheckouts[category.id].checkouts += 1;
+        }
       }
     }
   });
 
-  // Sort by reservations first, then by item count, only show categories with items or reservations
-  const topCategories = Object.values(categoryStats)
-    .filter((cat: any) => cat.items > 0 || cat.reservations > 0)
-    .sort((a, b) => {
-      if (b.reservations !== a.reservations) {
-        return b.reservations - a.reservations;
-      }
-      return b.items - a.items;
-    })
+  // Sort by checkouts (most used first), show top 4
+  const topCategories = Object.values(categoryCheckouts)
+    .filter((cat: any) => cat.checkouts > 0)
+    .sort((a, b) => b.checkouts - a.checkouts)
     .slice(0, 4);
 
   return (
