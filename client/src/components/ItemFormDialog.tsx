@@ -21,7 +21,9 @@ interface ItemFormDialogProps {
     id?: string;
     barcode: string;
     productName: string;
+    productNameAr?: string;
     productType: string;
+    productTypeAr?: string;
     status: string;
     location?: string;
     notes?: string;
@@ -39,7 +41,9 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
   const [formData, setFormData] = useState({
     barcode: item?.barcode || '',
     productName: item?.productName || '',
+    productNameAr: item?.productNameAr || '',
     productType: item?.productType || '',
+    productTypeAr: item?.productTypeAr || '',
     status: item?.status || 'Available',
     location: item?.location || '',
     notes: item?.notes || '',
@@ -75,7 +79,9 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
       setFormData({
         barcode: item.barcode,
         productName: item.productName,
+        productNameAr: item.productNameAr || '',
         productType: item.productType,
+        productTypeAr: item.productTypeAr || '',
         status: item.status,
         location: item.location || '',
         notes: item.notes || '',
@@ -86,7 +92,9 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
       setFormData({
         barcode: '',
         productName: '',
+        productNameAr: '',
         productType: '',
+        productTypeAr: '',
         status: 'Available',
         location: '',
         notes: '',
@@ -129,7 +137,7 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="productName">{t('productName')} *</Label>
+              <Label htmlFor="productName">{t('productName')} (EN) *</Label>
               <Input
                 id="productName"
                 value={formData.productName}
@@ -143,7 +151,22 @@ export default function ItemFormDialog({ open, onClose, onSubmit, item, mode, us
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="productType">{t('type')} *</Label>
+              <Label htmlFor="productNameAr">{t('productName')} (AR)</Label>
+              <Input
+                id="productNameAr"
+                value={formData.productNameAr}
+                onChange={(e) => setFormData({ ...formData, productNameAr: e.target.value })}
+                placeholder="e.g., كانون EOS R5"
+                data-testid="input-product-name-ar"
+                dir="rtl"
+              />
+            </div>
+            <div className="space-y-2" />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="productType">{t('type')} (EN) *</Label>
               {mode === 'edit' ? (
                 <div className="bg-muted p-2 rounded text-sm text-muted-foreground">
                   {formData.productType}
