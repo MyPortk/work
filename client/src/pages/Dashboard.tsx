@@ -271,22 +271,22 @@ export default function Dashboard({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-end justify-center gap-4 h-48">
+              <div className="flex items-end justify-center gap-6 h-48">
                 {mostRequestedData.map((item: any, index: number) => {
                   const maxRequests = Math.max(...mostRequestedData.map((d: any) => d.requests), 1);
                   const heightPercent = (item.requests / maxRequests) * 100;
                   return (
-                    <div key={index} className="flex flex-col items-center gap-2 flex-1">
-                      <div className="relative w-full h-32 flex items-end justify-center">
+                    <div key={index} className="flex flex-col items-center gap-2">
+                      <div className="relative h-32 flex items-end justify-center">
                         <div
-                          className="w-full bg-gradient-to-t from-[#667eea] to-[#764ba2] rounded-t-md transition-all hover:opacity-80 cursor-pointer"
-                          style={{ height: `${heightPercent}%`, minHeight: '8px' }}
+                          className="bg-gradient-to-t from-[#667eea] to-[#764ba2] rounded-t-md transition-all hover:opacity-80 cursor-pointer"
+                          style={{ height: `${heightPercent}%`, width: '24px', minHeight: '8px' }}
                           title={`${item.name}: ${item.requests} requests`}
                         ></div>
                       </div>
-                      <div className="flex flex-col items-center gap-1 w-full">
-                        <span className="text-2xl font-bold text-foreground">{item.requests}</span>
-                        <span className="text-xs text-muted-foreground text-center truncate">{item.name}</span>
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-lg font-bold text-foreground">{item.requests}</span>
+                        <span className="text-xs text-muted-foreground text-center whitespace-nowrap">{item.name}</span>
                       </div>
                     </div>
                   );
