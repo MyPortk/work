@@ -103,30 +103,27 @@ export default function Dashboard({
     .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
     .slice(0, 5);
 
-  // Calculate top 4 product types by checkout count (most used)
-  const productTypeCheckouts: { [key: string]: number } = {};
+  // Calculate checkout count for each existing category
+  const categoryCheckouts: { [key: string]: number } = {};
   
-  // Count checkouts per product type (only items that have been actually checked out)
+  // Count checkouts per category (only items that have been actually checked out)
   (reservations as any[]).forEach((reservation: any) => {
     if (reservation.checkoutDate) {
       const item = (items as any[]).find((i: any) => String(i.id) === String(reservation.itemId));
-      if (item && item.productType) {
-        productTypeCheckouts[item.productType] = (productTypeCheckouts[item.productType] || 0) + 1;
+      if (item) {
+        categoryCheckouts[item.productType] = (categoryCheckouts[item.productType] || 0) + 1;
       }
     }
   });
 
-  // Build top categories from product types, using category images
-  const topCategories = Object.entries(productTypeCheckouts)
-    .map(([productType, checkouts]) => {
-      const matchingCategory = (categories as any[]).find((c: any) => c.name === productType);
-      return {
-        name: productType,
-        checkouts: checkouts,
-        image: matchingCategory?.image || null
-      };
-    })
-    .filter((cat: any) => cat.image !== null) // Only show categories that have images
+  // Get top 4 existing categories with checkouts, sorted by checkout count
+  const topCategories = (categories as any[])
+    .filter((cat: any) => categoryCheckouts[cat.name] > 0) // Only categories that have been checked out
+    .map((cat: any) => ({
+      name: cat.name,
+      checkouts: categoryCheckouts[cat.name] || 0,
+      image: cat.image
+    }))
     .sort((a, b) => b.checkouts - a.checkouts)
     .slice(0, 4);
 
