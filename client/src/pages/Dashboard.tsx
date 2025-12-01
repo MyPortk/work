@@ -3,7 +3,7 @@ import InventoryHeader from "@/components/InventoryHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/lib/api";
 import { useTranslation, type Language } from "@/lib/translations";
-import { Package, Clock, AlertCircle, CheckCircle2, TrendingUp, Activity, Zap, BarChart3 } from "lucide-react";
+import { Package, Clock, AlertCircle, CheckCircle2, TrendingUp, Activity, Zap, BarChart3, ArrowRight } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 interface DashboardProps {
@@ -400,11 +400,11 @@ export default function Dashboard({
             </CardHeader>
             <CardContent>
               {topCategories.length > 0 ? (
-                <div className="grid grid-cols-2 gap-3">
-                  {topCategories.map((cat: any, index: number) => (
+                <div className="grid grid-cols-4 gap-2">
+                  {topCategories.slice(0, 4).map((cat: any, index: number) => (
                     <div
                       key={index}
-                      className="relative h-32 rounded-lg overflow-hidden hover-elevate cursor-pointer group"
+                      className="relative h-24 rounded-md overflow-hidden cursor-pointer group"
                       onClick={onNavigateToInventory}
                       data-testid={`box-category-${cat.name}`}
                       style={{
@@ -414,7 +414,15 @@ export default function Dashboard({
                       }}
                     >
                       {/* Dark overlay */}
-                      <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-40 transition-all"></div>
+                      <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-60 transition-all"></div>
+                      
+                      {/* Category name + arrow on hover */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ArrowRight className="w-5 h-5 text-white mb-1" />
+                        <p className="text-white text-xs font-semibold text-center leading-tight px-1">
+                          {cat.name}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
