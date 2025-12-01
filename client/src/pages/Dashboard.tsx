@@ -165,7 +165,7 @@ export default function Dashboard({
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-purple-700 dark:text-purple-400 flex items-center gap-2">
                 <BookOpen className="w-4 h-4" />
-                {language === 'ar' ? 'قيد الانتظار' : 'Pending'}
+                {currentLanguage === 'ar' ? 'قيد الانتظار' : 'Pending'}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -221,7 +221,7 @@ export default function Dashboard({
                   className="w-full"
                   data-testid="button-view-maintenance"
                 >
-                  {t('maintenance')}
+                  {t(currentLanguage === 'ar' ? 'maintenance' : 'maintenance')}
                 </Button>
               )}
             </CardContent>
