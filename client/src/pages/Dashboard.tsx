@@ -54,6 +54,11 @@ export default function Dashboard({
     queryFn: () => api.activityLogs.getAll(),
   }) as any;
 
+  const { data: categories = [] } = useQuery({
+    queryKey: ['/api/categories'],
+    queryFn: () => api.categories.getAll(),
+  }) as any;
+
   // Calculate stats
   const totalItems = (items as any[]).length;
   const availableItems = (items as any[]).filter((item: any) => item.status === 'Available').length;
@@ -97,6 +102,19 @@ export default function Dashboard({
   const recentActivities = (activityLogs as any[])
     .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
     .slice(0, 5);
+
+  // Calculate items per category
+  const categoryItemCount: { [key: string]: { name: string; count: number; image: string } } = {};
+  (categories as any[]).forEach((cat: any) => {
+    const count = (items as any[]).filter((item: any) => item.productType === cat.name).length;
+    if (count > 0) {
+      categoryItemCount[cat.id] = { name: cat.name, count, image: cat.image };
+    }
+  });
+
+  const topCategories = Object.values(categoryItemCount)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 4);
 
   return (
     <div className="min-h-screen bg-background">
@@ -322,25 +340,38 @@ export default function Dashboard({
             </CardContent>
           </Card>
 
-          {/* Overdue Items - Right (30%) - 3 cols */}
+          {/* Top Categories - Right (30%) - 3 cols */}
           <Card className="hover-elevate lg:col-span-3">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-sm">
-                <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
-                {currentLanguage === 'ar' ? 'متأخر' : 'Overdue'}
+            <CardHeader className="pb-3 flex flex-row items-center justify-between gap-2">
+              <CardTitle className="text-sm">
+                {currentLanguage === 'ar' ? 'الفئات الرئيسية' : 'Top Categories'}
               </CardTitle>
+              <button
+                onClick={onNavigateToInventory}
+                className="text-xs text-primary hover:underline"
+                data-testid="button-view-all-categories"
+              >
+                {currentLanguage === 'ar' ? 'عرض الكل' : 'View All'}
+              </button>
             </CardHeader>
             <CardContent>
-              {overdueItems > 0 ? (
-                <div className="text-center p-6 bg-red-50 dark:bg-red-950/30 rounded-lg">
-                  <p className="text-4xl font-bold text-red-600 dark:text-red-400">{overdueItems}</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    {currentLanguage === 'ar' ? 'عناصر متأخرة الإرجاع' : 'Items overdue for return'}
-                  </p>
+              {topCategories.length > 0 ? (
+                <div className="grid grid-cols-2 gap-2">
+                  {topCategories.map((cat: any, index: number) => (
+                    <div
+                      key={index}
+                      className="p-3 bg-muted rounded-lg hover-elevate cursor-pointer"
+                      onClick={onNavigateToInventory}
+                      data-testid={`box-category-${cat.name}`}
+                    >
+                      <p className="text-xs font-semibold text-foreground truncate">{cat.name}</p>
+                      <p className="text-lg font-bold text-primary mt-1">{cat.count}</p>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground text-center py-8">
-                  {currentLanguage === 'ar' ? 'لا توجد عناصر متأخرة' : 'No overdue items'}
+                  {currentLanguage === 'ar' ? 'لا توجد فئات' : 'No categories'}
                 </p>
               )}
             </CardContent>
