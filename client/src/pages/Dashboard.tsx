@@ -130,11 +130,11 @@ export default function Dashboard({
 
         {/* Key Metrics - 4 columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Equipment */}
-          <Card className="hover-elevate" data-testid="card-equipment">
+          {/* Total Items */}
+          <Card className="hover-elevate" data-testid="card-total-items">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-blue-600 dark:text-blue-400">{currentLanguage === 'ar' ? 'معدات' : 'Equipment'}</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">{t('totalItems')}</CardTitle>
                 <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded-md">
                   <Package className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 </div>
@@ -142,26 +142,8 @@ export default function Dashboard({
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400" data-testid="text-equipment">{equipmentCount}</div>
-                <p className="text-xs text-muted-foreground">{currentLanguage === 'ar' ? 'إجمالي المعدات' : 'Total Equipment'}</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Assets */}
-          <Card className="hover-elevate" data-testid="card-assets">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-purple-600 dark:text-purple-400">{currentLanguage === 'ar' ? 'أصول' : 'Assets'}</CardTitle>
-                <div className="p-2 bg-purple-50 dark:bg-purple-950/30 rounded-md">
-                  <Zap className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="text-4xl font-bold text-purple-600 dark:text-purple-400" data-testid="text-assets">{assetsCount}</div>
-                <p className="text-xs text-muted-foreground">{currentLanguage === 'ar' ? 'إجمالي الأصول' : 'Total Assets'}</p>
+                <div className="text-4xl font-bold text-foreground" data-testid="text-total-items">{totalItems}</div>
+                <p className="text-xs text-muted-foreground">{currentLanguage === 'ar' ? 'إجمالي العناصر' : 'Total items'}</p>
               </div>
             </CardContent>
           </Card>
@@ -190,7 +172,27 @@ export default function Dashboard({
           <Card className="hover-elevate" data-testid="card-in-use">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-amber-600 dark:text-amber-400">{t('inUse')}</CardTitle>
+                <CardTitle className="text-sm font-medium text-purple-600 dark:text-purple-400">{t('inUse')}</CardTitle>
+                <div className="p-2 bg-purple-50 dark:bg-purple-950/30 rounded-md">
+                  <Zap className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="text-4xl font-bold text-purple-600 dark:text-purple-400" data-testid="text-in-use">{inUseItems}</div>
+                <p className="text-xs text-muted-foreground">
+                  {totalItems > 0 ? Math.round((inUseItems / totalItems) * 100) : 0}% {currentLanguage === 'ar' ? 'قيد الاستخدام' : 'in use'}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Pending Actions */}
+          <Card className="hover-elevate" data-testid="card-pending-actions">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-amber-600 dark:text-amber-400">{currentLanguage === 'ar' ? 'معلقة' : 'Pending'}</CardTitle>
                 <div className="p-2 bg-amber-50 dark:bg-amber-950/30 rounded-md">
                   <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 </div>
@@ -198,10 +200,8 @@ export default function Dashboard({
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <div className="text-4xl font-bold text-amber-600 dark:text-amber-400" data-testid="text-in-use">{inUseItems}</div>
-                <p className="text-xs text-muted-foreground">
-                  {totalItems > 0 ? Math.round((inUseItems / totalItems) * 100) : 0}% {currentLanguage === 'ar' ? 'قيد الاستخدام' : 'in use'}
-                </p>
+                <div className="text-4xl font-bold text-amber-600 dark:text-amber-400" data-testid="text-pending-actions">{pendingReservations}</div>
+                <p className="text-xs text-muted-foreground">{pendingReservations} {currentLanguage === 'ar' ? 'حجز معلق' : 'pending'}</p>
               </div>
             </CardContent>
           </Card>
@@ -370,10 +370,14 @@ export default function Dashboard({
             <CardTitle>{currentLanguage === 'ar' ? 'ملخص النظام' : 'System Summary'}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
               <div className="space-y-1 p-3 bg-muted rounded-lg">
-                <p className="text-muted-foreground">{currentLanguage === 'ar' ? 'إجمالي العناصر' : 'Total Items'}</p>
-                <p className="text-2xl font-bold">{totalItems}</p>
+                <p className="text-muted-foreground">{currentLanguage === 'ar' ? 'معدات' : 'Equipment'}</p>
+                <p className="text-2xl font-bold">{equipmentCount}</p>
+              </div>
+              <div className="space-y-1 p-3 bg-muted rounded-lg">
+                <p className="text-muted-foreground">{currentLanguage === 'ar' ? 'أصول' : 'Assets'}</p>
+                <p className="text-2xl font-bold">{assetsCount}</p>
               </div>
               <div className="space-y-1 p-3 bg-muted rounded-lg">
                 <p className="text-muted-foreground">{currentLanguage === 'ar' ? 'معدل الاستخدام' : 'Usage Rate'}</p>
@@ -386,6 +390,10 @@ export default function Dashboard({
               <div className="space-y-1 p-3 bg-muted rounded-lg">
                 <p className="text-muted-foreground">{currentLanguage === 'ar' ? 'التنبيهات' : 'Alerts'}</p>
                 <p className="text-2xl font-bold">{maintenanceItems + pendingReservations}</p>
+              </div>
+              <div className="space-y-1 p-3 bg-muted rounded-lg">
+                <p className="text-muted-foreground">{currentLanguage === 'ar' ? 'متأخر' : 'Overdue'}</p>
+                <p className="text-2xl font-bold">{overdueItems}</p>
               </div>
             </div>
           </CardContent>
