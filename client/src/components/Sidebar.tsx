@@ -57,9 +57,7 @@ export default function Sidebar({
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Sidebar */}
       <div className="w-64 bg-gradient-to-b from-[#667eea] to-[#764ba2] text-white flex flex-col fixed h-screen overflow-y-auto">
-        {/* Menu Items */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {menuItems.map((item) => {
             const IconComponent = item.icon;
@@ -82,9 +80,7 @@ export default function Sidebar({
           })}
         </div>
 
-        {/* Bottom Actions */}
         <div className="border-t border-white border-opacity-20 p-4 space-y-3">
-          {/* Logout */}
           <button
             onClick={onLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all text-red-200"
@@ -96,10 +92,7 @@ export default function Sidebar({
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-auto" style={{ marginLeft: '16rem' }}>
-        {/* Content will be rendered here */}
-      </div>
+      <div className="flex-1 overflow-auto" style={{ marginLeft: '16rem' }} />
     </div>
   );
 }
