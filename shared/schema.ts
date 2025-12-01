@@ -26,7 +26,6 @@ export const items = pgTable("items", {
   notes: text("notes"),
   isEquipment: boolean("is_equipment").notNull().default(true),
   maintenanceAvailableDate: date("maintenance_available_date"),
-  checkoutCount: text("checkout_count").default('0'),
   createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`)
 });
@@ -151,8 +150,7 @@ export const insertUserSchema = createInsertSchema(users).omit({
 export const insertItemSchema = createInsertSchema(items).omit({
   id: true,
   createdAt: true,
-  updatedAt: true,
-  checkoutCount: true
+  updatedAt: true
 });
 
 export const insertReservationSchema = createInsertSchema(reservations).omit({
