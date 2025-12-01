@@ -454,7 +454,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
               >
                 {t('equipment')}
               </Button>
-              {showAssetsOption && (
+              {(userRole === 'admin' || userRole === 'developer' || showAssetsOption) && (
                 <Button
                   onClick={() => setItemTypeFilter('assets')}
                   variant={itemTypeFilter === 'assets' ? 'default' : 'outline'}
