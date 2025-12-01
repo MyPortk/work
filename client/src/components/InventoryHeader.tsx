@@ -18,6 +18,7 @@ interface InventoryHeaderProps {
   currentView: 'categories' | 'inventory';
   onViewChange: (view: 'categories' | 'inventory') => void;
   onLogout: () => void;
+  onNavigateToDashboard?: () => void;
   onNavigateToReservations?: () => void;
   onNavigateToActivityLogs?: () => void;
   onNavigateToQRCodes?: () => void;
@@ -34,6 +35,7 @@ export default function InventoryHeader({
   currentView,
   onViewChange,
   onLogout,
+  onNavigateToDashboard,
   onNavigateToReservations,
   onNavigateToActivityLogs,
   onNavigateToQRCodes,
@@ -109,6 +111,13 @@ export default function InventoryHeader({
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>{t('navigation')}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+
+                {onNavigateToDashboard && (
+                  <DropdownMenuItem onClick={onNavigateToDashboard}>
+                    <Package className="w-4 h-4 mr-2" />
+                    {currentLanguage === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+                  </DropdownMenuItem>
+                )}
 
                 <DropdownMenuItem onClick={() => onViewChange('categories')}>
                   <Package className="w-4 h-4 mr-2" />
