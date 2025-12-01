@@ -68,14 +68,16 @@ export default function Dashboard({
   const pendingReservations = (reservations as any[]).filter((r: any) => r.status === 'pending').length;
   const approvedReservations = (reservations as any[]).filter((r: any) => r.status === 'approved').length;
 
-  // Calculate most requested equipment
-  const equipmentRequestCount: { [key: string]: number } = {};
+  // Calculate most checked out equipment (only items with checkout_date)
+  const equipmentCheckoutCount: { [key: string]: number } = {};
   (reservations as any[]).forEach((reservation: any) => {
-    const itemId = String(reservation.itemId);
-    equipmentRequestCount[itemId] = (equipmentRequestCount[itemId] || 0) + 1;
+    if (reservation.checkoutDate) {
+      const itemId = String(reservation.itemId);
+      equipmentCheckoutCount[itemId] = (equipmentCheckoutCount[itemId] || 0) + 1;
+    }
   });
 
-  const mostRequestedData = Object.entries(equipmentRequestCount)
+  const mostRequestedData = Object.entries(equipmentCheckoutCount)
     .map(([itemId, count]) => {
       const item = (items as any[]).find((i: any) => String(i.id) === itemId);
       return {
@@ -83,9 +85,9 @@ export default function Dashboard({
         requests: count,
       };
     })
-    .filter((data: any) => data.name !== `Equipment ${equipmentRequestCount}`)
+    .filter((data: any) => data.name !== `Equipment ${equipmentCheckoutCount}`)
     .sort((a, b) => b.requests - a.requests)
-    .slice(0, 10); // Top 10 most requested
+    .slice(0, 10); // Top 10 most checked out
 
   // Calculate by category
   const equipmentCount = (items as any[]).filter((i: any) => i.isEquipment === true).length;
