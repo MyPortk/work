@@ -59,23 +59,23 @@ export default function Dashboard({
   const approvedReservations = (reservations as any[]).filter((r: any) => r.status === 'approved').length;
 
   // Calculate most requested equipment
-  const equipmentRequestCount: { [key: number]: number } = {};
+  const equipmentRequestCount: { [key: string]: number } = {};
   (reservations as any[]).forEach((reservation: any) => {
-    const itemId = Number(reservation.itemId);
+    const itemId = String(reservation.itemId);
     equipmentRequestCount[itemId] = (equipmentRequestCount[itemId] || 0) + 1;
   });
 
   const mostRequestedData = Object.entries(equipmentRequestCount)
     .map(([itemId, count]) => {
-      const item = (items as any[]).find((i: any) => i.id === parseInt(itemId));
+      const item = (items as any[]).find((i: any) => String(i.id) === itemId);
       return {
-        itemId: parseInt(itemId),
-        name: item?.productName || 'Unknown Item',
+        name: item?.productName || `Equipment ${itemId}`,
         requests: count,
       };
     })
+    .filter((data: any) => data.name !== `Equipment ${equipmentRequestCount}`)
     .sort((a, b) => b.requests - a.requests)
-    .slice(0, 8); // Top 8 most requested
+    .slice(0, 5); // Top 5 most requested
 
   return (
     <div className="min-h-screen bg-background">
@@ -264,43 +264,27 @@ export default function Dashboard({
         {/* Most Requested Equipment Chart */}
         {mostRequestedData.length > 0 && (
           <Card className="hover-elevate" data-testid="card-most-requested">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <TrendingUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                {currentLanguage === 'ar' ? 'المعدات الأكثر طلباً' : 'Most Requested Equipment'}
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <TrendingUp className="w-4 h-4" />
+                {currentLanguage === 'ar' ? 'الأكثر طلباً' : 'Most Requested'}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="w-full h-56">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={mostRequestedData} margin={{ top: 10, right: 10, left: -20, bottom: 60 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="currentColor" opacity={0.1} />
-                    <XAxis 
-                      dataKey="name" 
-                      angle={-45} 
-                      textAnchor="end" 
-                      height={80}
-                      style={{ fontSize: '11px' }}
-                    />
-                    <YAxis style={{ fontSize: '11px' }} />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'var(--background)',
-                        border: '1px solid var(--border)',
-                        borderRadius: '6px',
-                        fontSize: '12px'
-                      }}
-                      labelStyle={{ color: 'var(--foreground)' }}
-                      formatter={(value: any) => [value, currentLanguage === 'ar' ? 'طلبات' : 'Requests']}
-                    />
-                    <Bar 
-                      dataKey="requests" 
-                      fill="#667eea" 
-                      radius={[4, 4, 0, 0]}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+            <CardContent className="space-y-3">
+              {mostRequestedData.map((item: any, index: number) => (
+                <div key={index} className="space-y-1">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground truncate">{item.name}</span>
+                    <span className="font-semibold text-foreground">{item.requests}</span>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-[#667eea] to-[#764ba2] h-2 rounded-full transition-all"
+                      style={{ width: `${(item.requests / (mostRequestedData[0]?.requests || 1)) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
         )}
