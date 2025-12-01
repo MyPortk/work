@@ -82,7 +82,7 @@ export default function Sidebar({
         // Mouse is outside sidebar area, schedule auto-hide
         autoHideTimeoutRef.current = setTimeout(() => {
           setIsCollapsed(true);
-        }, 2000); // 2 second delay before auto-hiding
+        }, 1000); // 1 second delay before auto-hiding
       }
     };
 

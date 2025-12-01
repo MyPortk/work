@@ -198,7 +198,7 @@ export default function Permissions({
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                When enabled, the sidebar automatically hides after 2 seconds when the mouse moves away from it. It automatically reappears when the mouse moves near the left edge of the screen.
+                When enabled, the sidebar automatically hides after 1 second when the mouse moves away from it. It automatically reappears when the mouse moves near the left edge of the screen.
               </p>
               <div className="flex items-center gap-4">
                 <Switch
