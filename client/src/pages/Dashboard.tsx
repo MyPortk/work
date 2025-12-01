@@ -85,7 +85,7 @@ export default function Dashboard({
     })
     .filter((data: any) => data.name !== `Equipment ${equipmentRequestCount}`)
     .sort((a, b) => b.requests - a.requests)
-    .slice(0, 5); // Top 5 most requested
+    .slice(0, 10); // Top 10 most requested
 
   // Calculate by category
   const equipmentCount = (items as any[]).filter((i: any) => i.isEquipment === true).length;
