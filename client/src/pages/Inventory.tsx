@@ -53,6 +53,7 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
   const [showCategoryForm, setShowCategoryForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState<any>(null);
   const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
+  const [showAssetsOption, setShowAssetsOption] = useState(true);
   const [reservingItem, setReservingItem] = useState<Item | null>(null);
   const [itemTypeFilter, setItemTypeFilter] = useState<'equipment' | 'assets'>('equipment');
   const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
@@ -436,14 +437,16 @@ export default function Inventory({ userName, userRole, userId, onLogout, onNavi
               >
                 {t('equipment')}
               </Button>
-              <Button
-                onClick={() => setItemTypeFilter('assets')}
-                variant={itemTypeFilter === 'assets' ? 'default' : 'outline'}
-                data-testid="button-filter-assets-categories"
-                className={itemTypeFilter === 'assets' ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2]' : ''}
-              >
-                {t('assets')}
-              </Button>
+              {showAssetsOption && (
+                <Button
+                  onClick={() => setItemTypeFilter('assets')}
+                  variant={itemTypeFilter === 'assets' ? 'default' : 'outline'}
+                  data-testid="button-filter-assets-categories"
+                  className={itemTypeFilter === 'assets' ? 'bg-gradient-to-r from-[#667eea] to-[#764ba2]' : ''}
+                >
+                  {t('assets')}
+                </Button>
+              )}
             </div>
 
             <div className="max-w-2xl mx-auto mb-8">

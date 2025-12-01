@@ -3,7 +3,7 @@ import { queryClient } from "@/lib/queryClient";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { InventoryHeader } from "@/components/InventoryHeader";
+import InventoryHeader from "@/components/InventoryHeader";
 import { useToast } from "@/hooks/use-toast";
 import type { Language } from "@/lib/translations";
 import { useTranslation } from "@/lib/translations";

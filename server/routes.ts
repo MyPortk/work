@@ -1500,6 +1500,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Permissions routes
+  app.get('/api/permissions', requireAuth, async (req, res) => {
+    try {
+      const permissions = await storage.getAllPermissions();
+      const permissionsObj: { [key: string]: boolean } = {};
+      permissions.forEach(p => {
+        permissionsObj[p.key] = p.enabled;
+      });
+      res.json(permissionsObj);
+    } catch (error) {
+      console.error('Get permissions error:', error);
+      res.status(500).json({ error: 'Failed to get permissions' });
+    }
+  });
+
+  app.patch('/api/permissions/:key', requireAdmin, async (req, res) => {
+    try {
+      const { key } = req.params;
+      const { enabled } = req.body;
+      
+      if (typeof enabled !== 'boolean') {
+        return res.status(400).json({ error: 'enabled must be a boolean' });
+      }
+
+      const permission = await storage.updatePermission(key, enabled);
+      if (!permission) {
+        return res.status(404).json({ error: 'Permission not found' });
+      }
+      res.json(permission);
+    } catch (error) {
+      console.error('Update permission error:', error);
+      res.status(500).json({ error: 'Failed to update permission' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
