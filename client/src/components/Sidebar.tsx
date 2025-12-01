@@ -59,12 +59,6 @@ export default function Sidebar({
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <div className="w-64 bg-gradient-to-b from-[#667eea] to-[#764ba2] text-white flex flex-col fixed h-screen overflow-y-auto">
-        {/* Header */}
-        <div className="p-6 border-b border-white border-opacity-20">
-          <h2 className="text-2xl font-bold">{t('inventory_manager')}</h2>
-          <p className="text-sm opacity-90 mt-1">{userName}</p>
-        </div>
-
         {/* Menu Items */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {menuItems.map((item) => {
