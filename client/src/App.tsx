@@ -296,6 +296,24 @@ function App() {
       );
     }
 
+    if (currentView === 'permissions') {
+      return (
+        <Permissions
+          userName={currentUser?.name || 'User'}
+          userRole={currentUser?.role || 'user'}
+          onLogout={handleLogout}
+          onNavigateToInventory={handleNavigateToInventory}
+          onNavigateToReservations={handleNavigateToReservations}
+          onNavigateToActivityLogs={handleNavigateToActivityLogs}
+          onNavigateToQRCodes={handleNavigateToQRCodes}
+          onNavigateToMaintenance={handleNavigateToMaintenance}
+          onNavigateToReports={handleNavigateToReports}
+          language={language}
+          onLanguageChange={handleLanguageChange}
+        />
+      );
+    }
+
     return null;
   };
 
@@ -321,6 +339,7 @@ function App() {
               onNavigateToMaintenance={handleNavigateToMaintenance}
               onNavigateToReports={handleNavigateToReports}
               onNavigateToUsers={() => setCurrentView('users')}
+              onNavigateToPermissions={handleNavigateToPermissions}
               onLogout={handleLogout}
               language={language}
             />

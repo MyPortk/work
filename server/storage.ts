@@ -1,9 +1,9 @@
-import { type User, type InsertUser, type Item, type Reservation, type InsertReservation, type InsertActivityLog, type ActivityLog, type InsertCategory, type Category, type Notification, type InsertNotification, type InsertDamageReport, type DamageReport } from "@shared/schema";
+import { type User, type InsertUser, type Item, type Reservation, type InsertReservation, type InsertActivityLog, type ActivityLog, type InsertCategory, type Category, type Notification, type InsertNotification, type InsertDamageReport, type DamageReport, type SystemPermission } from "@shared/schema";
 import { randomUUID } from "crypto";
 import { db } from './db';
 import { 
   items, users, reservations, categories, notifications, activityLogs,
-  itemEditHistory, reservationStatusHistory, damageReports,
+  itemEditHistory, reservationStatusHistory, damageReports, systemPermissions,
   type InsertItem, type InsertItemEditHistory, type InsertReservationStatusHistory
 } from "@shared/schema";
 import { eq, and, gte, lte, or, desc, asc } from 'drizzle-orm';
@@ -60,6 +60,10 @@ export interface IStorage {
   getAllDamageReports(): Promise<any[]>;
   getDamageReportById(id: string): Promise<DamageReport | undefined>;
   updateDamageReport(id: string, data: Partial<InsertDamageReport>): Promise<DamageReport | undefined>;
+
+  getPermission(key: string): Promise<SystemPermission | undefined>;
+  getAllPermissions(): Promise<SystemPermission[]>;
+  updatePermission(key: string, enabled: boolean): Promise<SystemPermission | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -502,6 +506,30 @@ export class MemStorage implements IStorage {
       .where(eq(damageReports.id, id))
       .returning();
     return report;
+  }
+
+  async getPermission(key: string): Promise<SystemPermission | undefined> {
+    return await db.query.systemPermissions.findFirst({
+      where: eq(systemPermissions.key, key)
+    });
+  }
+
+  async getAllPermissions(): Promise<SystemPermission[]> {
+    return await db.query.systemPermissions.findMany();
+  }
+
+  async updatePermission(key: string, enabled: boolean): Promise<SystemPermission | undefined> {
+    const existing = await this.getPermission(key);
+    if (existing) {
+      const [updated] = await db.update(systemPermissions)
+        .set({ enabled, updatedAt: new Date() })
+        .where(eq(systemPermissions.key, key))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db.insert(systemPermissions).values({ key, enabled, updatedAt: new Date() }).returning();
+      return created;
+    }
   }
 }
 
