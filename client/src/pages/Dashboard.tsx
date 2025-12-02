@@ -369,14 +369,14 @@ export default function Dashboard({
           </Card>
         </div>
 
-        {/* Most Requested & Top Categories Grid - 50/50 Split */}
+        {/* Most Used & Top Categories Grid - 50/50 Split */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {/* Most Requested Bar Chart - Left (50%) */}
+          {/* Most Used Bar Chart - Left (50%) */}
           <Card className="hover-elevate" data-testid="card-most-requested">
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2">
                 <BarChart3 className="w-5 h-5" />
-                {currentLanguage === 'ar' ? 'الأكثر طلباً' : 'Most Requested Equipment'}
+                {currentLanguage === 'ar' ? 'الأكثر استخداماً' : 'Most Used Equipment'}
               </CardTitle>
             </CardHeader>
             <CardContent className="py-2">
