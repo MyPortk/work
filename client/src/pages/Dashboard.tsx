@@ -68,15 +68,15 @@ export default function Dashboard({
   const pendingReservations = (reservations as any[]).filter((r: any) => r.status === 'pending').length;
   const approvedReservations = (reservations as any[]).filter((r: any) => r.status === 'approved').length;
 
-  // Get most checked out equipment from checkoutCount field
+  // Get most checked out equipment from checkoutCount field - only show items with checkouts
   const mostRequestedData = (items as any[])
-    .filter((item: any) => item.isEquipment)
+    .filter((item: any) => item.isEquipment && parseInt(item.checkoutCount || '0') > 0)
     .map((item: any) => ({
       name: item.productName,
       requests: parseInt(item.checkoutCount || '0'),
     }))
-    .sort((a, b) => b.requests - a.requests)
-    .slice(0, 10); // Top 10 most checked out
+    .sort((a, b) => b.requests - a.requests) // Descending order - most checked out first
+    .slice(0, 10);
 
   // Calculate by category
   const equipmentCount = (items as any[]).filter((i: any) => i.isEquipment === true).length;
