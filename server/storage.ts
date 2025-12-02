@@ -147,8 +147,26 @@ export class MemStorage implements IStorage {
   }
 
   async updateItem(id: string, updates: Partial<InsertItem>): Promise<Item | undefined> {
+    // Clean up empty strings for nullable fields and convert to null
+    const cleanedUpdates: Record<string, any> = {};
+    const dateFields = ['checkoutDate', 'returnedDate'];
+    const nullableFields = ['location', 'notes'];
+    
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === '') {
+        // Convert empty strings to null for date and nullable fields
+        if ([...dateFields, ...nullableFields].includes(key)) {
+          cleanedUpdates[key] = null;
+        } else {
+          cleanedUpdates[key] = value;
+        }
+      } else {
+        cleanedUpdates[key] = value;
+      }
+    }
+
     const [item] = await db.update(items)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({ ...cleanedUpdates, updatedAt: new Date() })
       .where(eq(items.id, id))
       .returning();
     return item;
