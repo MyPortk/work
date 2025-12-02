@@ -68,12 +68,21 @@ export default function Dashboard({
   const pendingReservations = (reservations as any[]).filter((r: any) => r.status === 'pending').length;
   const approvedReservations = (reservations as any[]).filter((r: any) => r.status === 'approved').length;
 
-  // Get most checked out equipment from checkoutCount field - show top 10 equipment sorted by checkouts
+  // Count how many times each item status changed to "In Use" = checkouts
+  const itemCheckoutCounts: { [key: string]: number } = {};
+  (activityLogs as any[]).forEach((log: any) => {
+    if (log.newStatus === 'In Use') {
+      const itemId = String(log.itemId);
+      itemCheckoutCounts[itemId] = (itemCheckoutCounts[itemId] || 0) + 1;
+    }
+  });
+
+  // Get most checked out equipment - show top 10 equipment sorted by "In Use" status changes
   const mostRequestedData = (items as any[])
     .filter((item: any) => item.isEquipment)
     .map((item: any) => ({
       name: item.productName,
-      requests: parseInt(item.checkoutCount || '0'),
+      requests: itemCheckoutCounts[item.id] || 0,
     }))
     .sort((a, b) => b.requests - a.requests) // Descending order - most checked out first
     .slice(0, 10);
@@ -152,14 +161,17 @@ export default function Dashboard({
     'Storage Devices': 'Storage Devices',
   };
 
-  // Calculate total checkout count for each category based on checkoutCount field
+  // Calculate total checkout count for each category based on "In Use" status changes
   const categoryCheckouts: { [key: string]: number } = {};
   
-  // Sum checkoutCount for all items in each category
-  (items as any[]).forEach((item: any) => {
-    if (item.isEquipment && item.productType) {
-      const categoryName = productTypeToCategory[item.productType] || item.productType;
-      categoryCheckouts[categoryName] = (categoryCheckouts[categoryName] || 0) + parseInt(item.checkoutCount || '0');
+  // Count "In Use" status changes per category
+  (activityLogs as any[]).forEach((log: any) => {
+    if (log.newStatus === 'In Use') {
+      const item = (items as any[]).find((i: any) => String(i.id) === String(log.itemId));
+      if (item && item.isEquipment && item.productType) {
+        const categoryName = productTypeToCategory[item.productType] || item.productType;
+        categoryCheckouts[categoryName] = (categoryCheckouts[categoryName] || 0) + 1;
+      }
     }
   });
 
