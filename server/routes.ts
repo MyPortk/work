@@ -652,32 +652,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         shouldShowEquipment = isEquipmentParam === 'true';
       }
 
-      // Combine default and custom categories
-      const defaultCategories = Object.values(CATEGORIES)
+      // Only show database categories - avoid duplication
+      const allCategories = dbCategories
         .filter(cat => {
-          // Filter based on equipment type - check if category is in EQUIPMENT_CATEGORIES or ASSET_CATEGORIES
-          const isEquipmentCategory = Object.values(EQUIPMENT_CATEGORIES).some(c => c.name === cat.name);
-          return shouldShowEquipment === isEquipmentCategory;
-        })
-        .map(cat => {
-          const categoryItems = allItems.filter(item => 
-            (cat.subTypes as readonly string[]).includes(item.productType)
-          );
-
-          return {
-            name: cat.name,
-            image: cat.image,
-            subTypes: cat.subTypes,
-            totalCount: categoryItems.length,
-            availableCount: categoryItems.filter(item => item.status === 'Available').length,
-            isCustom: false,
-            isEquipment: shouldShowEquipment
-          };
-        });
-
-      const customCategories = dbCategories
-        .filter(cat => {
-          // Filter custom categories by isEquipment flag
+          // Filter categories by isEquipment flag
           return shouldShowEquipment === cat.isEquipment;
         })
         .map(cat => {
@@ -697,17 +675,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
             isEquipment: cat.isEquipment
           };
         });
-
-      // Show all default categories (even with 0 items) and custom categories
-      const allCategories = [...defaultCategories, ...customCategories];
-      
-      console.log(`📋 GET /api/categories (isEquipment=${isEquipmentParam}):`, {
-        shouldShowEquipment,
-        defaultCategoriesCount: defaultCategories.length,
-        customCategoriesCount: customCategories.length,
-        totalCategoriesCount: allCategories.length,
-        customCategories: customCategories.map(c => ({ name: c.name, isEquipment: c.isEquipment }))
-      });
 
       res.json(allCategories);
     } catch (error) {
