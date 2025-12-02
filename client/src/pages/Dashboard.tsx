@@ -68,24 +68,13 @@ export default function Dashboard({
   const pendingReservations = (reservations as any[]).filter((r: any) => r.status === 'pending').length;
   const approvedReservations = (reservations as any[]).filter((r: any) => r.status === 'approved').length;
 
-  // Calculate most checked out equipment (only items with checkout_date)
-  const equipmentCheckoutCount: { [key: string]: number } = {};
-  (reservations as any[]).forEach((reservation: any) => {
-    if (reservation.checkoutDate) {
-      const itemId = String(reservation.itemId);
-      equipmentCheckoutCount[itemId] = (equipmentCheckoutCount[itemId] || 0) + 1;
-    }
-  });
-
-  const mostRequestedData = Object.entries(equipmentCheckoutCount)
-    .map(([itemId, count]) => {
-      const item = (items as any[]).find((i: any) => String(i.id) === itemId);
-      return {
-        name: item?.productName || `Equipment ${itemId}`,
-        requests: count,
-      };
-    })
-    .filter((data: any) => data.name !== `Equipment ${equipmentCheckoutCount}`)
+  // Get most checked out equipment from checkoutCount field
+  const mostRequestedData = (items as any[])
+    .filter((item: any) => item.isEquipment && parseInt(item.checkoutCount || '0') > 0)
+    .map((item: any) => ({
+      name: item.productName,
+      requests: parseInt(item.checkoutCount || '0'),
+    }))
     .sort((a, b) => b.requests - a.requests)
     .slice(0, 10); // Top 10 most checked out
 
@@ -163,17 +152,14 @@ export default function Dashboard({
     'Storage Devices': 'Storage Devices',
   };
 
-  // Calculate checkout count for each category
+  // Calculate total checkout count for each category based on checkoutCount field
   const categoryCheckouts: { [key: string]: number } = {};
   
-  // Count checkouts per category (only items that have been actually checked out)
-  (reservations as any[]).forEach((reservation: any) => {
-    if (reservation.checkoutDate) {
-      const item = (items as any[]).find((i: any) => String(i.id) === String(reservation.itemId));
-      if (item && item.productType) {
-        const categoryName = productTypeToCategory[item.productType] || item.productType;
-        categoryCheckouts[categoryName] = (categoryCheckouts[categoryName] || 0) + 1;
-      }
+  // Sum checkoutCount for all items in each category
+  (items as any[]).forEach((item: any) => {
+    if (item.isEquipment && item.productType) {
+      const categoryName = productTypeToCategory[item.productType] || item.productType;
+      categoryCheckouts[categoryName] = (categoryCheckouts[categoryName] || 0) + parseInt(item.checkoutCount || '0');
     }
   });
 
