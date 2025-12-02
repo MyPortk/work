@@ -11,6 +11,31 @@ import { sendReservationRequestEmail, sendReservationApprovedEmail, sendReservat
 import { format } from "date-fns";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Initialize default asset categories if they don't exist
+  const initializeDefaultAssets = async () => {
+    const existingCategories = await storage.getAllCategories();
+    const assetCategoryNames = Object.values(ASSET_CATEGORIES).map(cat => cat.name);
+    
+    for (const assetCat of Object.values(ASSET_CATEGORIES)) {
+      const exists = existingCategories.some(cat => cat.name === assetCat.name);
+      if (!exists) {
+        await storage.createCategory({
+          name: assetCat.name,
+          image: assetCat.image,
+          subTypes: JSON.stringify(Array.from(assetCat.subTypes)),
+          isEquipment: false,
+          showQuantity: true,
+          showLocation: true,
+          showNotes: true
+        });
+        console.log(`✅ Created default asset category: ${assetCat.name}`);
+      }
+    }
+  };
+  
+  // Run initialization on startup
+  initializeDefaultAssets().catch(err => console.error('Failed to initialize asset categories:', err));
+
   // Authentication routes
   app.post("/api/auth/login", async (req, res) => {
     try {
