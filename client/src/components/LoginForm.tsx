@@ -175,10 +175,12 @@ export default function LoginForm({ onLogin, isLoading = false, error }: LoginFo
 
           <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-100 rounded-xl text-center">
             <p className="text-sm text-blue-900 font-medium">
-              Secure Authentication
+              User: admin
+              Pass: afaq
             </p>
-            <p className="text-xs text-blue-700 mt-1">
-              Your credentials are encrypted and protected
+            <p className="text-sm text-blue-900 font-medium">
+              User: staff1
+              Pass: afaq
             </p>
           </div>
         </CardContent>
